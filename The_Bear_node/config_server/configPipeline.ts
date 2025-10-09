@@ -1,6 +1,6 @@
 import express,{ Express } from "express";
 import cors from 'cors';
-import routingCliente from './config_routing/endpointsUser';
+import routingUsuario from './config_routing/endpointsUser';
 import routingRestaurante from'./config_routing/endpointsRestaurante';
 
 function configPipeline(serverWeb:Express){
@@ -9,7 +9,7 @@ function configPipeline(serverWeb:Express){
     serverWeb.use(cors());
 
     //midlewere de enrutamiento
-    serverWeb.use('/api/Cliente', routingCliente);
+    serverWeb.use('/api/Usuario', routingUsuario);
     serverWeb.use('/api/Restaurante', routingRestaurante);
 }
 export default configPipeline;

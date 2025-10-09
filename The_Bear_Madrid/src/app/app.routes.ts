@@ -10,12 +10,12 @@ export const routes: Routes = [
             {path:'Login', component:LoginComponent}
         ]
     },
-    {
+   /* {
         path: 'Restaurante',
             children:[
                 {path:'Home', component: HomeComponent},
                 
             ]
     }
-    
+    */
 ];

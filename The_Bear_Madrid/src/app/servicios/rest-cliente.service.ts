@@ -16,11 +16,11 @@ export class RestClienteService {
   constructor() { }
 
   //#region-----------metodos-----------------
-  public RegistroCliente(datos: any): Signal<IRestMessage> {
+  public RegistroUsuario(datos: any): Signal<IRestMessage> {
     return toSignal(
-      this._httpClient.post<IRestMessage>('http://localhost:3003/api/zonaCliente/Registro',
+      this._httpClient.post<IRestMessage>('http://localhost:3003/api/Usuario/Registro',
         datos,
-        { headers: new HttpHeaders({ 'Content-type': 'application/json' }) }
+        { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
       ).pipe(
         startWith({ codigo: 100, mensaje: 'esperando respuesta del server...' })
       ),
@@ -30,7 +30,7 @@ export class RestClienteService {
 
   public LoginCliente(datos: any): Signal<IRestMessage> {
     return toSignal(
-      this._httpClient.post<IRestMessage>('http://localhost:3003/api/zonaCliente/Login',
+      this._httpClient.post<IRestMessage>('http://localhost:3003/api/Usuario/Login',
         datos,
         { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
       ).pipe(
@@ -43,7 +43,7 @@ export class RestClienteService {
   public RefrescarTokens(refreshToken: string): Observable<IRestMessage> {
     return this._httpClient
       .post<IRestMessage>(
-        'http://localhost:3003/api/zonaCliente/RefrescarTokens',
+        'http://localhost:3003/api/Usuario/RefrescarTokens',
         { refreshToken },
         { headers: new HttpHeaders({ 'Content-Type': 'application/json ' }) }
       )

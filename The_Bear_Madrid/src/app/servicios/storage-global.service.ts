@@ -7,11 +7,13 @@ import IUsuario from '../modelos/Interfaces/IUsuario';
 })
 export class StorageGlobalService {
 
+  
   private _jwt = signal<IJwt>({ sesion: '', refresh: '', verificacion: '' });
   private _datosUsuario = signal<IUsuario | undefined>(undefined)
 
   constructor() { }
-
+  
+//#region---------metodos del Usuario-------------
   getJWT(): IJwt {
     return this._jwt()
   };
@@ -35,4 +37,5 @@ export class StorageGlobalService {
       }
     })
   }
+  //#endregion----------------------------------
 }

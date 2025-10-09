@@ -27,8 +27,7 @@ const UserController = {
 
             console.log('usuario nuevo insertardo en coleccion usuarios de mongodb....', _nuevoUsuario);
 
-            //genero el jwt 
-            
+            //genero el jwt usando como codigo el id de mongo
             const _jwt =jsonwebtoken.sign({email, codigo:_nuevoUsuario._id}, process.env.JWT_SECRET as string, {issuer:'http://localhost:3003', expiresIn:'1h'});
 
             res.status(200).send({codigo:0, mensaje:'Registro realizado correctamente', datos:{jwtVerificacion: _jwt, datosUsuario:{..._nuevoUsuario.toObject(), 'password': undefined}}})//---> al hacer esto asi sobreescribo la password para que sea mas seguro 
@@ -40,10 +39,23 @@ const UserController = {
     },
     Login: async (req: Request, res: Response, next: NextFunction) => {
         try {
+            console.log('datos del body mandados desde el login  ', req.body);
+            const {email,password}= req.body;
+
+            await mongoose.connect(process.env.MONGODB_URL!);
+
+            let _user =await Usuario.findOne({'email':email}).lean();//<-- .lean() me devuelve modelo js y reduce el consumo 
+            if (!_user) throw new Error('no existe ese usuario con ese email');
+            if (!bcrypt.compareSync(password, _user.password)) throw new Error('contraseña incorrecta');
+
+            //genero jwt
+            const _jwt =jsonwebtoken.sign({email, codigo:_user._id}, process.env.JWT_SECRET as string, {issuer:'http://localhost:3003', expiresIn:'1h'});
+
+            res.status(200).send({codigo:0, mensaje:'Login realizado con exito correcto ',datos:{jwtVerificacion:_jwt, datosUsuario:{..._user}} })
 
         } catch (error) {
             console.log('error al realizar el login', error);
-            res.status(403).send({ codigo: 1, mensaje: 'Error en el login' });
+            res.status(500).send({ codigo: 1, mensaje: 'Error en el login' });
         }
     },
     RefrescarToken: async (req: Request, res: Response, next: NextFunction) => {
@@ -80,7 +92,7 @@ const UserController = {
 
         } catch (error) {
             console.log('error al refrescar tokens...', error);
-            res.status(200).send({ codigo: 1, mensaje: 'error al refrescar tokens...' + error });
+            res.status(500).send({ codigo: 1, mensaje: 'error al refrescar tokens...' + error });
         }
     }
 }

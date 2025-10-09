@@ -1,5 +1,5 @@
 <header class="header d-flex justify-content-between align-items-center p-3 bg-dark text-white">
-  <a [routerLink]="['/Cliente/']" routerLinkActive="router-link-active" class="text-white">
+  <a [routerLink]="['/Home']" routerLinkActive="router-link-active" class="text-white">
       <img src="/the_bear_logo.jpg" alt="Logo The Bear" >
      </a>
 </header>
@@ -12,7 +12,7 @@
  
 
     <!-- Formulario -->
-    <form [formGroup]="formRegistro" (ngSubmit)="RegistrarCliente($event)">
+    <form [formGroup]="formRegistro" (ngSubmit)="RegistrarUser($event)">
       <!-- Nombre -->
       <div class="mb-3">
         <input type="text"
@@ -69,7 +69,7 @@
 
     <p class="text-center mt-3">
       ¿Ya tienes una cuenta? 
-      <a [routerLink]="['/Cliente/Login']" routerLinkActive="router-link-active" class="text-primary">Inicia sesión</a>
+      <a [routerLink]="['/Usuario/Login']" routerLinkActive="router-link-active" class="text-primary">Inicia sesión</a>
     </p>
   </div>
 </div>

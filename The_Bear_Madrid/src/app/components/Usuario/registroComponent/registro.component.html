@@ -1,0 +1,82 @@
+<header class="header d-flex justify-content-between align-items-center p-3 bg-dark text-white">
+  <a [routerLink]="['/Cliente/']" routerLinkActive="router-link-active" class="text-white">
+      <img src="/the_bear_logo.jpg" alt="Logo The Bear" >
+     </a>
+</header>
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+  <div class="registro-container p-4 shadow-lg rounded">
+    <h2 class="text-center mb-4">Crea tu cuenta en The Bear</h2>
+
+    <!-- Mensaje de error general -->
+ 
+
+    <!-- Formulario -->
+    <form [formGroup]="formRegistro" (ngSubmit)="RegistrarCliente($event)">
+      <!-- Nombre -->
+      <div class="mb-3">
+        <input type="text"
+               class="form-control"
+               placeholder="Nombre*"
+               formControlName="nombre"
+                />
+          @if( formRegistro.controls['nombre'].errors?.['required'] && formRegistro.controls['nombre'].dirty ) { <span class="text-danger"><small>* Nombre obligatorio</small></span>}
+          @if( formRegistro.controls['nombre'].errors?.['maxlength'] && formRegistro.controls['nombre'].dirty ) { <span class="text-danger"><small>* max.50 caracteres</small></span>}
+          @if( formRegistro.controls['nombre'].errors?.['minlength'] && formRegistro.controls['nombre'].dirty ) { <span class="text-danger"><small>* min. 3 caracteres</small></span>}
+      </div>
+
+      <!-- Apellidos -->
+      <div class="mb-3">
+        <input type="text" class="form-control" placeholder="Apellidos*" formControlName="apellidos" />    
+         @if( formRegistro.controls['apellidos'].errors?.['required'] && formRegistro.controls['nombre'].dirty ) { <span class="text-danger"><small>* Nombre obligatorio</small></span>}
+          @if( formRegistro.controls['apellidos'].errors?.['maxlength'] && formRegistro.controls['nombre'].dirty ) { <span class="text-danger"><small>* max.100 caracteres</small></span>}
+          @if( formRegistro.controls['apellidos'].errors?.['minlength'] && formRegistro.controls['nombre'].dirty ) { <span class="text-danger"><small>* min. 3 caracteres</small></span>}    
+      </div>
+
+      <!-- Teléfono -->
+      <div class="mb-3">
+        <input type="tel" class="form-control" placeholder="Teléfono*" formControlName="telefono" />  
+          @if( formRegistro.controls['telefono'].errors?.['required'] && formRegistro.controls['telefono'].dirty ) { <span class="text-danger"><small>* Telefono obligatorio</small></span>}
+          @if( formRegistro.controls['telefono'].errors?.['pattern'] && formRegistro.controls['telefono'].dirty ) { <span class="text-danger"><small>* formato incorrecto (+34)123456789</small></span>}
+      
+      </div>
+
+      <!-- Correo -->
+      <div class="mb-3">
+        <input type="email" class="form-control" placeholder="Correo electrónico*" formControlName="email" />
+      </div>
+
+       <!-- Contraseña -->
+         <div class="input-group mb-3">
+          <input [type]="pswdVisible() ? 'text' : 'password'" class="form-control" placeholder="Contraseña*" formControlName="password"  />
+          <span class="input-group-text" (click)="SetPswdVisible()">
+                <img [class]= "pswdVisible() ? 'https://cdn-icons-png.flaticon.com/512/159/159604.png' : 'https://cdn-icons-png.flaticon.com/512/159/159604.png'" alt="icono boton ojo"/> 
+            </span>
+            
+        </div>
+        <div class="input-group mb-3">
+          <input [type]="repswdVisible() ? 'text' : 'password'" class="form-control" placeholder="Repetir Contraseña*"  formControlName="repassword" />
+            <span class="input-group-text" (click)="SetRePswdVisible()">
+                <img [src]= "repswdVisible() ? '' : ''" alt="icono boton ojo"/>
+            </span>
+        </div>
+
+      <!-- Botón -->
+      <div class="d-grid">
+        <button type="submit" class="btn btn-dark">Registrarse</button>
+      </div>
+    </form>
+
+    <p class="text-center mt-3">
+      ¿Ya tienes una cuenta? 
+      <a [routerLink]="['/Cliente/Login']" routerLinkActive="router-link-active" class="text-primary">Inicia sesión</a>
+    </p>
+  </div>
+</div>
+
+<footer class="footer text-center p-3 bg-dark text-white">
+  <p class="mb-1">© The Bear Restaurante</p>
+  <a href="#" class="text-white me-2">Cookies</a>
+  <a href="#" class="text-white me-2">Aviso legal</a>
+  <a href="#" class="text-white">Política de privacidad</a>
+</footer>

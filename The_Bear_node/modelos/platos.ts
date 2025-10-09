@@ -1,0 +1,14 @@
+import mongoose, { mongo } from "mongoose";
+
+const platoSchema = new mongoose.Schema(
+    {
+        nombre:String,
+        imagenes:[String],
+        categoria:String,
+        precio:Number,
+        descripcion:String,
+        valoraciones:[{type:mongoose.Schema.Types.ObjectId, ref:"Opinion"}]
+    }
+)
+
+export default mongoose.model("Plato", platoSchema, "platos");

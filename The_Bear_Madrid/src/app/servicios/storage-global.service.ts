@@ -18,7 +18,7 @@ export class StorageGlobalService {
     return this._jwt()
   };
   
-  setJwt(tipo: string, valor: string) {
+  setJWT(tipo: string, valor: string) {
     this._jwt.update(antes => ({ ...antes, [tipo]: valor }))
   };
 

@@ -5,10 +5,11 @@ import IForm from '../../../modelos/Interfaces/IForm';
 import { RestClienteService } from '../../../servicios/rest-cliente.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { HTTP_INJECTIONTOKEN_STORAGE_SVCS } from '../../../app.config';
+import { FooterComponent } from "../../Restaurante/layOutComponent/footerComponent/footer.component";
 
 @Component({
   selector: 'app-login',
-  imports: [RouterLink, RouterLinkActive, FormsModule, ReactiveFormsModule],
+  imports: [RouterLink, RouterLinkActive, FormsModule, ReactiveFormsModule, FooterComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })

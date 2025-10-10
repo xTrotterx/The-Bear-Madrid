@@ -6,10 +6,11 @@ import IForm from '../../../modelos/Interfaces/IForm';
 import { Observable } from 'rxjs';
 import { RestClienteService } from '../../../servicios/rest-cliente.service';
 import { HTTP_INJECTIONTOKEN_STORAGE_SVCS } from '../../../app.config';
+import { FooterComponent } from "../../Restaurante/layOutComponent/footerComponent/footer.component";
 
 @Component({
   selector: 'app-registro',
-  imports: [RouterLink, RouterLinkActive, ReactiveFormsModule],
+  imports: [RouterLink, RouterLinkActive, ReactiveFormsModule, FooterComponent],
   templateUrl: './registro.component.html',
   styleUrl: './registro.component.css'
 })

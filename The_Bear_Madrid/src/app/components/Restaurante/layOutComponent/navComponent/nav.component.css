@@ -1,0 +1,29 @@
+/* ===== HEADER ===== */
+.header {
+  background-color: #0b1fd7 ;
+  height: 100px;
+  display: flex;
+  justify-content: center ; /* centra horizontalmente */
+  align-items: center;
+  position: relative;
+  padding: 0;
+}
+
+/* Centra el enlace con la imagen */
+.header a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+   height: 200px; 
+}
+
+/* Imagen centrada y más grande */
+.header img {
+  height: 80px ;     /* fuerza el tamaño del logo */
+  width: auto ;      /* mantiene proporción */
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+}
+
+

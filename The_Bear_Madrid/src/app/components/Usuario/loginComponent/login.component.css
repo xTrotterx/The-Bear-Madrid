@@ -3,8 +3,8 @@ html, body {
   margin: 0;
   display: flex;
   flex-direction: column;
-
 }
+
 .app-wrapper {
   display: flex;
   flex-direction: column;
@@ -20,10 +20,10 @@ html, body {
 
 /* ===== HEADER ===== */
 .header {
-  background-color: #0b1fd7 ;
+  background-color: #0b1fd7;
   height: 100px;
   display: flex;
-  justify-content: center ; /* centra horizontalmente */
+  justify-content: center; /* centra horizontalmente */
   align-items: center;
   position: relative;
   padding: 0;
@@ -34,13 +34,13 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
-   height: 200px; 
+  height: 200px; 
 }
 
 /* Imagen centrada y más grande */
 .header img {
-  height: 80px ;     /* fuerza el tamaño del logo */
-  width: auto ;      /* mantiene proporción */
+  height: 80px;     /* fuerza el tamaño del logo */
+  width: auto;      /* mantiene proporción */
   object-fit: contain;
   display: block;
   margin: 0 auto;
@@ -55,6 +55,7 @@ html, body {
   align-items: center;
   padding: 2rem;
 }
+
 .container::before {
   content: "";
   position: absolute;
@@ -73,7 +74,7 @@ html, body {
 
 /* ===== CONTENEDOR LOGIN ===== */
 .login-container {
- background-color: #edf0f4;
+  background-color: #edf0f4;
   border-radius: 20px;
   padding: 2rem;
   width: 100%;
@@ -86,33 +87,16 @@ html, body {
   margin-bottom: 10%;
 }
 
-.container::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.3); /* oscurece ligeramente la imagen */
-  z-index: 1;
-}
-
-.container > * {
-  position: relative;
-  z-index: 2; /* Para que el contenido esté encima del overlay */
-}
-
-
 /* ===== INPUTS ===== */
 .form-control {
-  border-radius: 10px ;
+  border-radius: 10px;
   padding: 0.75rem 1rem;
   border: 1px solid #ccc;
   transition: all 0.3s ease;
 }
 
 .mb-3 {
-  margin-bottom: 1.2rem ;
+  margin-bottom: 1.2rem;
 }
 
 /* ===== BOTÓN ===== */
@@ -144,4 +128,15 @@ html, body {
   text-decoration: underline;
 }
 
+/* ===== ENLACES EN LOGIN ===== */
+.login-container a {
+  color: #0b1fd7;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
 
+.login-container a:hover {
+  text-decoration: underline;
+  color: #0616a1;
+}

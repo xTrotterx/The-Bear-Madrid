@@ -122,3 +122,16 @@ html, body {
 }
 
 
+
+/* ===== ENLACES EN LOGIN ===== */
+.registro-container a {
+  color: #0b1fd7;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.registro-container a:hover {
+  text-decoration: underline;
+  color: #0616a1;
+}

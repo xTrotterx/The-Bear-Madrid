@@ -5,6 +5,6 @@ export default interface IStorageSvc{
     getJWT:() => IJwt,
     setJWT: (tipo:string, valor:string)=> void,
     
-    getDatosCliente: () => IUsuario,
+    getDatosUsuario: () => IUsuario,
     setDatosUsuario: (datosCliente: IUsuario) => void,
 }

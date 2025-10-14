@@ -62,7 +62,7 @@ export class RegistroComponent {
           this._storeGlobal.setDatosUsuario(_resp().datos.datosUsuario);
 
           //redirijo al componente home
-          //this._router.navigateByURl(/donde va el home del restaurante)
+          this._router.navigateByUrl('/Restaurante/Home');
 
         } else {
           //mensaje de error

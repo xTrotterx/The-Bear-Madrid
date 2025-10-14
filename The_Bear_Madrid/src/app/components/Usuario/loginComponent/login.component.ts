@@ -56,7 +56,7 @@ export class LoginComponent {
           this._storeGlobal.setDatosUsuario(_resp().datos.datosUsuario);
 
           //redirigir al home
-          //this._router.navigateByUrl()
+          this._router.navigateByUrl('/Restaurante/Home')
         } else {
           this.mensajeError.set(_resp().mensaje)
         }

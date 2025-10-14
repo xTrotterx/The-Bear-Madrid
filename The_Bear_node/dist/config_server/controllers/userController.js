@@ -16,6 +16,7 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 require("dotenv/config");
+const mailjet_1 = __importDefault(require("../../servicios/mailjet"));
 const usuario_1 = __importDefault(require("../../modelos/usuario"));
 const UserController = {
     Registro: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -35,6 +36,8 @@ const UserController = {
             //genero el jwt usando como codigo el id de mongo
             const _jwt = jsonwebtoken_1.default.sign({ email, codigo: _nuevoUsuario._id }, process.env.JWT_SECRET, { issuer: 'http://localhost:3003', expiresIn: '1h' });
             res.status(200).send({ codigo: 0, mensaje: 'Registro realizado correctamente', datos: { jwtVerificacion: _jwt, datosUsuario: Object.assign(Object.assign({}, _nuevoUsuario.toObject()), { 'password': undefined }) } }); //---> al hacer esto asi sobreescribo la password para que sea mas seguro 
+            //envio email de bienvenida
+            yield mailjet_1.default.sendEmial(nombre, apellidos, email);
         }
         catch (error) {
             console.log('Error al realizar el registro', error);

@@ -1,10 +1,22 @@
-import axios from "axios";
-
-export default {
-    sendEmial: async (nombre: string, apellidos: string, to: string) => {
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const axios_1 = __importDefault(require("axios"));
+exports.default = {
+    sendEmial: (nombre, apellidos, to) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const _config = Buffer.from(`${process.env.MAILJET_APIKEY}:${process.env.MAILJET_SECRET_APIKEY}`, 'utf-8').toString('base64');
-
             const _html = `
             <div>
                 <h2 style="text-align:center; color:#333;">¡Bienvenido a <strong>The Bear Madrid</strong>! 🐻</h2>
@@ -24,7 +36,6 @@ export default {
                 <p>Con cariño,<br><strong>El equipo de The Bear Madrid</strong></p>
             </div>
             `;
-
             const _mensaje = {
                 "Messages": [
                     {
@@ -44,7 +55,7 @@ export default {
                     }
                 ]
             };
-            const _respSend = await axios({
+            const _respSend = yield (0, axios_1.default)({
                 method: 'POST',
                 url: 'https://api.mailjet.com/v3.1/send',
                 headers: {
@@ -54,11 +65,13 @@ export default {
                 data: JSON.stringify(_mensaje)
             });
             console.log('se ha enviado el correo con exito ', _respSend.data);
-            if ((_respSend.data as any).Messages[0].Status !== 'success') throw new Error('error en envio de mail al usuario: ' + _respSend.data);
+            if (_respSend.data.Messages[0].Status !== 'success')
+                throw new Error('error en envio de mail al usuario: ' + _respSend.data);
             return true;
-        } catch (error) {
+        }
+        catch (error) {
             console.log('error el enviar email en servicio mailjet', error);
             return false;
         }
-    }
-}
+    })
+};

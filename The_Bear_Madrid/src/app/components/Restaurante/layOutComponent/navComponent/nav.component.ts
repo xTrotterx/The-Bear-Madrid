@@ -21,14 +21,14 @@ export class NavComponent {
 //#region---------propiedades-------
   public datosUsuario=signal<IUsuario>(this._storageGlobal.getDatosUsuario());
   public tipos =signal<ITipos |null> (null)
-  public breadCrumb=signal<ITipos[]>()
+  //public breadCrumb=signal<ITipos[]>()
 
 
 //#endregion
 
   public MostrarTipos(){
     this.tipos.set(null);
-    this.breadCrumb.set([{}])
+    //this.breadCrumb.set([{}])
 
   }
 

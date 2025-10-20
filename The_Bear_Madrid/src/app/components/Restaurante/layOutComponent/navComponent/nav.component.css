@@ -1,29 +1,32 @@
-/* ===== HEADER ===== */
 .header {
-  background-color: #0b1fd7 ;
+  background-color: #0b1fd7;
   height: 100px;
   display: flex;
-  justify-content: center ; /* centra horizontalmente */
+  justify-content: space-between;
   align-items: center;
   position: relative;
-  padding: 0;
+  padding: 0 2rem;
 }
 
-/* Centra el enlace con la imagen */
-.header a {
+.logo-container {
   display: flex;
   justify-content: center;
   align-items: center;
-   height: 200px; 
 }
 
-/* Imagen centrada y más grande */
-.header img {
-  height: 80px ;     /* fuerza el tamaño del logo */
-  width: auto ;      /* mantiene proporción */
+.logo {
+  height: 80px;
+  width: auto;
   object-fit: contain;
-  display: block;
-  margin: 0 auto;
 }
 
+.botonMenu {
+  border: none;
+  background: transparent;
+  font-size: 1.8rem;
+}
 
+.user-area button {
+  border-radius: 10px;
+  font-weight: 500;
+}

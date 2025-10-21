@@ -7,4 +7,6 @@ export default interface IStorageSvc{
     
     getDatosUsuario: () => IUsuario,
     setDatosUsuario: (datosCliente: IUsuario) => void,
+
+    IsLogged:() => boolean,
 }

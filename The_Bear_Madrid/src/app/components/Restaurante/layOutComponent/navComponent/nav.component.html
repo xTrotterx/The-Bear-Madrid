@@ -1,13 +1,10 @@
 <div class="app-wrapper d-flex flex-column min-vh-100">
   <!-- HEADER -->
   <header class="header d-flex justify-content-between align-items-center px-4 bg-dark text-white">
-    
+
     <!-- Botón Offcanvas (izquierda) -->
-    <button class="btn btn-outline-light botonMenu d-flex align-items-center"
-            type="button"
-            data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasMenu"
-            aria-controls="offcanvasMenu">
+    <button class="btn btn-outline-light botonMenu d-flex align-items-center" type="button" data-bs-toggle="offcanvas"
+      data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu">
       ☰
     </button>
 
@@ -18,28 +15,30 @@
 
     <!-- Área usuario (derecha) -->
     <div class="user-area d-flex align-items-center">
-      <ng-container >
-        <button class="btn btn-outline-light me-2" routerLink="/login">Iniciar sesión</button>
-        <button class="btn btn-light text-dark" routerLink="/registro">Registrarse</button>
-      </ng-container>
 
-      <ng-template #logueado>
-        <span class="me-3">Bienvenido, <strong>{{ datosUsuario().nombre }}</strong></span>
-        <button class="btn btn-outline-light" (click)="LogOut()">Salir</button>
-      </ng-template>
+      @if(this.isLogged){
+      <span class="me-3">Bienvenido, <strong>{{ this.datosUsuario().nombre + ' '+ this.datosUsuario().apellidos}}</strong></span>
+      <button class="btn btn-outline-light" (click)="LogOut()">Salir</button>
+      }@else{
+
+
+      <button class="btn btn-outline-light me-2" [routerLink]="['/Usuario/Login']">Iniciar sesión</button>
+      <button class="btn btn-light text-dark" [routerLink]="['Usuario/Registro']">Registrarse</button>
+      }
     </div>
   </header>
 
   <!-- OFFCANVAS Bootstrap -->
-  <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="offcanvasMenu" aria-labelledby="offcanvasMenuLabel">
+  <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="offcanvasMenu"
+    aria-labelledby="offcanvasMenuLabel">
     <div class="offcanvas-header">
       <h5 class="offcanvas-title" id="offcanvasMenuLabel">Tipos de platos</h5>
       <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
       <ul class="list-group list-group-flush">
-        <li *ngFor="tipos" class="list-group-item bg-dark text-white" >
-          {{ tipos }}
+        <li  class="list-group-item bg-dark text-white">
+         
         </li>
       </ul>
 

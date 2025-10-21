@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { computed, Injectable, Signal, signal } from '@angular/core';
 import IJwt from '../modelos/IJwt';
 import IUsuario from '../modelos/Interfaces/IUsuario';
 
@@ -10,7 +10,15 @@ export class StorageGlobalService {
   
   private _jwt = signal<IJwt>({ sesion: '', refresh: '', verificacion: '' });
   private _datosUsuario = signal<IUsuario | undefined>(undefined)
-
+  
+//hago una señal computada para comprobar si el usuario esta logueado atraves d elos tokens
+  private _isLogin:Signal<boolean>=computed<boolean>( ()=>{
+    if(this._jwt() && this._jwt().sesion !==''){
+      return true;
+    }else{
+      return false
+    }
+  })
   constructor() { }
   
 //#region---------metodos del Usuario-------------
@@ -36,6 +44,9 @@ export class StorageGlobalService {
         return { ...datosUsuario };
       }
     })
+  }
+  IsLogged():boolean{
+    return this._isLogin();
   }
   //#endregion----------------------------------
 }

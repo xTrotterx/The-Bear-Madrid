@@ -3,9 +3,10 @@ import { RegistroComponent } from './components/Usuario/registroComponent/regist
 import { LoginComponent } from './components/Usuario/loginComponent/login.component';
 import { HomeComponent } from './components/Restaurante/homeComponent/home.component';
 import { LayOutComponent } from './components/Restaurante/layOutComponent/lay-out.component';
-import {controlGuard} from './guard/control.guard'
+import { controlGuard } from './guard/control.guard'
 import { PerfilComponent } from './components/Usuario/perfilComponent/perfil.component';
 import { MapComponent } from './components/Restaurante/mapComponent/map.component';
+import { PlatoComponent } from './components/Restaurante/platoComponent/plato.component';
 
 export const routes: Routes = [
     { path: '', component: RegistroComponent },//<---pendiente a cambiar
@@ -14,15 +15,15 @@ export const routes: Routes = [
         children: [
             { path: 'Registro', component: RegistroComponent },
             { path: 'Login', component: LoginComponent },
-            { path:'Perfil', canActivate:[controlGuard], component:PerfilComponent}
+            { path: 'Perfil', canActivate: [controlGuard], component: PerfilComponent }
         ]
     },
     {
         path: 'Restaurante', component: LayOutComponent,
         children: [
             { path: 'Home', component: HomeComponent },
-            { path: 'Map', component: MapComponent}
-            
+            { path: 'Platos/:pathTipo', component: PlatoComponent },
+            { path: 'Map', component: MapComponent }
         ]
     }
 

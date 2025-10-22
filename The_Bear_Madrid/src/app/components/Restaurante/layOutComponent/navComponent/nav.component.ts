@@ -4,12 +4,12 @@ import { HTTP_INJECTIONTOKEN_STORAGE_SVCS } from '../../../../app.config';
 import IUsuario from '../../../../modelos/Interfaces/IUsuario';
 import ITipos from '../../../../modelos/Interfaces/ITipos';
 import { RestClienteService } from '../../../../servicios/rest-cliente.service';
-import { NgFor, NgIf } from '@angular/common';
+import { NgClass, NgFor, NgIf } from '@angular/common';
 import IRestMessage from '../../../../modelos/IRestMessage';
 
 @Component({
   selector: 'app-nav',
-  imports: [RouterLink],
+  imports: [RouterLink, NgClass],
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.css'
 })
@@ -34,7 +34,7 @@ export class NavComponent {
 
 
 //funcion resource para recuperar los tipos de platos
-public tipoResource:ResourceRef<IRestMessage>=resource(
+public _tipoResource:ResourceRef<IRestMessage>=resource(
   {
     request: this.tipo,
     loader:async ({request,abortSignal, previous})=>{
@@ -50,7 +50,7 @@ public tipoResource:ResourceRef<IRestMessage>=resource(
     injector: this._injector
   }
 );
-public tipos = computed<ITipos[]>(()=> this.tipoResource.value().codigo==0 ? this.tipoResource.value().datos : [] )
+public tipos = computed<ITipos[]>(()=> this._tipoResource.value().codigo==0 ? this._tipoResource.value().datos : [] )
 
   //#endregion
 //#region -------metodos---------------------
@@ -66,7 +66,7 @@ public tipos = computed<ITipos[]>(()=> this.tipoResource.value().codigo==0 ? thi
       this._router.navigate(['Restaurante/Plato', tip.pathTipo]);
     }
 
-    this.tipo.set(tip);
+    this.tipo.set(tip);//la señal apunta al tipo delseccionado y lo muestro en la barra 
     this.breadCrumb.update((prev:ITipos[])=>{
       let _pos= prev.findIndex(tipoo =>tipoo.pathTipo ==tip.pathTipo);
       return _pos == -1 ? [...prev, tip]: prev.slice(0, _pos+1)

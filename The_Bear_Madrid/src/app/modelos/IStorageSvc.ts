@@ -1,4 +1,6 @@
 import IJwt from "./IJwt";
+import IOrder from "./Interfaces/IOrder";
+import IPlato from "./Interfaces/IPlato";
 import IUsuario from "./Interfaces/IUsuario";
 
 export default interface IStorageSvc{
@@ -9,4 +11,7 @@ export default interface IStorageSvc{
     setDatosUsuario: (datosCliente: IUsuario) => void,
 
     IsLogged:() => boolean,
+
+    getorder: ()=> IOrder,
+    setItemsOrder: (operacion:string,item:{plato:IPlato, cantidad:number})=> void
 }

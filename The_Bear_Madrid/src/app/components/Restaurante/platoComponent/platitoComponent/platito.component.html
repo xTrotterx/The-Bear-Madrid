@@ -1,0 +1,34 @@
+
+<div class="card" style="width: 18rem;">
+    <img [src]="this.plato()!.imagenes[0]" class="card-img-top" style="height: 170px; width: 170px;" alt="...">
+    <div class="card-body">
+      <h3 class="card-title">{{ this.plato()!.nombre }}</h3>
+      <p class="card-text"><strong>{{ this.plato()!.precio }} €</strong></p>
+      @if( this.cantidadPlatos() == 0)
+      {
+        <button type="button" class=" btn btn-primary" (click)="AddToCart()">Añadir</button>
+      }
+      @else {
+        <div class='input-group input-group-sm'>
+          <button type='button' class='btn btn-primary btn-sm' (click)="ModificarCantidad('resta')" >
+              @if (this.cantidadPlatos() == 1)
+              {
+                <i class='fa-solid fa-trash' style='color: white;'></i>
+              }
+              @else {
+                  -
+              }
+                
+          </button>
+          <input type='text' 
+                 class='form-control' 
+                 maxLength='2'                  
+                 [value]="this.cantidadPlatos()"
+                 (change)="SetCantidadPlatosFromInput($event)"
+                 (blur)="ModificarCantidad('modifica')"
+                 />
+          <button type='button' class='btn btn-primary btn-sm' (click)="ModificarCantidad('suma')">+</button>
+        </div>
+      }
+    </div>
+</div>

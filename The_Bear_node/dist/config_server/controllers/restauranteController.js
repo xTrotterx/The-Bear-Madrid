@@ -40,7 +40,8 @@ const RestauranteController = {
             console.log('path recuperado de la url....', pathTipo);
             yield mongoose_1.default.connect(process.env.MONGODB_URL);
             let _platos = yield platos_1.default.find({ pathTipo: pathTipo });
-            console.log();
+            console.log('platos recuperados:...', _platos);
+            res.status(200).send({ condigo: 0, mensaje: 'platos recuperados con exito...', datos: _platos });
         }
         catch (error) {
             console.log('error al recuperar los platos en servicio node...', error);

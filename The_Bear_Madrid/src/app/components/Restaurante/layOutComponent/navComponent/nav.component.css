@@ -1,32 +1,54 @@
-.header {
-  background-color: #0b1fd7;
-  height: 100px;
+/* Navbar azul más alta */
+.custom-navbar {
+  background-color: #0b1fd7 !important;
+  height: 80px;              /* 🔹 antes solía ser ~56px, ahora más alta */
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  position: relative;
-  padding: 0 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.logo-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+/* Centrar el logo absolutamente en el navbar */
+.logo-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
+/* Ajustar tamaño del logo */
 .logo {
-  height: 80px;
+  height: 60px;              /* 🔹 tamaño perfecto para barra de 80px */
   width: auto;
-  object-fit: contain;
+  transition: transform 0.2s ease;
 }
 
-.botonMenu {
-  border: none;
-  background: transparent;
-  font-size: 1.8rem;
+.logo:hover {
+  transform: scale(1.05);
 }
 
-.user-area button {
-  border-radius: 10px;
-  font-weight: 500;
+/* Botón del menú (☰) */
+.navbar-toggler {
+  color: white;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  content: " > ";
+  color: #e0e0e0;
+}
+
+.breadcrumb-item a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.breadcrumb-item.active a {
+  color: #ccc;
+  pointer-events: none;
 }

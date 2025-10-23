@@ -33,5 +33,5 @@ export class PlatoComponent {
       injector: this._injector
     }
   );
-  public platos = computed<IPlato[]>(() => this._platosResource.value().codigo == 0 ? this._platosResource.value().datos : []);
+  public platos = computed<IPlato[]>(() => this._platosResource.value() ? (this._platosResource.value().codigo==0 ? this._platosResource.value().datos :[]):[]);
 }

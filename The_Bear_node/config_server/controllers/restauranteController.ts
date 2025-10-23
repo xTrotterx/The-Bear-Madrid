@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import mongoose from "mongoose";
 import Tipo from "../../modelos/tipo";
 import Plato from "../../modelos/platos"
+import { configDotenv } from "dotenv";
 
 const RestauranteController = {
     RecuperarTipos: async (req: Request, res: Response, next: NextFunction) => {
@@ -31,7 +32,8 @@ const RestauranteController = {
 
             await mongoose.connect(process.env.MONGODB_URL!);
             let _platos = await Plato.find({pathTipo: pathTipo});
-            console.log()
+            console.log('platos recuperados:...', _platos);
+            res.status(200).send({condigo:0, mensaje: 'platos recuperados con exito...', datos:_platos})
 
         } catch (error) {
             console.log('error al recuperar los platos en servicio node...', error);

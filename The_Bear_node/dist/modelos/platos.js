@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const platoSchema = new mongoose_1.default.Schema({
     nombre: String,
-    imagenes: [String],
+    imagen: String,
     patTipo: String,
     precio: Number,
     descripcion: String,

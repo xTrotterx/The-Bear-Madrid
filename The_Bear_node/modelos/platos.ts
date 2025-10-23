@@ -3,7 +3,7 @@ import mongoose, { mongo } from "mongoose";
 const platoSchema = new mongoose.Schema(
     {
         nombre:String,
-        imagenes:[String],
+        imagen:String,
         patTipo:String,
         precio:Number,
         descripcion:String,

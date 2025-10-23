@@ -2,35 +2,40 @@
 html, body {
   height: 100%;
   margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  background-color: #f8f9fa;
-
+  background-color: #0b1fd7; /* azul de fondo base */
 }
 
-/* --- HEADER --- */
+/* --- HEADER FIJO Y AZUL --- */
 .header {
-  background-color: #0b1fd7 ;
-  height: 100px;
+  background-color: #0b1fd7; /* azul */
+  height: 85px; /* un poco más delgada */
   display: flex;
-  justify-content: center ; /* centra horizontalmente */
-  align-items: center;
-  position: relative;
+  justify-content: center; /* centra horizontalmente */
+  align-items: center;     /* centra verticalmente */
+  position: fixed;          /* fijo al hacer scroll */
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;           /* sobre todo lo demás */
   padding: 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
 }
 
-/* Centra el enlace con la imagen */
+/* Centra el enlace con la imagen dentro del header */
 .header a {
   display: flex;
   justify-content: center;
   align-items: center;
-   height: 200px; 
+  height: 100%;
 }
 
-/* Imagen centrada y más grande */
+/* Logo centrado y proporcional */
 .header img {
-  height: 80px ;     /* fuerza el tamaño del logo */
-  width: auto ;      /* mantiene proporción */
+  height: 70px;  /* ajusta al nuevo alto del header */
+  width: auto;
   object-fit: contain;
   display: block;
   margin: 0 auto;
@@ -39,12 +44,23 @@ html, body {
 /* --- CONTENEDOR PRINCIPAL --- */
 .container {
   background-image: url('/fondo.jpg');
+  background-size: cover;       /* cubre todo el espacio */
+  background-repeat: no-repeat; /* no se repite */
+  background-position: center;  /* centrada */
+  background-attachment: fixed;
   flex: 1;
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: 2rem;
+  align-items: flex-start;      /* empieza justo debajo del header */
+  position: relative;
+
+  margin: 0 !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  padding: 120px 0 40px 0 !important; /* espacio superior para el header fijo */
 }
+
+/* Capa oscura sobre la imagen */
 .container::before {
   content: "";
   position: absolute;
@@ -52,46 +68,45 @@ html, body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.3); /* Oscurece ligeramente la imagen */
+  background: rgba(0,0,0,0.3);
   z-index: 1;
 }
 
 .container > * {
   position: relative;
-  z-index: 2; /* Para que el contenido esté encima del overlay */
+  z-index: 2;
 }
 
-/* --- FORMULARIO --- */
+/* --- CONTENEDOR REGISTRO --- */
 .registro-container {
-  background-color: #edf0f4;
+  background-color: rgba(237, 240, 244, 0.95);
   border-radius: 20px;
   padding: 2rem;
   width: 100%;
   max-width: 420px;
-  box-shadow: 
-    0 6px 15px rgba(0, 0, 0, 0.15),
-    0 3px 6px rgba(0, 0, 0, 0.08);   
-  border: 1px solid rgba(255, 255, 255, 0.6); 
+  box-shadow:
+    0 6px 15px rgba(0,0,0,0.15),
+    0 3px 6px rgba(0,0,0,0.08);
+  border: 1px solid rgba(255,255,255,0.6);
   transition: all 0.3s ease;
   margin-bottom: 10%;
 }
 
-
 /* --- INPUTS --- */
 .form-control {
-  border-radius: 10px ;
+  border-radius: 10px;
   padding: 0.75rem 1rem;
   border: 1px solid #ccc;
   transition: all 0.3s ease;
 }
 
 .mb-3 {
-  margin-bottom: 1.2rem ;
+  margin-bottom: 1.2rem;
 }
 
 /* --- INPUT GROUP (icono ojo) --- */
 .input-group-text {
-  border-radius: 10px ;
+  border-radius: 10px;
   background-color: #f8f9fa;
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -105,14 +120,14 @@ html, body {
 .btn-dark {
   background-color: #fff;
   color: #000;
-  border: 1.5px solid #000; 
+  border: 1.5px solid #000;
   border-radius: 10px;
   transition: all 0.3s ease;
   padding: 0.55rem 0;
   font-size: 1rem;
-  width: 66%; 
-  margin: 0 auto; 
-  display: block; 
+  width: 70%;
+  margin: 0 auto;
+  display: block;
 }
 
 .btn-dark:hover {
@@ -121,9 +136,7 @@ html, body {
   transform: scale(1.05);
 }
 
-
-
-/* ===== ENLACES EN LOGIN ===== */
+/* --- ENLACES --- */
 .registro-container a {
   color: #0b1fd7;
   text-decoration: none;
@@ -134,4 +147,28 @@ html, body {
 .registro-container a:hover {
   text-decoration: underline;
   color: #0616a1;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 576px) {
+  .header {
+    height: 70px;
+  }
+
+  .header img {
+    height: 55px;
+  }
+
+  .container {
+    padding: 100px 1rem 2rem 1rem !important;
+  }
+
+  .registro-container {
+    margin: 1.5rem;
+    padding: 1.5rem;
+  }
+
+  .btn-dark {
+    width: 85%;
+  }
 }

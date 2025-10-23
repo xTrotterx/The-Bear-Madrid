@@ -1,22 +1,23 @@
-/* Navbar azul más alta */
+/* 🔷 Navbar azul personalizada */
 .custom-navbar {
   background-color: #0b1fd7 !important;
-  height: 80px;              /* 🔹 antes solía ser ~56px, ahora más alta */
+  height: 90px; /* 🔹 un pelín más grande */
   display: flex;
   align-items: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  padding: 0 1rem;
 }
 
-/* Centrar el logo absolutamente en el navbar */
+/* Centrado absoluto del logo */
 .logo-center {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
 }
 
-/* Ajustar tamaño del logo */
+/* Tamaño del logo */
 .logo {
-  height: 60px;              /* 🔹 tamaño perfecto para barra de 80px */
+  height: 70px; /* 🔹 un poco más grande */
   width: auto;
   transition: transform 0.2s ease;
 }
@@ -25,10 +26,12 @@
   transform: scale(1.05);
 }
 
-/* Botón del menú (☰) */
+/* 🔸 Botón ☰ más grande y centrado verticalmente */
 .navbar-toggler {
-  color: white;
+  font-size: 1.8rem; /* aumenta el tamaño del icono */
+  padding: 0.6rem 0.9rem; /* botón más grande */
   border-color: rgba(255, 255, 255, 0.5);
+  color: white;
 }
 
 /* Breadcrumb */
@@ -51,4 +54,67 @@
 .breadcrumb-item.active a {
   color: #ccc;
   pointer-events: none;
+}
+
+/* 🔸 Ajuste responsive para pantallas pequeñas */
+@media (max-width: 768px) {
+  .custom-navbar {
+    height: 75px;
+  }
+
+  .logo {
+    height: 55px;
+  }
+
+  .navbar-toggler {
+    font-size: 1.6rem;
+    padding: 0.5rem 0.8rem;
+  }
+}
+/* 🔷 Offcanvas personalizado */
+.custom-offcanvas {
+  background-color: #000 !important; /* 🔹 Fondo negro */
+  color: #fff;
+  border-right: 2px solid #0b1fd7; /* línea azul decorativa opcional */
+}
+
+/* Encabezado del offcanvas */
+.custom-offcanvas .offcanvas-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Título */
+.custom-offcanvas .offcanvas-title {
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Botón de cierre blanco */
+.custom-offcanvas .btn-close {
+  filter: invert(1); /* lo vuelve blanco */
+}
+
+/* Breadcrumb dentro del offcanvas */
+.custom-offcanvas .breadcrumb-item a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.custom-offcanvas .breadcrumb-item + .breadcrumb-item::before {
+  content: " > ";
+  color: #aaa;
+}
+
+/* Tipos de platos */
+.custom-offcanvas .list-group-item {
+  background-color: transparent;
+  color: #fff;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background-color 0.2s ease;
+}
+
+.custom-offcanvas .list-group-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
 }

@@ -1,57 +1,63 @@
 <div class="app-wrapper d-flex flex-column min-vh-100">
-<header class="header d-flex justify-content-between align-items-center p-3 bg-dark text-white">
-  <a [routerLink]="['/Home']" routerLinkActive="router-link-active" class="text-white">
-      <img src="/the_bear_logo.jpg" alt="Logo The Bear" >
-     </a>
-</header>
 
-<!-- Fondo con imagen -->
-<div class="container flex-grow-1 d-flex justify-content-center align-items-center">
-  <div class="login-container p-4 shadow-lg rounded">
-    <h2 class="text-center mb-4">Inicia sesión en The Bear</h2>
+  <!-- HEADER -->
+  <header class="header custom-header d-flex justify-content-center align-items-center p-3 text-white">
+    <a [routerLink]="['/Home']" routerLinkActive="router-link-active" class="text-white d-flex justify-content-center">
+      <img src="/the_bear_logo.jpg" alt="Logo The Bear" class="logo">
+    </a>
+  </header>
 
-    <!-- Formulario -->
-    <form [formGroup]="formLogin" (ngSubmit)="LoginUser($event)">
-      <!-- Correo -->
-      <div class="mb-3">
-        <input
-          type="email"
-          class="form-control"
-          placeholder="Correo electrónico*"
-          formControlName="email"
-        />
-          @if(formLogin.controls['email'].errors?.['required'] && formLogin.controls['email'].dirty){<span class="text-danger"><small>* Campo obligatorio</small></span>}
-        
-      </div>
+  <!-- FONDO CON IMAGEN -->
+  <div class="container flex-grow-1 d-flex justify-content-center align-items-center custom-bg">
+    <div class="login-container p-4 shadow-lg rounded">
+      <h2 class="text-center mb-4">Inicia sesión en The Bear</h2>
 
-      <!-- Contraseña -->
-      <div class="input-group mb-3">
-        <input
-        [type]="pswdVisible() ? 'text' : 'password'"
-         class="form-control"
-          placeholder="Contraseña*"
-          formControlName="password"
-        />
-        <span class="input-group-text" (click)="SetPswdVisible()" >
-          <img src="https://cdn-icons-png.flaticon.com/512/159/159604.png" alt="icono ojo" style="height: 20px;">
-        </span>
-      </div>
+      <!-- FORMULARIO -->
+      <form [formGroup]="formLogin" (ngSubmit)="LoginUser($event)">
+        <!-- Correo -->
+        <div class="mb-3">
+          <input
+            type="email"
+            class="form-control"
+            placeholder="Correo electrónico*"
+            formControlName="email"
+          />
+          @if(formLogin.controls['email'].errors?.['required'] && formLogin.controls['email'].dirty){
+            <span class="text-danger"><small>* Campo obligatorio</small></span>
+          }
+        </div>
 
-      <!-- Botón -->
-      <div class="d-grid">
-        <button type="submit" class="btn btn-dark">Iniciar sesión</button>
-      </div>
-    </form>
+        <!-- Contraseña -->
+        <div class="input-group mb-3">
+          <input
+            [type]="pswdVisible() ? 'text' : 'password'"
+            class="form-control"
+            placeholder="Contraseña*"
+            formControlName="password"
+          />
+          <span class="input-group-text" (click)="SetPswdVisible()">
+            <img src="https://cdn-icons-png.flaticon.com/512/159/159604.png" alt="icono ojo" style="height: 20px;">
+          </span>
+        </div>
 
-    <p class="text-center mt-3">
-      ¿No tienes una cuenta?
-      <a [routerLink]="['/Usuario/Registro']" routerLinkActive="router-link-active" class="text-primary">Regístrate</a>
-    </p>
-     <p>
-      <a [routerLink]="['/Restaurante/Home']" routerLinkActive="router-link-active" class="text-primary">Continuar como invitado</a>
-    </p>
-    
+        <!-- Botón -->
+        <div class="d-grid">
+          <button type="submit" class="btn btn-dark">Iniciar sesión</button>
+        </div>
+      </form>
+
+      <p class="text-center mt-3">
+        ¿No tienes una cuenta?
+        <a [routerLink]="['/Usuario/Registro']" routerLinkActive="router-link-active" class="text-primary">Regístrate</a>
+      </p>
+
+      <p class="text-center">
+        <a [routerLink]="['/Restaurante/Home']" routerLinkActive="router-link-active" class="text-primary">
+          Continuar como invitado
+        </a>
+      </p>
+    </div>
   </div>
-</div>
 
-<app-footer></app-footer>
+  <app-footer></app-footer>
+</div>

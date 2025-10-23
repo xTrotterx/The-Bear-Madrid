@@ -1,62 +1,65 @@
 html, body {
   height: 100%;
   margin: 0;
+  padding: 0; /* 🔹 Elimina cualquier separación */
   display: flex;
   flex-direction: column;
-  background-color: #0b1fd7
+  background-color: #0b1fd7;
 }
 
 .app-wrapper {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* importante para que ocupe toda la pantalla */
+  min-height: 100vh; /* Ocupa toda la pantalla */
 }
 
-.container.flex-grow-1 {
-  flex: 1; /* empuja el footer hacia abajo */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+/* ===================================
+   🔹 HEADER
+=================================== */
 
-/* ===== HEADER ===== */
-.header {
-  background-color: #0b1fd7;
-  height: 100px;
-  display: flex;
-  justify-content: center; /* centra horizontalmente */
-  align-items: center;
-  position: relative;
-  padding: 0;
-}
 
 /* Centra el enlace con la imagen */
 .header a {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 200px; 
+  height: 100%;
 }
 
-/* Imagen centrada y más grande */
+/* Imagen centrada y proporcional */
 .header img {
-  height: 80px;     /* fuerza el tamaño del logo */
-  width: auto;      /* mantiene proporción */
+  height: 70px;  /* 🔹 Ajustado al nuevo alto */
+  width: auto;
   object-fit: contain;
   display: block;
   margin: 0 auto;
 }
 
-/* ===== FONDO ===== */
+/* ===================================
+   🔹 FONDO DE PANTALLA
+=================================== */
 .container {
   background-image: url('/fondo.jpg');
+  background-size: cover;       /* ✅ Ocupa toda la pantalla */
+  background-repeat: no-repeat; /* ✅ No se repite */
+  background-position: center;  /* ✅ Centrada */
+  background-attachment: fixed; /* ✅ Fondo fijo */
   flex: 1;
+
+  /* 🔹 Quita márgenes automáticos de Bootstrap */
+  margin: 0 !important;
+  max-width: 100% !important;
+  padding: 0 !important;
+  width: 100% !important;
+
+  /* 🔹 Centra contenido */
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 2rem;
+  position: relative;
 }
 
+/* Capa oscura sobre la imagen */
 .container::before {
   content: "";
   position: absolute;
@@ -64,31 +67,36 @@ html, body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.3); /* Oscurece ligeramente la imagen */
+  background: rgba(0, 0, 0, 0.3);
   z-index: 1;
 }
 
 .container > * {
   position: relative;
-  z-index: 2; /* Para que el contenido esté encima del overlay */
+  z-index: 2;
 }
 
-/* ===== CONTENEDOR LOGIN ===== */
+/* ===================================
+   🔹 CONTENEDOR LOGIN
+=================================== */
 .login-container {
-  background-color: #edf0f4;
+  background-color: rgba(237, 240, 244, 0.95);
   border-radius: 20px;
   padding: 2rem;
   width: 100%;
   max-width: 420px;
-  box-shadow: 
+  box-shadow:
     0 6px 15px rgba(0, 0, 0, 0.15),
-    0 3px 6px rgba(0, 0, 0, 0.08);   
-  border: 1px solid rgba(255, 255, 255, 0.6); 
+    0 3px 6px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   transition: all 0.3s ease;
+  margin-top: 60px;
   margin-bottom: 10%;
 }
 
-/* ===== INPUTS ===== */
+/* ===================================
+   🔹 FORMULARIO / INPUTS / BOTÓN
+=================================== */
 .form-control {
   border-radius: 10px;
   padding: 0.75rem 1rem;
@@ -100,18 +108,17 @@ html, body {
   margin-bottom: 1.2rem;
 }
 
-/* ===== BOTÓN ===== */
 .btn-dark {
   background-color: #fff;
   color: #000;
-  border: 1.5px solid #000; 
+  border: 1.5px solid #000;
   border-radius: 10px;
   transition: all 0.3s ease;
   padding: 0.55rem 0;
   font-size: 1rem;
-  width: 66%; 
-  margin: 0 auto; 
-  display: block; 
+  width: 66%;
+  margin: 0 auto;
+  display: block;
 }
 
 .btn-dark:hover {
@@ -120,7 +127,9 @@ html, body {
   transform: scale(1.05);
 }
 
-/* ===== LINK DE REGISTRO ===== */
+/* ===================================
+   🔹 ENLACES / TEXTOS
+=================================== */
 .text-primary {
   text-decoration: none;
 }
@@ -129,7 +138,6 @@ html, body {
   text-decoration: underline;
 }
 
-/* ===== ENLACES EN LOGIN ===== */
 .login-container a {
   color: #0b1fd7;
   text-decoration: none;
@@ -140,4 +148,26 @@ html, body {
 .login-container a:hover {
   text-decoration: underline;
   color: #0616a1;
+}
+
+/* ===================================
+   🔹 RESPONSIVE (opcional pero recomendado)
+=================================== */
+@media (max-width: 576px) {
+  .header {
+    height: 70px; /* 🔹 Más pequeño en móvil */
+  }
+
+  .header img {
+    height: 55px; /* 🔹 Ajuste proporcional */
+  }
+
+  .login-container {
+    margin: 2rem;
+    padding: 1.5rem;
+  }
+
+  .btn-dark {
+    width: 80%;
+  }
 }

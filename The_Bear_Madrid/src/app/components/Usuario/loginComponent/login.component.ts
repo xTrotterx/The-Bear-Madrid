@@ -6,10 +6,11 @@ import { RestClienteService } from '../../../servicios/rest-cliente.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { HTTP_INJECTIONTOKEN_STORAGE_SVCS } from '../../../app.config';
 import { FooterComponent } from "../../Restaurante/layOutComponent/footerComponent/footer.component";
+import { NavComponent } from '../../Restaurante/layOutComponent/navComponent/nav.component';
 
 @Component({
   selector: 'app-login',
-  imports: [RouterLink, RouterLinkActive, FormsModule, ReactiveFormsModule, FooterComponent],
+  imports: [RouterLink, RouterLinkActive, FormsModule, ReactiveFormsModule, FooterComponent, NavComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })

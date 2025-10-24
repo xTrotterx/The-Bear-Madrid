@@ -18,30 +18,43 @@ const platos_1 = __importDefault(require("../../modelos/platos"));
 const RestauranteController = {
     RecuperarTipos: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            let pathTipo = req.query.pathTipo;
-            console.log('pathTipo recuperado....', pathTipo);
-            let _pattern = '^\\d+$';
-            if (pathTipo !== 'raiz')
-                _pattern = `${pathTipo}-(\\d+-?)`;
-            let _regex = new RegExp(_pattern);
+            const pathTipo = req.query.pathTipo;
+            console.log('pathTipo recibido:', pathTipo);
             yield mongoose_1.default.connect(process.env.MONGODB_URL);
-            let _tipos = yield tipo_1.default.find({ pathTipo: { $regex: _regex } });
-            console.log('tipos de platos recuperados:...', _tipos);
-            res.status(200).send({ codigo: 0, mensaje: 'tipos recuperados con exito', datos: _tipos });
+            let _tipos;
+            if (pathTipo === 'raiz') {
+                // Tipos raíz: 1, 2, 3...
+                _tipos = yield tipo_1.default.find({ pathTipo: { $regex: '^\\d+$' } });
+            }
+            else {
+                // Buscar subtipos
+                const subtipos = yield tipo_1.default.find({ pathTipo: { $regex: `^${pathTipo}-\\d+$` } });
+                // Buscar elementos finales (terminan en -$)
+                const finales = yield tipo_1.default.find({ pathTipo: `${pathTipo}-1-$` }); // o tu regla para finales
+                // Si tus finales pueden variar en número (3-1-$, 3-2-$, etc.), usa regex:
+                // const finales = await Tipo.find({ pathTipo: { $regex: `^${pathTipo}-\\d+-\\$` } });
+                _tipos = [...subtipos, ...finales];
+            }
+            console.log('Tipos recuperados:', _tipos);
+            res.status(200).send({
+                codigo: 0,
+                mensaje: 'Tipos y finales recuperados con éxito',
+                datos: _tipos
+            });
         }
         catch (error) {
-            console.log('error el recuperar los tipos en servicio node...', error);
-            res.status(500).send({ codigo: 1, mensaje: 'error al recuperar los tipos....' + error });
+            console.log('Error al recuperar tipos:', error);
+            res.status(500).send({ codigo: 1, mensaje: 'Error al recuperar tipos: ' + error });
         }
     }),
     RecuperarPlatos: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             let pathTipo = req.query.pathTipo;
-            console.log('path recuperado de la url....', pathTipo);
+            console.log('path recuperado de la url para sacar los platos....', pathTipo);
             yield mongoose_1.default.connect(process.env.MONGODB_URL);
             let _platos = yield platos_1.default.find({ pathTipo: pathTipo });
             console.log('platos recuperados:...', _platos);
-            res.status(200).send({ condigo: 0, mensaje: 'platos recuperados con exito...', datos: _platos });
+            res.status(200).send({ codigo: 0, mensaje: 'platos recuperados con exito...', datos: _platos });
         }
         catch (error) {
             console.log('error al recuperar los platos en servicio node...', error);

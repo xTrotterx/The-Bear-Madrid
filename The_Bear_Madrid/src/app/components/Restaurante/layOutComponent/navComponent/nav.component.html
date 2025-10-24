@@ -57,7 +57,7 @@
   </div>
 -->
   <nav class="navbar custom-navbar fixed-top">
-    <div class="container-fluid d-flex justify-content-between align-items-center">
+      <div class="container-fluid d-flex justify-content-between align-items-center">
 
       <!-- Botón del menú a la izquierda -->
       <button class="navbar-toggler me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar"
@@ -71,16 +71,13 @@
           <img src="/the_bear_logo.jpg" alt="Logo The Bear" class="logo">
         </a>
       </div>
-
-      <!-- Espaciador para mantener simetría -->
-      <div style="width:40px;"></div>
-
+      
       <!-- Offcanvas -->
       <div class="offcanvas offcanvas-start custom-offcanvas" tabindex="-1" id="offcanvasDarkNavbar"
         aria-labelledby="offcanvasDarkNavbarLabel">
         <div class="offcanvas-header">
           <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">The Bear Menu</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+          <button #btnCerrar type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
             aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
@@ -106,5 +103,3 @@
         </div>
       </div>
     </div>
-  </nav>
-</div>

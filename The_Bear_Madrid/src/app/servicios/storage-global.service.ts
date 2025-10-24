@@ -12,13 +12,14 @@ export class StorageGlobalService {
   private _datosUsuario = signal<IUsuario | undefined>(undefined)
   
 //hago una señal computada para comprobar si el usuario esta logueado atraves d elos tokens
-  private _isLogin:Signal<boolean>=computed<boolean>( ()=>{
+ /* private _isLogin:Signal<boolean>=computed<boolean>( ()=>{
     if(this._jwt() && this._jwt().sesion !==''){
       return true;
     }else{
       return false
     }
   })
+    */
   constructor() { }
   
 //#region---------metodos del Usuario-------------
@@ -45,8 +46,8 @@ export class StorageGlobalService {
       }
     })
   }
-  IsLogged():boolean{
-    return this._isLogin();
-  }
+ // IsLogged():boolean{
+   // return this._isLogin();
+  //}
   //#endregion----------------------------------
 }

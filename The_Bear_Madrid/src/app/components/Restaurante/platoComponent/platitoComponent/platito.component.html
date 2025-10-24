@@ -1,34 +1,38 @@
+<div class="card h-100 platito-card">
+  <img [src]="this.plato()!.imagen" class="card-img-top mx-auto d-block" alt="{{ this.plato()!.nombre }}">
+  
+  <div class="card-body d-flex flex-column">
+    <h5 class="card-title text-center">{{ this.plato()!.nombre }}</h5>
+    <p class="card-text text-center fw-bold">{{ this.plato()!.precio }} €</p>
 
-<div class="card" style="width: 18rem;">
-    <img [src]="this.plato()!.imagen" class="card-img-top" style="height: 170px; width: 170px;" alt="...">
-    <div class="card-body">
-      <h3 class="card-title">{{ this.plato()!.nombre }}</h3>
-      <p class="card-text"><strong>{{ this.plato()!.precio }} €</strong></p>
-      @if( this.cantidadPlatos() == 0)
-      {
-        <button type="button" class=" btn btn-primary" (click)="AddToCart()">Añadir</button>
-      }
-      @else {
-        <div class='input-group input-group-sm'>
-          <button type='button' class='btn btn-primary btn-sm' (click)="ModificarCantidad('resta')" >
-              @if (this.cantidadPlatos() == 1)
-              {
-                <i class='fa-solid fa-trash' style='color: white;'></i>
-              }
-              @else {
-                  -
-              }
-                
-          </button>
-          <input type='text' 
-                 class='form-control' 
-                 maxLength='2'                  
-                 [value]="this.cantidadPlatos()"
-                 (change)="SetCantidadPlatosFromInput($event)"
-                 (blur)="ModificarCantidad('modifica')"
-                 />
-          <button type='button' class='btn btn-primary btn-sm' (click)="ModificarCantidad('suma')">+</button>
-        </div>
-      }
-    </div>
+    <!-- Botón Añadir o Control de Cantidad -->
+    @if(this.cantidadPlatos() == 0)
+    {
+      <button type="button" class="btn btn-primary mt-auto w-100" (click)="AddToCart()">
+        Añadir
+      </button>
+    }
+    @else {
+      <div class="input-group input-group-sm mt-auto">
+        <button type="button" class="btn btn-primary btn-sm" (click)="ModificarCantidad('resta')">
+          @if (this.cantidadPlatos() == 1)
+          {
+            <i class="fa-solid fa-trash text-white"></i>
+          }
+          @else {
+            -
+          }
+        </button>
+
+        <input type="text" 
+               class="form-control text-center" 
+               maxlength="2"
+               [value]="this.cantidadPlatos()"
+               (change)="SetCantidadPlatosFromInput($event)"
+               (blur)="ModificarCantidad('modifica')" />
+
+        <button type="button" class="btn btn-primary btn-sm" (click)="ModificarCantidad('suma')">+</button>
+      </div>
+    }
+  </div>
 </div>

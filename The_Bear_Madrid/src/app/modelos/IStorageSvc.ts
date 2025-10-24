@@ -10,8 +10,8 @@ export default interface IStorageSvc{
     getDatosUsuario: () => IUsuario,
     setDatosUsuario: (datosCliente: IUsuario) => void,
 
-    IsLogged:() => boolean,
+    //IsLogged:() => boolean,
 
-    getorder: ()=> IOrder,
+    getOrder: ()=> IOrder,
     setItemsOrder: (operacion:string,item:{plato:IPlato, cantidad:number})=> void
 }

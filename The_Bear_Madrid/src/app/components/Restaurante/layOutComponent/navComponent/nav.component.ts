@@ -26,7 +26,7 @@ export class NavComponent {
   public tipo = signal<ITipos | null>(null);
 
   public datosUsuario = signal<IUsuario>(this._storageGlobal.getDatosUsuario());
-  public isLogged: boolean = this._storageGlobal.IsLogged();
+
 
   public btnCerrar = viewChild<ElementRef>('btnCerrar');
 
@@ -48,7 +48,7 @@ export class NavComponent {
       injector: this._injector
     }
   );
-  public tipos = computed<ITipos[]>(() => this._tipoResource.value() ? (this._tipoResource.value().codigo==0 ? this._tipoResource.value().datos :[]):[]);
+  public tipos = computed<ITipos[]>(() => this._tipoResource.value() ? (this._tipoResource.value().codigo == 0 ? this._tipoResource.value().datos : []) : []);
 
   //#endregion
   //#region -------metodos---------------------
@@ -58,7 +58,8 @@ export class NavComponent {
   }
 
   public RecuperarSubTipo(tip: ITipos) {
-    if (/.*-\$$/.test(tip.pathTipo)) {
+
+    if (tip.pathTipo.endsWith('$')) {
       this.InnitTipos();
       this.btnCerrar()?.nativeElement.click();
       this._router.navigate(['/Restaurante/Platos', tip.pathTipo]);
@@ -71,12 +72,6 @@ export class NavComponent {
     })
   }
 
-  LogOut() {
-    this._storageGlobal.setJWT('sesion', '')
-    this._storageGlobal.setJWT('refresh', '');
-    this._storageGlobal.setDatosUsuario(undefined as any);
-
-  }
   //#endregion
 
 }

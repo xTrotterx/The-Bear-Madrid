@@ -1,24 +1,27 @@
 html, body {
   height: 100%;
   margin: 0;
-  padding: 0; /* 🔹 Elimina cualquier separación */
+  padding: 0; 
   display: flex;
   flex-direction: column;
-  background-color: #0b1fd7;
 }
 
-.app-wrapper {
+.header {
+  background-color: #0b1fd7; /* azul */
+  height: 85px; /* un poco más delgada */
   display: flex;
-  flex-direction: column;
-  min-height: 100vh; /* Ocupa toda la pantalla */
+  justify-content: center; /* centra horizontalmente */
+  align-items: center;     /* centra verticalmente */
+  position: fixed;          /* fijo al hacer scroll */
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;           /* sobre todo lo demás */
+  padding: 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  
 }
 
-/* ===================================
-   🔹 HEADER
-=================================== */
-
-
-/* Centra el enlace con la imagen */
 .header a {
   display: flex;
   justify-content: center;
@@ -26,7 +29,6 @@ html, body {
   height: 100%;
 }
 
-/* Imagen centrada y proporcional */
 .header img {
   height: 70px;  /* 🔹 Ajustado al nuevo alto */
   width: auto;
@@ -35,31 +37,24 @@ html, body {
   margin: 0 auto;
 }
 
-/* ===================================
-   🔹 FONDO DE PANTALLA
-=================================== */
 .container {
   background-image: url('/fondo.jpg');
-  background-size: cover;       /* ✅ Ocupa toda la pantalla */
-  background-repeat: no-repeat; /* ✅ No se repite */
-  background-position: center;  /* ✅ Centrada */
-  background-attachment: fixed; /* ✅ Fondo fijo */
+  background-size: cover;       /* cubre todo el espacio */
+  background-repeat: no-repeat; /* no se repite */
+  background-position: center;  /* centrada */
+  background-attachment: fixed;
   flex: 1;
-
-  /* 🔹 Quita márgenes automáticos de Bootstrap */
-  margin: 0 !important;
-  max-width: 100% !important;
-  padding: 0 !important;
-  width: 100% !important;
-
-  /* 🔹 Centra contenido */
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;      /* empieza justo debajo del header */
   position: relative;
+
+  margin: 0 !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  padding: 120px 0 40px 0 !important; /* espacio superior para el header fijo */
 }
 
-/* Capa oscura sobre la imagen */
 .container::before {
   content: "";
   position: absolute;
@@ -76,9 +71,6 @@ html, body {
   z-index: 2;
 }
 
-/* ===================================
-   🔹 CONTENEDOR LOGIN
-=================================== */
 .login-container {
   background-color: rgba(237, 240, 244, 0.95);
   border-radius: 20px;
@@ -90,13 +82,10 @@ html, body {
     0 3px 6px rgba(0, 0, 0, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.6);
   transition: all 0.3s ease;
-  margin-top: 60px;
+  margin-top: 20px;
   margin-bottom: 10%;
 }
 
-/* ===================================
-   🔹 FORMULARIO / INPUTS / BOTÓN
-=================================== */
 .form-control {
   border-radius: 10px;
   padding: 0.75rem 1rem;
@@ -127,9 +116,7 @@ html, body {
   transform: scale(1.05);
 }
 
-/* ===================================
-   🔹 ENLACES / TEXTOS
-=================================== */
+
 .text-primary {
   text-decoration: none;
 }
@@ -150,9 +137,6 @@ html, body {
   color: #0616a1;
 }
 
-/* ===================================
-   🔹 RESPONSIVE (opcional pero recomendado)
-=================================== */
 @media (max-width: 576px) {
   .header {
     height: 70px; /* 🔹 Más pequeño en móvil */

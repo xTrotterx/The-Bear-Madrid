@@ -59,11 +59,11 @@ export class NavComponent {
 
   public RecuperarSubTipo(tip: ITipos) {
 
-    if (tip.pathTipo.endsWith('$')) {
+   // if (tip.pathTipo.endsWith('$')) {
       this.InnitTipos();
       this.btnCerrar()?.nativeElement.click();
       this._router.navigate(['/Restaurante/Platos', tip.pathTipo]);
-    }
+   // }
 
     this.tipo.set(tip);//la señal apunta al tipo delseccionado y lo muestro en la barra 
     this.breadCrumb.update((prev: ITipos[]) => {

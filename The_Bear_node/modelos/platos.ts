@@ -4,7 +4,7 @@ const platoSchema = new mongoose.Schema(
     {
         nombre:String,
         imagen:String,
-        patTipo:String,
+        pathTipo:String,
         precio:Number,
         descripcion:String,
         valoraciones:[{type:mongoose.Schema.Types.ObjectId, ref:"Opinion"}]

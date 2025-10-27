@@ -1,0 +1,21 @@
+.scroll-container {
+  display: flex;
+  gap: 1.2rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 10px;
+}
+
+.scroll-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.scroll-container app-platito {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+}

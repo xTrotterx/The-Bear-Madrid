@@ -31,13 +31,35 @@ const RestauranteController = {
             console.log('path recuperado de la url para sacar los platos....', pathTipo);
 
             await mongoose.connect(process.env.MONGODB_URL!);
-            let _platos = await Plato.find({pathTipo: pathTipo});
+            let _platos = await Plato.find({ pathTipo: pathTipo });
             console.log('platos recuperados:...', _platos);
-            res.status(200).send({codigo:0, mensaje: 'platos recuperados con exito...', datos:_platos})
+            res.status(200).send({ codigo: 0, mensaje: 'platos recuperados con exito...', datos: _platos })
 
         } catch (error) {
             console.log('error al recuperar los platos en servicio node...', error);
             res.status(500).send({ codigo: 1, mensaje: 'error al recuperar platos ' + error })
+        }
+    },
+    PlatosPorTipos: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+
+            await mongoose.connect(process.env.MONGODB_URL!);
+
+            // Recupera todos los platos
+            let _platos = await Plato.find({});
+
+            // Agrupa por tipo
+            let _agrupados: Record<string, any[]> = {};
+
+            _platos.forEach(p => {
+                if (!_agrupados[p.pathTipo ?? '']) _agrupados[p.pathTipo ?? ''] = [];
+                _agrupados[p.pathTipo ?? ''].push(p);
+            });
+
+            res.status(200).send({ codigo: 0,mensaje: "Platos agrupados por tipo", datos: _agrupados});
+        } catch (error) {
+            console.log('error al recuperar datos para el home en node...', error);
+            res.status(500).send({ codigo: 1, mensaje: 'error al recuperar platosPorTipos...' + error });
         }
     }
 }

@@ -5,11 +5,11 @@ import { HomeComponent } from './components/Restaurante/homeComponent/home.compo
 import { LayOutComponent } from './components/Restaurante/layOutComponent/lay-out.component';
 import { controlGuard } from './guard/control.guard'
 import { PerfilComponent } from './components/Usuario/perfilComponent/perfil.component';
-import { MapComponent } from './components/Restaurante/mapComponent/map.component';
+import { MapComponent } from './components/Mapa/mapComponent/map.component';
 import { PlatoComponent } from './components/Restaurante/platoComponent/plato.component';
 
 export const routes: Routes = [
-    { path: '', component: RegistroComponent },//<---pendiente a cambiar
+    { path: '', redirectTo:'/Restaurante/Home', pathMatch:'full'},//<---pendiente a cambiar
     {
         path: 'Usuario',
         children: [
@@ -25,6 +25,7 @@ export const routes: Routes = [
             { path: 'Platos/:pathTipo', component: PlatoComponent },
             { path: 'Map', component: MapComponent }
         ]
-    }
+    },
+    { path: 'Mapa', component:MapComponent}
 
 ];

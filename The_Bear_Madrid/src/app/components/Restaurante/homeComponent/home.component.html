@@ -1,1 +1,12 @@
-<p>home works!</p>
+<div class="container mt-4">
+  @for(seccion of this.platosPorTipo(); track $index)
+  {
+    <div class="mb-5">
+      <h2 class="text-primary fw-bold border-bottom pb-2">{{ seccion.tipo }}</h2>
+      
+      <div class="scroll-container mt-3">
+       
+      </div>
+    </div>
+  }
+</div>

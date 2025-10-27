@@ -7,6 +7,7 @@ import { controlGuard } from './guard/control.guard'
 import { PerfilComponent } from './components/Usuario/perfilComponent/perfil.component';
 import { MapComponent } from './components/Mapa/mapComponent/map.component';
 import { PlatoComponent } from './components/Restaurante/platoComponent/plato.component';
+import { MostrarMapaComponent } from './components/Mapa/mostrar-mapa.component';
 
 export const routes: Routes = [
     { path: '', redirectTo:'/Restaurante/Home', pathMatch:'full'},//<---pendiente a cambiar
@@ -23,9 +24,10 @@ export const routes: Routes = [
         children: [
             { path: 'Home', component: HomeComponent },
             { path: 'Platos/:pathTipo', component: PlatoComponent },
-            { path: 'Map', component: MapComponent }
+            { path: 'Mapa', component:MostrarMapaComponent}
+            
         ]
     },
-    { path: 'Mapa', component:MapComponent}
+    
 
 ];

@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-
 import mapboxgl from 'mapbox-gl';
 
 @Component({
@@ -22,7 +21,6 @@ export class MapComponent implements OnInit, OnDestroy{
   private _map?: mapboxgl.Map;
   private _marker?: mapboxgl.Marker;
   private _nombreMarker: string = 'Ubicacion';
-
   //#endregion
 
   //#region------metodos-----
@@ -30,9 +28,9 @@ export class MapComponent implements OnInit, OnDestroy{
   ngOnInit():void {
     this.InitMap();
   }
-ngOnDestroy():void {
+  ngOnDestroy():void {
   this._map?.remove();
-}
+  }
 
   private InitMap(): void {
     //configuracion del token

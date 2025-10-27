@@ -4,7 +4,7 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-mostrar-mapa',
-  imports: [ RouterLink, MapComponent],
+  imports: [ MapComponent],
   templateUrl: './mostrar-mapa.component.html',
   styleUrl: './mostrar-mapa.component.css'
 })

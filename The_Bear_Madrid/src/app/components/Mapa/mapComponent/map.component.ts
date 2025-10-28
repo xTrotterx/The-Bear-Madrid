@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import mapboxgl from 'mapbox-gl';
-
+//import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
 @Component({
   selector: 'app-map',
   imports: [],
@@ -21,6 +21,7 @@ export class MapComponent implements OnInit, OnDestroy{
   private _map?: mapboxgl.Map;
   private _marker?: mapboxgl.Marker;
   private _nombreMarker: string = 'Ubicacion';
+ // private _directions?:MapboxDirections;
   //#endregion
 
   //#region------metodos-----
@@ -47,6 +48,20 @@ export class MapComponent implements OnInit, OnDestroy{
     //con esto meto los botones para controlar el mapa a parte de que se puede con el raton 
     this._map.addControl(new mapboxgl.NavigationControl());
 
+    // plugin de Directions 
+   /* this._directions = new MapboxDirections({
+      accessToken: this._accessToken,
+      unit: 'metric', 
+      profile: 'mapbox/driving', // opciones: 'driving', 'walking', 'cycling', 'driving-traffic'
+      controls: {
+        inputs: true, // muestra inputs de origen/destino
+        instructions: true, // muestra instrucciones de la ruta
+        profileSwitcher: true // permite cambiar entre coche/pie/bici
+      },
+      interactive: true,
+      language: 'es' 
+    });
+*/
     //esto es para poner un marcador
     this._marker = new mapboxgl.Marker({ color: '#FF0000' })
                                .setLngLat([this._long, this._lat])

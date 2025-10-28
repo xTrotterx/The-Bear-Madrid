@@ -8,4 +8,5 @@ const restauranteController_1 = __importDefault(require("../controllers/restaura
 const routingRestaurante = express_1.default.Router();
 routingRestaurante.get('/Tipos', restauranteController_1.default.RecuperarTipos);
 routingRestaurante.get('/Platos', restauranteController_1.default.RecuperarPlatos);
+routingRestaurante.get('/PlatosPorTipo', restauranteController_1.default.PlatosPorTipos);
 exports.default = routingRestaurante;

@@ -7,7 +7,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const platoSchema = new mongoose_1.default.Schema({
     nombre: String,
     imagen: String,
-    patTipo: String,
+    pathTipo: String,
     precio: Number,
     descripcion: String,
     valoraciones: [{ type: mongoose_1.default.Schema.Types.ObjectId, ref: "Opinion" }]

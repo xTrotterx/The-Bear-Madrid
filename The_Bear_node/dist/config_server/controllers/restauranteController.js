@@ -47,6 +47,26 @@ const RestauranteController = {
             console.log('error al recuperar los platos en servicio node...', error);
             res.status(500).send({ codigo: 1, mensaje: 'error al recuperar platos ' + error });
         }
+    }),
+    PlatosPorTipos: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            yield mongoose_1.default.connect(process.env.MONGODB_URL);
+            // Recupera todos los platos
+            let _platos = yield platos_1.default.find({});
+            // Agrupa por tipo
+            let _agrupados = {};
+            _platos.forEach(p => {
+                var _a, _b, _c;
+                if (!_agrupados[(_a = p.pathTipo) !== null && _a !== void 0 ? _a : ''])
+                    _agrupados[(_b = p.pathTipo) !== null && _b !== void 0 ? _b : ''] = [];
+                _agrupados[(_c = p.pathTipo) !== null && _c !== void 0 ? _c : ''].push(p);
+            });
+            res.status(200).send({ codigo: 0, mensaje: "Platos agrupados por tipo", datos: _agrupados });
+        }
+        catch (error) {
+            console.log('error al recuperar datos para el home en node...', error);
+            res.status(500).send({ codigo: 1, mensaje: 'error al recuperar platosPorTipos...' + error });
+        }
     })
 };
 exports.default = RestauranteController;

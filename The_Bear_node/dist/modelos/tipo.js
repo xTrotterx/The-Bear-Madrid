@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const tipoSchema = new mongoose_1.default.Schema({
     nombreTipo: String,
-    pathTipo: String
+    pathTipo: String,
+    esFinal: Boolean
 });
 exports.default = mongoose_1.default.model("Tipo", tipoSchema, "tipos");

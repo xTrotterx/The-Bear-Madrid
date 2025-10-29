@@ -58,19 +58,24 @@ export class NavComponent {
   }
 
   public RecuperarSubTipo(tip: ITipos) {
+  // actualizar breadcrumb 
+  this.breadCrumb.update((prev: ITipos[]) => {
+    let _pos = prev.findIndex(tipoo => tipoo.pathTipo == tip.pathTipo);
+    return _pos == -1 ? [...prev, tip] : prev.slice(0, _pos + 1);
+  });
 
-   //if (tip.pathTipo.endsWith('$')) {
-      this.InnitTipos();
-      this.btnCerrar()?.nativeElement.click();
-      this._router.navigate(['/Restaurante/Platos', tip.pathTipo]);
-  // }
-
-    this.tipo.set(tip);//la señal apunta al tipo delseccionado y lo muestro en la barra 
-    this.breadCrumb.update((prev: ITipos[]) => {
-      let _pos = prev.findIndex(tipoo => tipoo.pathTipo == tip.pathTipo);
-      return _pos == -1 ? [...prev, tip] : prev.slice(0, _pos + 1)
-    })
+  // comprobar si es un tipo final
+  if (tip.esFinal) {
+    // es un subtipo final, navegar a platos y cerrar el menú
+    this.btnCerrar()?.nativeElement.click();
+    this._router.navigate(['/Restaurante/Platos', tip.pathTipo]);
+    // no se si reinciarlo 
+    // this.InnitTipos();
+  } else {
+    // si no es subtipo final, actualizo el tipo para cargar subcategorías
+    this.tipo.set(tip);
   }
+}
 
   //#endregion
 

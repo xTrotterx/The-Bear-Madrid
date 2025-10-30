@@ -6,6 +6,7 @@ export default interface IPlato{
     pathTipo:string,
     precio:number,
     descripcion:string,
-    valoraciones:[IOpinion]
+    valoraciones:[IOpinion],
+    _id:string
 
 }

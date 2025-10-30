@@ -22,12 +22,13 @@ export class PlatitoComponent {
 
 
   //#region----metodos-----
+
   SetCantidadPlatosFromInput(ev: any) {
     ev.target.value !== '' ? this.cantidadPlatos.set(parseInt(ev.target.value)) : this.cantidadPlatos.set(1)
   }
-  AddToCart():void{
+  AddToOrder():void{
     this.cantidadPlatos.set(1);
-    this._storage.setItemsOrder('addItem', {plato:this.plato(),cantidad:1})
+    this._storage.setItemsOrder('sumar', {plato:this.plato(),cantidad:1})
   }
   ModificarCantidad(ope: string) {
     switch (ope) {
@@ -38,7 +39,7 @@ export class PlatitoComponent {
         this.cantidadPlatos.set(this.cantidadPlatos() - 1)
         break;
     }
-    this._storage.setItemsOrder(this.cantidadPlatos() == 0 ? 'borrarPlato' : 'modificarPlato', { plato: this.plato(), cantidad: this.cantidadPlatos() })
+    this._storage.setItemsOrder(this.cantidadPlatos() == 0 ? 'eliminar' : 'restar', { plato: this.plato(), cantidad: this.cantidadPlatos() })
 
   }
 

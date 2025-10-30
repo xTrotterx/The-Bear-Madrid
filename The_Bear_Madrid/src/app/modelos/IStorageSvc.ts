@@ -7,7 +7,7 @@ export default interface IStorageSvc{
     getJWT:() => IJwt,
     setJWT: (tipo:string, valor:string)=> void,
     
-    getDatosUsuario: () => IUsuario,
+    getDatosUsuario: () => IUsuario | undefined,
     setDatosUsuario: (datosCliente: IUsuario) => void,
 
     //IsLogged:() => boolean,

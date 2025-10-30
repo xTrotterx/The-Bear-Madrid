@@ -25,11 +25,9 @@ export class NavComponent {
   public breadCrumb = signal<ITipos[]>([{ nombreTipo: 'Atrás', pathTipo: 'raiz' }]);
   public tipo = signal<ITipos | null>(null);
 
-  public datosUsuario = signal<IUsuario>(this._storageGlobal.getDatosUsuario());
-
+  public datosUsuario = signal<IUsuario  | undefined>(this._storageGlobal.getDatosUsuario());
 
   public btnCerrar = viewChild<ElementRef>('btnCerrar');
-
 
   //funcion resource para recuperar los tipos de platos
   public _tipoResource: ResourceRef<IRestMessage> = resource(

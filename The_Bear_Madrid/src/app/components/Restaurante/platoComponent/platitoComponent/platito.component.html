@@ -8,13 +8,13 @@
     <!-- Botón Añadir o Control de Cantidad -->
     @if(this.cantidadPlatos() == 0)
     {
-      <button type="button" class="btn btn-primary mt-auto w-100" (click)="AddToCart()">
+      <button type="button" class="btn btn-primary mt-auto w-100" (click)="AddToOrder()">
         Añadir
       </button>
     }
     @else {
       <div class="input-group input-group-sm mt-auto">
-        <button type="button" class="btn btn-primary btn-sm" (click)="ModificarCantidad('resta')">
+        <button type="button" class="btn btn-primary btn-sm" (click)="ModificarCantidad('restar')">
           @if (this.cantidadPlatos() == 1)
           {
             <i class="fa-solid fa-trash text-white"></i>
@@ -31,7 +31,7 @@
                (change)="SetCantidadPlatosFromInput($event)"
                (blur)="ModificarCantidad('modifica')" />
 
-        <button type="button" class="btn btn-primary btn-sm" (click)="ModificarCantidad('suma')">+</button>
+        <button type="button" class="btn btn-primary btn-sm" (click)="ModificarCantidad('sumar')">+</button>
       </div>
     }
   </div>

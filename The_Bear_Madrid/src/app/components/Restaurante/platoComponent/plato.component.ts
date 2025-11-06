@@ -21,10 +21,7 @@ export class PlatoComponent {
   //private _pathTipo = signal<string>(this._activatedRoute.snapshot.paramMap.get('pathTipo') as string);
   //antes no me actualizaba porque con snapshot me coge solo el valor incial con toSginal y param map convierto
   //  el observable en señal que se actualiza automaticamente
-  private _pathTipo = toSignal(
-    this._activatedRoute.paramMap.pipe(
-      map(params => params.get('pathTipo') as string)
-    ),
+  private _pathTipo = toSignal(this._activatedRoute.paramMap.pipe(map(params => params.get('pathTipo') as string)),
     { initialValue: this._activatedRoute.snapshot.paramMap.get('pathTipo') as string }
   );
 

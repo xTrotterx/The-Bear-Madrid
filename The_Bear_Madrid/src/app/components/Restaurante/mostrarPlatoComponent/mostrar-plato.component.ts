@@ -41,6 +41,7 @@ public plato =computed<IPlato>(()=>{
   if(_resp?.codigo !== 0) return null;
   return _resp.datos;
 });
+
 //mirar para mañana lo del populate para sacar las opiniones y no tener qu ehacer otra peticion para cargar las opiniones
 
 //#endregion

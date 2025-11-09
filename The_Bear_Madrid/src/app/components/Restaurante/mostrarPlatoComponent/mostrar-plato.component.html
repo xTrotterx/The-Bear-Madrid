@@ -1,1 +1,115 @@
-<p>mostrar-plato works!</p>
+<div class="container mt-4">
+  <div class="row">
+    <!-- Columna principal: info del plato -->
+    <div class="col-md-8">
+      <div class="container">
+        <!-- Nombre y valoración -->
+        <div class="row mb-4">
+          <div class="col-md d-flex justify-content-between align-items-center">
+            <h3><strong>{{ plato()!.nombre }}</strong></h3>
+           <!-- <div>
+              @for (i of [1,2,3,4,5]; track $index) {
+                <i class="fas fa-star fa-lg"
+                   [style.color]="i <= valoracionMedia() ? '#0970e6' : '#ccc'"></i>
+              }
+              <span class="ms-2 fw-semibold" style="color:#0970e6;">
+                {{ valoracionMedia() | number:'1.1-1' }}
+              </span>
+            </div>-->
+          </div>
+        </div>
+
+        <!-- Imágenes del plato -->
+        <div class="row mb-4">
+          <div class="col-md d-flex flex-wrap gap-3 justify-content-start">
+            @for (img of plato()!.imagen; track $index) {
+              <img [src]="img"
+                   class="rounded shadow-sm"
+                   style="width: 280px; height: 280px; object-fit: cover;">
+            }
+          </div>
+        </div>
+
+        <!-- Descripción / características -->
+        <div class="row mb-4">
+          <div class="col-md">
+            <h5><strong>Descripción</strong></h5>
+            <p>{{ plato()!.descripcion }}</p>
+            <hr>
+            <h5><strong>Características</strong></h5>
+           
+          </div>
+        </div>
+
+        <!-- Botón para valorar -->
+        <div class="row mb-4">
+          <div class="col-md">
+            <h5><strong>Valora este plato</strong></h5>
+            <button class="btn btn-outline-primary btn-sm"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalOpinion">
+              ¿Qué opinas tú de este plato?
+            </button>
+
+            <!-- Modal de opinión 
+            <app-modal-opinion></app-modal-opinion> -->
+          </div>
+        </div>
+
+        <!-- Opiniones -->
+        <div class="row mb-4">
+          <div class="col-md d-flex justify-content-between align-items-center">
+            <div>
+              <h5><strong>Opiniones de los usuarios</strong></h5>
+              <div class="d-flex align-items-center">
+              <!--  @for (i of [1,2,3,4,5]; track $index) {
+                  <i class="fas fa-star fa-lg"
+                     [style.color]="i <= valoracionMedia() ? '#0970e6' : '#ccc'"></i>
+                }
+                <span class="ms-2 fw-semibold" style="color:#0970e6;">
+                  {{ valoracionMedia() | number:'1.1-1' }}
+                </span>
+                <small class="ms-2 text-muted">
+                  (basado en {{ plato()!.valoraciones.length }} opiniones)
+                </small>-->
+              </div>
+            </div>
+            <select class="form-select w-50">
+              <option selected>Mostrar todas...</option>
+              <option value="1">Más recientes</option>
+              <option value="2">Más "Me gusta"</option>
+              <option value="3">Mayor puntuación</option>
+            </select>
+          </div>
+          <hr>
+        </div>
+
+        <!-- Listado de opiniones 
+        @for (opi of listarOpiniones() ?? []; track opi.idCliente) {
+          <div class="row mb-3">
+            <div class="col-md">
+              <app-mini-opinion [opinion]="opi"></app-mini-opinion>
+            </div>
+          </div>
+        }-->
+      </div>
+    </div>
+
+    <!-- Columna lateral: precio y acciones -->
+    <div class="col-md-4">
+      <div class="container">
+        <div class="row mt-4">
+          <div class="col-md text-center mb-3">
+            <h4 class="fw-bold">{{ plato().precio }} €</h4>
+          </div>
+          <div class="col-md d-flex justify-content-end">
+            <button class="btn btn-primary w-100 me-2">Añadir</button>
+            <button class="btn btn-outline-primary">
+              <i class="fa-regular fa-heart"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

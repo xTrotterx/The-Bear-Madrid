@@ -65,6 +65,24 @@ const RestauranteController = {
             res.status(500).send({ codigo: 1, mensaje: 'error al recuperar platosPorTipos...' + error });
         }
     },
+
+    //en este a parte de sacar un plato voy a sacar tmb sus opiniones asi me ahorro una peticion para solo las opiniones
+    RecuperarPlato: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+
+            let _idPlato = req.body.query.idPlato;
+            console.log('id del plato', _idPlato);
+
+            await mongoose.connect(process.env.MONGODB_URL!);
+            let _plato = await Plato.findById(_idPlato).populate('valoraciones').lean();//<--decueclo las valoraciones enteras en lugar de solo los ids y con lean() lo convierto en json
+
+            res.status(200).send({ codigo: 0, mensaje: 'producto con opiniones recuperados con exito...', datos: _plato });
+
+        } catch (error) {
+            console.log('error al recuperar plato con opiniones...', error);
+            res.status(500).send({ codgio: 1, mensaje: 'error al recuperar un plato con opiniones...' + error });
+        }
+    },
     GuardarOpinion: async (req: Request, res: Response, next: NextFunction) => {
         try {
 

@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import mongoose from "mongoose";
 import Tipo from "../../modelos/tipo";
 import Plato from "../../modelos/platos"
+import Opinion from "../../modelos/opinion";
+import Usuario from "../../modelos/usuario";
 
 
 const RestauranteController = {
@@ -40,6 +42,7 @@ const RestauranteController = {
             res.status(500).send({ codigo: 1, mensaje: 'error al recuperar platos ' + error })
         }
     },
+    //hay que cambiar esta mierda angel espabila
     PlatosPorTipos: async (req: Request, res: Response, next: NextFunction) => {
         try {
 
@@ -56,10 +59,65 @@ const RestauranteController = {
                 _agrupados[p.pathTipo ?? ''].push(p);
             });
 
-            res.status(200).send({ codigo: 0,mensaje: "Platos agrupados por tipo", datos: _agrupados});
+            res.status(200).send({ codigo: 0, mensaje: "Platos agrupados por tipo", datos: _agrupados });
         } catch (error) {
             console.log('error al recuperar datos para el home en node...', error);
             res.status(500).send({ codigo: 1, mensaje: 'error al recuperar platosPorTipos...' + error });
+        }
+    },
+    GuardarOpinion: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+
+            //primaero debo de guardar la opinion y luego en el usuario que la escribe y en el plato que la recibe
+            const { titulo, opinion, puntuacion, estrellas, idUser, idPlato } = req.body;
+            console.log('req.body...', req.body);
+            let _nOpinion = new Opinion(
+                {
+                    titulo: titulo,
+                    opinion: opinion,
+                    puntacion: puntuacion,
+                    estrellas: estrellas,
+                    idUser: idUser,
+                    idPlato: idPlato
+                }
+            )
+            console.log('nueva opinion: ', _nOpinion.titulo);
+            await mongoose.connect(process.env.MONGODB_URL!)
+            let _op = await _nOpinion.save();
+            console.log('nueva opinion guardada correctamente', _op);
+
+            //platp
+            let _plato = await Plato.findByIdAndUpdate(idPlato, { $push: _op }, { new: true });
+            if (!_plato) throw new Error('no se ha podido actualizar el plato con la nueva opinion');
+            console.log('plato actualizado, ', _plato.valoraciones);
+
+            //user
+            let _user = await Usuario.findByIdAndUpdate(idUser, { $push: _op }, { new: true });
+            if (!_user) throw new Error('no se ha actualizado el usuario con la nueva opinon');
+            console.log('usuario actualizado,', _user.opiniones);
+
+            res.status(200).send({ codigo: 0, mensaje: 'opinion guardada correctamente...', datos: _op });
+
+        } catch (error) {
+            console.log('error al guardar la opinion en servicio node', error);
+            res.status(500).send({ codigo: 1, mensaje: 'errpr al guardar la opinion....' + error });
+        }
+    },
+    CargarOpinones: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+
+            let _idPlato = req.query.idPlato;
+            console.log('id del plato, ', _idPlato);
+
+            await mongoose.connect(process.env.MONGODB_URL!);
+            let _opiniones = await Opinion.find({ idPlato: _idPlato });
+            console.log('opiniones del plato...', _opiniones);
+
+            res.status(200).send({ codigo: 0, mensaje: 'opiniones del plato recuperadas correctamente...', datos: _opiniones });
+
+        } catch (error) {
+            console.log('error al cargar las opiniones de los platos', error);
+            res.status(500).send({ codigo: 1, mensaje: 'error al cagrar opiniones' + error });
         }
     }
 }

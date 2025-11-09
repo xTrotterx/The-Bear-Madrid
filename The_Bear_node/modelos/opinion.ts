@@ -10,4 +10,4 @@ const opinionSchema = new mongoose.Schema(
         idPlato:{type:mongoose.Schema.Types.ObjectId, ref:'Plato'}
     }
 )
-export default mongoose.model("Opinion", opinionSchema, "opiniones");
+export default mongoose.model("Opinion", opinionSchema, "opinion");

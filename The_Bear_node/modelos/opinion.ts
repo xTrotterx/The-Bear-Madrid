@@ -6,6 +6,7 @@ const opinionSchema = new mongoose.Schema(
         opinion:String, // texto de la opinion en si
         puntuacion:Number,
         estrellas:Number,
+        fecha:Date,
         idUser:{type:mongoose.Schema.Types.ObjectId, ref:'Usuario'},
         idPlato:{type:mongoose.Schema.Types.ObjectId, ref:'Plato'}
     }

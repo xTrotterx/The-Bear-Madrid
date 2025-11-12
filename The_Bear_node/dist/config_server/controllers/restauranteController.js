@@ -119,6 +119,7 @@ const RestauranteController = {
             res.status(500).send({ codigo: 1, mensaje: 'errpr al guardar la opinion....' + error });
         }
     }),
+    //puede que lo necesite para el perfil
     CargarOpinones: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             let _idPlato = req.query.idPlato;

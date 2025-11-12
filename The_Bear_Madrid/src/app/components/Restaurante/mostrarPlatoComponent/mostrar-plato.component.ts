@@ -18,6 +18,8 @@ private _activatedRoute =inject(ActivatedRoute);
 
 //#region------------propiedades----------------
 private _idPlato=signal<string>(this._activatedRoute.snapshot.paramMap.get('idPlato') as string);
+esFavorito= signal(false);
+estrellas(){return[1,2,3,4,5]}
 
 //#region------------metodos--------------------
 private _platoResource: Resource<IRestMessage>=resource(
@@ -43,6 +45,21 @@ public plato =computed<IPlato>(()=>{
   return _resp.datos;
 });
 
+//estrellitas
+valoracionMedia = computed(() => {
+  let _plato = this.plato();
+  if (!_plato?.valoraciones?.length) return 0; //-- explicacion de esta mierda porque antes me daba error al hacer === 0: de esta forma es directamente falso o undefined/null me cago en tu madre typescript
+  let _suma = _plato.valoraciones.reduce((acc, valoracion) => acc + (valoracion.estrellas ?? 0), 0);
+  return _suma / _plato.valoraciones.length;
+});
+
+valoracionRedondeada(){
+  return Math.round(this.valoracionMedia());
+}
+//boton para añadirlo me gusta del usuario
+toggleFavorito(){
+  this.esFavorito.set(!this.esFavorito());
+}
 //mirar para mañana lo del populate para sacar las opiniones y no tener qu ehacer otra peticion para cargar las opiniones
 
 //#endregion

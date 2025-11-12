@@ -87,7 +87,7 @@ const RestauranteController = {
         try {
 
             //primaero debo de guardar la opinion y luego en el usuario que la escribe y en el plato que la recibe
-            const { titulo, opinion, puntuacion, estrellas, idUser, idPlato } = req.body;
+            const { titulo, opinion, puntuacion, estrellas, fecha, idUser, idPlato } = req.body;
             console.log('req.body...', req.body);
             let _nOpinion = new Opinion(
                 {
@@ -95,6 +95,7 @@ const RestauranteController = {
                     opinion: opinion,
                     puntacion: puntuacion,
                     estrellas: estrellas,
+                    fecha: fecha ? new Date(fecha) : new Date(),
                     idUser: idUser,
                     idPlato: idPlato
                 }
@@ -121,6 +122,7 @@ const RestauranteController = {
             res.status(500).send({ codigo: 1, mensaje: 'errpr al guardar la opinion....' + error });
         }
     },
+    //puede que lo necesite para el perfil
     CargarOpinones: async (req: Request, res: Response, next: NextFunction) => {
         try {
 

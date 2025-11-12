@@ -8,6 +8,7 @@ import { PerfilComponent } from './components/Usuario/perfilComponent/perfil.com
 import { MapComponent } from './components/Mapa/mapComponent/map.component';
 import { PlatoComponent } from './components/Restaurante/platoComponent/plato.component';
 import { MostrarMapaComponent } from './components/Mapa/mostrar-mapa.component';
+import { MostrarPlatoComponent } from './components/Restaurante/mostrarPlatoComponent/mostrar-plato.component';
 
 export const routes: Routes = [
     { path: '', redirectTo:'/Restaurante/Home', pathMatch:'full'},//<---pendiente a cambiar
@@ -24,6 +25,7 @@ export const routes: Routes = [
         children: [
             { path: 'Home', component: HomeComponent },
             { path: 'Platos/:pathTipo', component: PlatoComponent },
+            {path:'Plato/:idPlato', component:MostrarPlatoComponent},
             { path: 'Mapa', component:MostrarMapaComponent}
             
         ]

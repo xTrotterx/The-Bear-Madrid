@@ -15,6 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const tipo_1 = __importDefault(require("../../modelos/tipo"));
 const platos_1 = __importDefault(require("../../modelos/platos"));
+const opinion_1 = __importDefault(require("../../modelos/opinion"));
+const usuario_1 = __importDefault(require("../../modelos/usuario"));
 const RestauranteController = {
     RecuperarTipos: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         try {
@@ -48,6 +50,7 @@ const RestauranteController = {
             res.status(500).send({ codigo: 1, mensaje: 'error al recuperar platos ' + error });
         }
     }),
+    //hay que cambiar esta mierda angel espabila
     PlatosPorTipos: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             yield mongoose_1.default.connect(process.env.MONGODB_URL);
@@ -66,6 +69,68 @@ const RestauranteController = {
         catch (error) {
             console.log('error al recuperar datos para el home en node...', error);
             res.status(500).send({ codigo: 1, mensaje: 'error al recuperar platosPorTipos...' + error });
+        }
+    }),
+    //en este a parte de sacar un plato voy a sacar tmb sus opiniones asi me ahorro una peticion para solo las opiniones
+    RecuperarPlato: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            let _idPlato = req.query.idPlato;
+            console.log('id del plato', _idPlato);
+            yield mongoose_1.default.connect(process.env.MONGODB_URL);
+            let _plato = yield platos_1.default.findById(_idPlato).populate('valoraciones').lean(); //<--decueclo las valoraciones enteras en lugar de solo los ids y con lean() lo convierto en json
+            res.status(200).send({ codigo: 0, mensaje: 'producto con opiniones recuperados con exito...', datos: _plato });
+        }
+        catch (error) {
+            console.log('error al recuperar plato con opiniones...', error);
+            res.status(500).send({ codgio: 1, mensaje: 'error al recuperar un plato con opiniones...' + error });
+        }
+    }),
+    GuardarOpinion: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            //primaero debo de guardar la opinion y luego en el usuario que la escribe y en el plato que la recibe
+            const { titulo, opinion, puntuacion, estrellas, idUser, idPlato } = req.body;
+            console.log('req.body...', req.body);
+            let _nOpinion = new opinion_1.default({
+                titulo: titulo,
+                opinion: opinion,
+                puntacion: puntuacion,
+                estrellas: estrellas,
+                idUser: idUser,
+                idPlato: idPlato
+            });
+            console.log('nueva opinion: ', _nOpinion.titulo);
+            yield mongoose_1.default.connect(process.env.MONGODB_URL);
+            let _op = yield _nOpinion.save();
+            console.log('nueva opinion guardada correctamente', _op);
+            //platp
+            let _plato = yield platos_1.default.findByIdAndUpdate(idPlato, { $push: _op }, { new: true });
+            if (!_plato)
+                throw new Error('no se ha podido actualizar el plato con la nueva opinion');
+            console.log('plato actualizado, ', _plato.valoraciones);
+            //user
+            let _user = yield usuario_1.default.findByIdAndUpdate(idUser, { $push: _op }, { new: true });
+            if (!_user)
+                throw new Error('no se ha actualizado el usuario con la nueva opinon');
+            console.log('usuario actualizado,', _user.opiniones);
+            res.status(200).send({ codigo: 0, mensaje: 'opinion guardada correctamente...', datos: _op });
+        }
+        catch (error) {
+            console.log('error al guardar la opinion en servicio node', error);
+            res.status(500).send({ codigo: 1, mensaje: 'errpr al guardar la opinion....' + error });
+        }
+    }),
+    CargarOpinones: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            let _idPlato = req.query.idPlato;
+            console.log('id del plato, ', _idPlato);
+            yield mongoose_1.default.connect(process.env.MONGODB_URL);
+            let _opiniones = yield opinion_1.default.find({ idPlato: _idPlato });
+            console.log('opiniones del plato...', _opiniones);
+            res.status(200).send({ codigo: 0, mensaje: 'opiniones del plato recuperadas correctamente...', datos: _opiniones });
+        }
+        catch (error) {
+            console.log('error al cargar las opiniones de los platos', error);
+            res.status(500).send({ codigo: 1, mensaje: 'error al cagrar opiniones' + error });
         }
     })
 };

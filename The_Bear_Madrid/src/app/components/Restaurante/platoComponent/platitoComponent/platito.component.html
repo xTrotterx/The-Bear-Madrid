@@ -1,5 +1,5 @@
 <div class="card h-100 platito-card">
-  <img [src]="this.plato()!.imagen" class="card-img-top mx-auto d-block" alt="{{ this.plato()!.nombre }}">
+  <img [src]="this.plato()!.imagen" class="card-img-top mx-auto d-block" alt="{{ this.plato()!.nombre }}" (click)="ElPlatito()">
   
   <div class="card-body d-flex flex-column">
     <h5 class="card-title text-center">{{ this.plato()!.nombre }}</h5>

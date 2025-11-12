@@ -1,6 +1,7 @@
 import { Component, inject, input, signal } from '@angular/core';
 import IPlato from '../../../../modelos/Interfaces/IPlato';
 import { HTTP_INJECTIONTOKEN_STORAGE_SVCS } from '../../../../app.config';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-platito',
@@ -11,6 +12,7 @@ import { HTTP_INJECTIONTOKEN_STORAGE_SVCS } from '../../../../app.config';
 export class PlatitoComponent {
   //#region---servicios--------
   private _storage = inject(HTTP_INJECTIONTOKEN_STORAGE_SVCS);
+  private _router=inject(Router);
 
   //#endregion
 
@@ -41,6 +43,10 @@ export class PlatitoComponent {
     }
     this._storage.setItemsOrder(this.cantidadPlatos() == 0 ? 'eliminar' : 'restar', { plato: this.plato(), cantidad: this.cantidadPlatos() })
 
+  }
+
+  ElPlatito(){
+    this._router.navigate(['Restaurante/Plato', this.plato()._id])
   }
 
   //#endregion

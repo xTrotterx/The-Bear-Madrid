@@ -30,6 +30,7 @@ private _platoResource: Resource<IRestMessage>=resource(
         {method:'GET', signal:abortSignal}
       );
       let _body=await _resp.json();
+      console.log('plato con opiniones', _body);
       return _body ?? {codigo:400, mensaje:'error al recuperar el plato'}
     },
     injector:this._injector

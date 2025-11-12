@@ -70,7 +70,7 @@ const RestauranteController = {
     RecuperarPlato: async (req: Request, res: Response, next: NextFunction) => {
         try {
 
-            let _idPlato = req.body.query.idPlato;
+            let _idPlato = req.query.idPlato;
             console.log('id del plato', _idPlato);
 
             await mongoose.connect(process.env.MONGODB_URL!);

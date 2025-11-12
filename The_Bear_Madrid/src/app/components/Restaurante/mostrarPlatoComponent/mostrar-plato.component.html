@@ -6,7 +6,7 @@
         <!-- Nombre y valoración -->
         <div class="row mb-4">
           <div class="col-md d-flex justify-content-between align-items-center">
-            <h3><strong>{{ plato()!.nombre }}</strong></h3>
+            <h3><strong>{{ plato()?.nombre }}</strong></h3>
            <!-- <div>
               @for (i of [1,2,3,4,5]; track $index) {
                 <i class="fas fa-star fa-lg"
@@ -22,11 +22,7 @@
         <!-- Imágenes del plato -->
         <div class="row mb-4">
           <div class="col-md d-flex flex-wrap gap-3 justify-content-start">
-            @for (img of plato()!.imagen; track $index) {
-              <img [src]="img"
-                   class="rounded shadow-sm"
-                   style="width: 280px; height: 280px; object-fit: cover;">
-            }
+              <img [src]="plato()!.imagen"class="rounded shadow-sm" style="width: 280px; height: 280px; object-fit: cover;">
           </div>
         </div>
 

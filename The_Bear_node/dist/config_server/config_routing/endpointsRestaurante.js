@@ -6,7 +6,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const restauranteController_1 = __importDefault(require("../controllers/restauranteController"));
 const routingRestaurante = express_1.default.Router();
+//platitos
+routingRestaurante.get('/PlatosPorTipo', restauranteController_1.default.PlatosPorTipos);
 routingRestaurante.get('/Tipos', restauranteController_1.default.RecuperarTipos);
 routingRestaurante.get('/Platos', restauranteController_1.default.RecuperarPlatos);
-routingRestaurante.get('/PlatosPorTipo', restauranteController_1.default.PlatosPorTipos);
+//plato con opiniones
+routingRestaurante.get('/Plato', restauranteController_1.default.RecuperarPlato);
+//opinioncitas
+routingRestaurante.post('/GuardarOpinion', restauranteController_1.default.GuardarOpinion);
+routingRestaurante.get('/CargarOpiniones', restauranteController_1.default.CargarOpinones);
 exports.default = routingRestaurante;

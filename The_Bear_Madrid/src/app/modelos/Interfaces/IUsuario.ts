@@ -8,5 +8,6 @@ export default interface IUsuario{
     email:string,
     password:string,
     favoritos:[IPlato],
-    opiniones:[IOpinion]
+    opiniones:[IOpinion],
+    _id:string;
 }

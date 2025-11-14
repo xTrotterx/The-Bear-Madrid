@@ -5,5 +5,6 @@ export default interface IOpinion{
     estrellas:number,
     fecha:Date,
     idUser:string,
-    idPlato:string
+    idPlato:string,
+    _id:string
 }

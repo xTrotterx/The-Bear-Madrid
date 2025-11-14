@@ -9,6 +9,7 @@ const opinionSchema = new mongoose_1.default.Schema({
     opinion: String, // texto de la opinion en si
     puntuacion: Number,
     estrellas: Number,
+    fecha: Date,
     idUser: { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'Usuario' },
     idPlato: { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'Plato' }
 });

@@ -12,7 +12,7 @@
                 <div class="d-flex align-items-center">
                   @for (i of estrellas(); track $index) {
                     <i class="fas fa-star fa-lg"
-                       [style.color]="i <= valoracionRedondeada() ? '#0970e6' : '#ccc'"></i>
+                       [style.color]="i <= valoracionRedondeada() ? '#ffc107' : '#ccc'"></i>
                   }
                 </div>
               </div>
@@ -60,7 +60,7 @@
                       <i class="bi bi-star-fill"
                          [style.color]="i <= valoracionRedondeada() ? '#0970e6' : '#ccc'"></i>
                     }
-                    <span class="ms-2 fw-semibold" style="color:#0970e6;">
+                    <span class="ms-2 fw-semibold" style="color: #ffc107;">
                       {{ valoracionRedondeada().toFixed(2)}}
                     </span>
                     <small class="ms-2 text-muted">
@@ -68,24 +68,25 @@
                     </small>
                   </div>
                 </div>
-                <select class="form-select w-50">
-                  <option selected>Mostrar todas...</option>
-                  <option value="1">Más recientes</option>
-                  <option value="2">Más "Me gusta"</option>
-                  <option value="3">Mayor puntuación</option>
+                
+                <select class="form-select w-50" style='width: 40%;' (change)="cambiarOpcion($event)">
+                  <option value="todas" selected>Filtros</option>
+                  <option value="todas">Todas</option>
+                  <option value="fecha">Más recientes</option>
+                  <option value="puntuacion">Mayor puntuación</option>
                 </select>
               </div>
               <hr>
             </div>
 
-            <!-- Listado de opiniones 
-            @for (opi of listarOpiniones() ?? []; track opi.idCliente) {
+            <!-- Listado de opiniones -->
+            @for (opi of (opiniones() | listarOpinion: _opciones()) ?? []; track opi._id) {
               <div class="row mb-3">
                 <div class="col-md">
-                  <app-mini-opinion [opinion]="opi"></app-mini-opinion>
+                  <app-opinion-component [opinion]="opi"></app-opinion-component>
                 </div>
               </div>
-            }-->
+            }
           </div>
         </div>
 
@@ -94,7 +95,7 @@
           <div class="container">
             <div class="row mt-4">
               <div class="col-md d-flex justify-content-end align-items-center gap-2">
-                <button class="btn flex-grow-1" style="background-color: #c82333; border-color: #c82333; color: white;">Añadir</button>
+                <button class="btn flex-grow-1" style="background-color: #ad0011; border-color: #ad0011; color: white;">Añadir</button>
                 <button class="btn btn-outline-danger rounded-circle p-0" style="width: 42px; height: 42px; display: flex; align-items: center; justify-content: center;" (click)="toggleFavorito()">
                   <i [class]="esFavorito() ? 'bi bi-heart-fill' : 'bi bi-heart'" [style.color]="esFavorito() ? '#c82333' : ''"></i>
                 </button>

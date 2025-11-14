@@ -88,13 +88,14 @@ const RestauranteController = {
     GuardarOpinion: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             //primaero debo de guardar la opinion y luego en el usuario que la escribe y en el plato que la recibe
-            const { titulo, opinion, puntuacion, estrellas, idUser, idPlato } = req.body;
+            const { titulo, opinion, puntuacion, estrellas, fecha, idUser, idPlato } = req.body;
             console.log('req.body...', req.body);
             let _nOpinion = new opinion_1.default({
                 titulo: titulo,
                 opinion: opinion,
                 puntacion: puntuacion,
                 estrellas: estrellas,
+                fecha: fecha ? new Date(fecha) : new Date(),
                 idUser: idUser,
                 idPlato: idPlato
             });

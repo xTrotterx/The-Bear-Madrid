@@ -7,10 +7,12 @@ import IOpinion from '../../../modelos/Interfaces/IOpinion';
 import IUsuario from '../../../modelos/Interfaces/IUsuario';
 import { HTTP_INJECTIONTOKEN_STORAGE_SVCS } from '../../../app.config';
 import { OpinionComponent } from '../opinionComponent/opinion.component';
+import Swal from 'sweetalert2';
+import { ModalOpinionComponent } from '../opinionComponent/modalOpinionComponent/modal-opinion.component';
 
 @Component({
   selector: 'app-mostrar-plato',
-  imports: [ListarOpinionPipe, OpinionComponent],
+  imports: [ListarOpinionPipe, OpinionComponent, ModalOpinionComponent],
   templateUrl: './mostrar-plato.component.html',
   styleUrl: './mostrar-plato.component.css'
 })
@@ -81,6 +83,19 @@ export class MostrarPlatoComponent {
     this._opciones.set(select.value as 'fecha' | 'puntuacion' | 'todas');
   }
 
+  public intentarOpinar() {
+    if (!this.datosUsuario()) {
+      Swal.fire({
+        icon: 'info',
+        title: '¡Ups!',
+        text: 'Necesitas tener una cuenta para dejar tu opinión',
+        timer: 3000,
+        timerProgressBar: true,
+        confirmButtonColor: '#ad0011'
+      });
+      return;
+    }
+  }
 
 
   //#endregion

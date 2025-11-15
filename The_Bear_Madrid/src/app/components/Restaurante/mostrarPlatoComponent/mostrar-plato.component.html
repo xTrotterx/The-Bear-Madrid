@@ -11,8 +11,7 @@
                 <h3><strong>{{ plato()?.nombre }}</strong></h3>
                 <div class="d-flex align-items-center">
                   @for (i of estrellas(); track $index) {
-                    <i class="fas fa-star fa-lg"
-                       [style.color]="i <= valoracionRedondeada() ? '#ffc107' : '#ccc'"></i>
+                  <i class="fas fa-star fa-lg" [style.color]="i <= valoracionRedondeada() ? '#ffc107' : '#ccc'"></i>
                   }
                 </div>
               </div>
@@ -21,7 +20,8 @@
             <!-- Imágenes del plato -->
             <div class="row mb-4">
               <div class="col-md d-flex flex-wrap gap-3 justify-content-start">
-                  <img [src]="plato()?.imagen" class="rounded shadow-sm" style="width: 280px; height: 280px; object-fit: cover; border: 1px solid #e0e0e0;">
+                <img [src]="plato()?.imagen" class="rounded shadow-sm"
+                  style="width: 280px; height: 280px; object-fit: cover; border: 1px solid #e0e0e0;">
               </div>
             </div>
 
@@ -39,13 +39,14 @@
               <div class="col-md">
                 <h5><strong>Dejanos tu opinión</strong></h5>
                 <button class="btn btn-outline-primary btn-sm"
-                        data-bs-toggle="modal"
-                        data-bs-target="#modalOpinion">
+                        [attr.data-bs-toggle]="datosUsuario() ? 'modal' : null"
+                        [attr.data-bs-target]="datosUsuario() ? '#modalOpinion' : null" 
+                        (click)="intentarOpinar()">
                   ¿Qué te ha parecido?
                 </button>
 
-                <!-- Modal de opinión 
-                <app-modal-opinion></app-modal-opinion> -->
+                <!-- Modal de opinión--> 
+                <app-modal-opinion [plato]="plato()" [datosUser]="datosUsuario()"></app-modal-opinion> 
                 <hr>
               </div>
             </div>
@@ -57,8 +58,7 @@
                   <h5><strong>Lo que opinais vosotros nos importa</strong></h5>
                   <div class="d-flex align-items-center">
                     @for (i of estrellas(); track $index) {
-                      <i class="bi bi-star-fill"
-                         [style.color]="i <= valoracionRedondeada() ? '#0970e6' : '#ccc'"></i>
+                    <i class="bi bi-star-fill" [style.color]="i <= valoracionRedondeada() ? '#0970e6' : '#ccc'"></i>
                     }
                     <span class="ms-2 fw-semibold" style="color: #ffc107;">
                       {{ valoracionRedondeada().toFixed(2)}}
@@ -68,7 +68,7 @@
                     </small>
                   </div>
                 </div>
-                
+
                 <select class="form-select w-50" style='width: 40%;' (change)="cambiarOpcion($event)">
                   <option value="todas" selected>Filtros</option>
                   <option value="todas">Todas</option>
@@ -81,11 +81,11 @@
 
             <!-- Listado de opiniones -->
             @for (opi of (opiniones() | listarOpinion: _opciones()) ?? []; track opi._id) {
-              <div class="row mb-3">
-                <div class="col-md">
-                  <app-opinion-component [opinion]="opi"></app-opinion-component>
-                </div>
+            <div class="row mb-3">
+              <div class="col-md">
+                <app-opinion-component [opinion]="opi" ></app-opinion-component>
               </div>
+            </div>
             }
           </div>
         </div>
@@ -95,9 +95,13 @@
           <div class="container">
             <div class="row mt-4">
               <div class="col-md d-flex justify-content-end align-items-center gap-2">
-                <button class="btn flex-grow-1" style="background-color: #ad0011; border-color: #ad0011; color: white;">Añadir</button>
-                <button class="btn btn-outline-danger rounded-circle p-0" style="width: 42px; height: 42px; display: flex; align-items: center; justify-content: center;" (click)="toggleFavorito()">
-                  <i [class]="esFavorito() ? 'bi bi-heart-fill' : 'bi bi-heart'" [style.color]="esFavorito() ? '#c82333' : ''"></i>
+                <button class="btn flex-grow-1"
+                  style="background-color: #ad0011; border-color: #ad0011; color: white;">Añadir</button>
+                <button class="btn btn-outline-danger rounded-circle p-0"
+                  style="width: 42px; height: 42px; display: flex; align-items: center; justify-content: center;"
+                  (click)="toggleFavorito()">
+                  <i [class]="esFavorito() ? 'bi bi-heart-fill' : 'bi bi-heart'"
+                    [style.color]="esFavorito() ? '#c82333' : ''"></i>
                 </button>
               </div>
             </div>

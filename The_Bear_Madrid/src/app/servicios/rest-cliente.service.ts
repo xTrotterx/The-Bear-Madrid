@@ -58,4 +58,16 @@ export class RestClienteService {
         )
       )
   }
+
+  public GuardarOpinion(datos: any): Signal<IRestMessage> {
+    return toSignal
+    (this._httpClient.post<IRestMessage>('http://localhost:3003/api/Restaurante/GuardarOpinion',
+      datos,
+      { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
+      ).pipe(
+        startWith({ codigo: 100, mensaje: 'esperando respuesta del server para guardar la opinion...' })
+      ),
+      { injector: this._injector, requireSync: true }
+    );
+  }
 }

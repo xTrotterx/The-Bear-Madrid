@@ -93,7 +93,7 @@ const RestauranteController = {
             let _nOpinion = new opinion_1.default({
                 titulo: titulo,
                 opinion: opinion,
-                puntacion: puntuacion,
+                puntuacion: puntuacion,
                 estrellas: estrellas,
                 fecha: fecha ? new Date(fecha) : new Date(),
                 idUser: idUser,
@@ -104,12 +104,12 @@ const RestauranteController = {
             let _op = yield _nOpinion.save();
             console.log('nueva opinion guardada correctamente', _op);
             //platp
-            let _plato = yield platos_1.default.findByIdAndUpdate(idPlato, { $push: _op }, { new: true });
+            let _plato = yield platos_1.default.findByIdAndUpdate(idPlato, { $push: { valoraciones: _op } }, { new: true });
             if (!_plato)
                 throw new Error('no se ha podido actualizar el plato con la nueva opinion');
             console.log('plato actualizado, ', _plato.valoraciones);
             //user
-            let _user = yield usuario_1.default.findByIdAndUpdate(idUser, { $push: _op }, { new: true });
+            let _user = yield usuario_1.default.findByIdAndUpdate(idUser, { $push: { opiniones: _op } }, { new: true });
             if (!_user)
                 throw new Error('no se ha actualizado el usuario con la nueva opinon');
             console.log('usuario actualizado,', _user.opiniones);

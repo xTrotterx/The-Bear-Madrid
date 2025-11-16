@@ -1,68 +1,100 @@
-import { Component, inject, Injector, input, Renderer2, Signal } from '@angular/core';
+import { Component, effect, inject, Injector, input, Renderer2, Signal } from '@angular/core';
 import { RestClienteService } from '../../../../servicios/rest-cliente.service';
 import IPlato from '../../../../modelos/Interfaces/IPlato';
 import IUsuario from '../../../../modelos/Interfaces/IUsuario';
 import IOpinion from '../../../../modelos/Interfaces/IOpinion';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+
 import { toSignal } from '@angular/core/rxjs-interop';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-modal-opinion',
-  imports: [],
+  imports: [ReactiveFormsModule],
   templateUrl: './modal-opinion.component.html',
   styleUrl: './modal-opinion.component.css'
 })
 export class ModalOpinionComponent {
-//#region-----servicios---------
-private _restSvc: RestClienteService = inject(RestClienteService);
-private _injector=inject(Injector);
+  //#region-----servicios---------
+  private _restSvc: RestClienteService = inject(RestClienteService);
+  private _injector = inject(Injector);
 
-//#endregion--------------------
+  //#endregion--------------------
 
-//#region-----propiedades-------
-public plato = input.required<IPlato>();
-public datosUser = input.required<IUsuario | undefined>();
-formOpinion:FormGroup;
-valoresOpinion:Signal<IOpinion>;
+  //#region-----propiedades-------
+  public plato = input.required<IPlato>();
+  public datosUser = input.required<IUsuario | undefined>();
+  formOpinion: FormGroup;
+   public valoresOpinion: Signal<Partial<{
+    titulo: string;
+    comentario: string;
+    estrellas: number;
+    puntuacion: number | null;
+  }>>;
+  public estrellasHover = 0;
 
-constructor(){
-  this.formOpinion = new FormGroup(
-  {
-    titulo: new FormControl('', [Validators.required])
-  }
-  );
-  this.valoresOpinion = toSignal(this.formOpinion.valueChanges);
-}
-
-//#endregion--------------------
-
-//#region------metodos----------
-public estrellas = 0;
-public puntos = 0;
-
-private renderer2 = inject(Renderer2);
-  punctuacionModal = Array.from({ length: 10 }, (el: any, pos: number) => pos + 1);
-
-Pinta(ev: Event, i: number) {
-    console.log('sobre estrella...', ev.target, i);
-    for (let index = 1; index <= 5; index++) {
-      let _star = this.renderer2.selectRootElement(`i[id="estrella-${index}"]`, true);
-
-      if (index <= i) {
-        this.renderer2.setAttribute(_star, 'style', 'color: #0970e6;');
-      } else {
-        this.renderer2.setAttribute(_star, 'style', ' color:lightgray;');
-      }
-    }
-  }
-  public EstrellasSelect(i: number) {
-    this.estrellas = i;
-
-    console.log('estrellas', this.estrellas);
+   constructor() {
+    this.formOpinion = new FormGroup({
+      titulo: new FormControl('', [Validators.required, Validators.maxLength(50)]),
+      opinion: new FormControl('', [Validators.required, Validators.maxLength(350)]),
+      estrellas: new FormControl(0, [Validators.required, Validators.min(1)]),
+      puntuacion: new FormControl(null, [Validators.required, Validators.min(1), Validators.max(5)])
+    });
+    
+    this.valoresOpinion = toSignal(this.formOpinion.valueChanges, {initialValue: this.formOpinion.value});
   }
 
-  public PuntosSelect(i: number) {
-    this.puntos = i;
+  //#endregion--------------------
+
+  //#region------metodos----------
+  EnviarOpinion($event:any){
+    console.log('datos del modal: ', this.formOpinion.value );
+
+  const opinionParaEnviar = {
+      titulo: this.formOpinion.value.titulo,
+      opinion: this.formOpinion.value.opinion,
+      estrellas: this.formOpinion.value.estrellas,
+      puntuacion: this.formOpinion.value.puntuacion,
+      fecha: new Date().toISOString(),
+      idUser: this.datosUser()?._id,  
+      idPlato: this.plato()._id,          
+             
+    };
+    const _resp =this._restSvc.GuardarOpinion(opinionParaEnviar);
+   
+    effect(()=> {
+       let _res= _resp();
+      console.log('si el codigo es 0 la opinion se ha guardado bien...', _res.codigo)//<-- me tiene que devolver 0
+
+    })
+    
+
   }
-//#endregion
+  public estrellasSeleccionadas = 0;
+  public puntuacionSeleccionada = 0;
+
+  punctuacionModal = Array.from({ length: 5 }, (el: any, pos: number) => pos + 1);
+
+  public Pinta(ev: Event, valor: number) {
+    this.estrellasHover = valor;
+  }
+
+  public seleccionarEstrella(valor: number) {
+    this.formOpinion.patchValue({ estrellas: valor });
+  }
+
+   public seleccionarPuntuacion(valor: number) {
+    this.formOpinion.patchValue({ puntuacion: valor });
+  }
+    // ✅ Computed para saber qué estrellas pintar
+  public get estrellasVisibles(): number {
+    // Si hay hover, mostrar hover; si no, mostrar seleccionadas
+    return this.estrellasHover > 0 
+      ? this.estrellasHover 
+      : (this.valoresOpinion()?.estrellas ?? 0);
+  }
+
+  public Blanquea() {
+    this.estrellasHover = 0;
+  }
+  //#endregion
 }

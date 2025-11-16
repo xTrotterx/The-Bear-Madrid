@@ -13,4 +13,4 @@ const opinionSchema = new mongoose_1.default.Schema({
     idUser: { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'Usuario' },
     idPlato: { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'Plato' }
 });
-exports.default = mongoose_1.default.model("Opinion", opinionSchema, "opinion");
+exports.default = mongoose_1.default.model("Opinion", opinionSchema, "opiniones");

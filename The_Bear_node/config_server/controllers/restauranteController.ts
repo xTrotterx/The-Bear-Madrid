@@ -93,7 +93,7 @@ const RestauranteController = {
                 {
                     titulo: titulo,
                     opinion: opinion,
-                    puntacion: puntuacion,
+                    puntuacion: puntuacion,
                     estrellas: estrellas,
                     fecha: fecha ? new Date(fecha) : new Date(),
                     idUser: idUser,
@@ -106,12 +106,12 @@ const RestauranteController = {
             console.log('nueva opinion guardada correctamente', _op);
 
             //platp
-            let _plato = await Plato.findByIdAndUpdate(idPlato, { $push: _op }, { new: true });
+            let _plato = await Plato.findByIdAndUpdate(idPlato, { $push: {valoraciones: _op} }, { new: true });
             if (!_plato) throw new Error('no se ha podido actualizar el plato con la nueva opinion');
             console.log('plato actualizado, ', _plato.valoraciones);
 
             //user
-            let _user = await Usuario.findByIdAndUpdate(idUser, { $push: _op }, { new: true });
+            let _user = await Usuario.findByIdAndUpdate(idUser, { $push: {opiniones: _op}}, { new: true });
             if (!_user) throw new Error('no se ha actualizado el usuario con la nueva opinon');
             console.log('usuario actualizado,', _user.opiniones);
 

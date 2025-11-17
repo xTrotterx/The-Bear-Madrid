@@ -6,6 +6,8 @@ import 'dotenv/config';
 import mailjet from "../../servicios/mailjet";
 
 import Usuario from "../../modelos/usuario";
+import Opinion from "../../modelos/opinion";
+import { existsSync } from "fs";
 
 const UserController = {
     Registro: async (req: Request, res: Response, next: NextFunction) => {
@@ -29,9 +31,9 @@ const UserController = {
             console.log('usuario nuevo insertardo en coleccion usuarios de mongodb....', _nuevoUsuario);
 
             //genero el jwt usando como codigo el id de mongo
-            const _jwt =jsonwebtoken.sign({email, codigo:_nuevoUsuario._id}, process.env.JWT_SECRET as string, {issuer:'http://localhost:3003', expiresIn:'1h'});
+            const _jwt = jsonwebtoken.sign({ email, codigo: _nuevoUsuario._id }, process.env.JWT_SECRET as string, { issuer: 'http://localhost:3003', expiresIn: '1h' });
 
-            res.status(200).send({codigo:0, mensaje:'Registro realizado correctamente', datos:{jwtVerificacion: _jwt, datosUsuario:{..._nuevoUsuario.toObject(), 'password': undefined}}})//---> al hacer esto asi sobreescribo la password para que sea mas seguro 
+            res.status(200).send({ codigo: 0, mensaje: 'Registro realizado correctamente', datos: { jwtVerificacion: _jwt, datosUsuario: { ..._nuevoUsuario.toObject(), 'password': undefined } } })//---> al hacer esto asi sobreescribo la password para que sea mas seguro 
 
 
             //envio email de bienvenida
@@ -45,18 +47,18 @@ const UserController = {
     Login: async (req: Request, res: Response, next: NextFunction) => {
         try {
             console.log('datos del body mandados desde el login  ', req.body);
-            const {email,password}= req.body;
+            const { email, password } = req.body;
 
             await mongoose.connect(process.env.MONGODB_URL!);
 
-            let _user =await Usuario.findOne({'email':email}).lean();//<-- .lean() me devuelve modelo js y reduce el consumo 
+            let _user = await Usuario.findOne({ 'email': email }).lean();//<-- .lean() me devuelve modelo js y reduce el consumo 
             if (!_user) throw new Error('no existe ese usuario con ese email');
             if (!bcrypt.compareSync(password, _user.password)) throw new Error('contraseña incorrecta');
 
             //genero jwt
-            const _jwt =jsonwebtoken.sign({email, codigo:_user._id}, process.env.JWT_SECRET as string, {issuer:'http://localhost:3003', expiresIn:'1h'});
+            const _jwt = jsonwebtoken.sign({ email, codigo: _user._id }, process.env.JWT_SECRET as string, { issuer: 'http://localhost:3003', expiresIn: '1h' });
 
-            res.status(200).send({codigo:0, mensaje:'Login realizado con exito correcto ',datos:{jwtVerificacion:_jwt, datosUsuario:{..._user}} })
+            res.status(200).send({ codigo: 0, mensaje: 'Login realizado con exito correcto ', datos: { jwtVerificacion: _jwt, datosUsuario: { ..._user } } })
 
         } catch (error) {
             console.log('error al realizar el login', error);
@@ -65,12 +67,12 @@ const UserController = {
     },
     RefrescarToken: async (req: Request, res: Response, next: NextFunction) => {
         try {
-       
+
             const refreshJWT = req.body.refreshToken;
             if (!refreshJWT) throw new Error('no se ha mandado refresh-token....al login de cabeza');
 
             const _claims: { idUser: string, email: string } = jsonwebtoken.verify(refreshJWT, process.env.JWT_SECRET!) as { idUser: string, email: string };
-  
+
             await mongoose.connect(process.env.MONGODB_URL!);
             let _datosUser = await Usuario.findOne({ _id: _claims.idUser, 'cuenta.email': _claims.email });
             if (!_datosUser) throw new Error('no existe usuario con ese id o email');
@@ -99,6 +101,51 @@ const UserController = {
             console.log('error al refrescar tokens...', error);
             res.status(500).send({ codigo: 1, mensaje: 'error al refrescar tokens...' + error });
         }
+    },
+    ActualizarFavoritos: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { idUser, idPlato } = req.body;
+            console.log('id del usuario, ', idUser, ' y del plato ', idPlato);
+
+            await mongoose.connect(process.env.MONGODB_URL!);
+            let _user = await Usuario.findById(idUser);
+
+            let _existe = _user?.favoritos.some(f => f.equals(idPlato));
+
+            if (_existe) {
+                await Usuario.updateOne(
+                    { _id: idUser },
+                    { $pull: { favoritos: idPlato } }
+                );
+            } else {
+                await Usuario.updateOne(
+                    { _id: idUser },
+                    { $addToSet: { favoritos: idPlato } } //con esto evito duplicaciones, solo lo mete si no existe, con un push si es posible que se duplique
+                );
+            }
+
+            res.status(500).send({codigo:1, mensaje:'lista de favoritos actualizada correctamente...',datos: _user?.favoritos });
+        } catch (error) {
+            console.log('error al añadir el plato en la lista favoritos del usuario en node....', error);
+            res.status(500).send({ codigo: 1, mensaje: 'error al actualizar favoritos del usuario....' + error });
+        }
+    },
+    //voy a  cargar de una los favoritos y las opiniones
+    CargarListas: async (req: Request, res: Response, next: Function) => {
+        try {
+            let _idUser = req.query.idUser;
+            console.log('id del usuario, ', _idUser);
+
+            await mongoose.connect(process.env.MONGODB_URL!);
+            let _listas = await Usuario.findById(_idUser).populate('favoritos').populate('opiniones').lean();
+            console.log('listas del usuario a mostrar....', _listas);
+
+            res.status(200).send({ codigo: 0, mensaje: 'listas recuperadas correctamente....', datos: _listas });
+        } catch (error) {
+            console.log('error al cargar la lista de favoritos del usuario...', error);
+            res.status(500).send({ codigo: 1, mensaje: 'error al cargar los favoritos del usuario en node..., ' + error });
+        }
     }
+
 }
 export default UserController;

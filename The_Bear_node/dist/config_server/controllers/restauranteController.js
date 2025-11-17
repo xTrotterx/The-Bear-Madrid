@@ -119,21 +119,6 @@ const RestauranteController = {
             console.log('error al guardar la opinion en servicio node', error);
             res.status(500).send({ codigo: 1, mensaje: 'errpr al guardar la opinion....' + error });
         }
-    }),
-    //puede que lo necesite para el perfil
-    CargarOpinones: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-        try {
-            let _idPlato = req.query.idPlato;
-            console.log('id del plato, ', _idPlato);
-            yield mongoose_1.default.connect(process.env.MONGODB_URL);
-            let _opiniones = yield opinion_1.default.find({ idPlato: _idPlato });
-            console.log('opiniones del plato...', _opiniones);
-            res.status(200).send({ codigo: 0, mensaje: 'opiniones del plato recuperadas correctamente...', datos: _opiniones });
-        }
-        catch (error) {
-            console.log('error al cargar las opiniones de los platos', error);
-            res.status(500).send({ codigo: 1, mensaje: 'error al cagrar opiniones' + error });
-        }
     })
 };
 exports.default = RestauranteController;

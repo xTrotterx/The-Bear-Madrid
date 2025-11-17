@@ -65,6 +65,18 @@ export class ModalOpinionComponent {
        let _res= _resp();
       console.log('si el codigo es 0 la opinion se ha guardado bien...', _res.codigo)//<-- me tiene que devolver 0
 
+      // Resetear formulario
+        this.formOpinion.reset();
+        this.estrellasHover = 0;
+        
+        // Cerrar modal
+        const modalElement = document.getElementById('modalOpinion');
+        if (modalElement) {
+          const modalInstance = (window as any).bootstrap?.Modal?.getInstance(modalElement);
+          modalInstance?.hide();
+        }
+        
+        return;
     })
     
 

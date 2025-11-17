@@ -89,6 +89,42 @@ const UserController = {
             console.log('error al refrescar tokens...', error);
             res.status(500).send({ codigo: 1, mensaje: 'error al refrescar tokens...' + error });
         }
+    }),
+    ActualizarFavoritos: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            const { idUser, idPlato } = req.body;
+            console.log('id del usuario, ', idUser, ' y del plato ', idPlato);
+            yield mongoose_1.default.connect(process.env.MONGODB_URL);
+            let _user = yield usuario_1.default.findById(idUser);
+            let _existe = _user === null || _user === void 0 ? void 0 : _user.favoritos.some(f => f.equals(idPlato));
+            if (_existe) {
+                yield usuario_1.default.updateOne({ _id: idUser }, { $pull: { favoritos: idPlato } });
+            }
+            else {
+                yield usuario_1.default.updateOne({ _id: idUser }, { $addToSet: { favoritos: idPlato } } //con esto evito duplicaciones, solo lo mete si no existe, con un push si es posible que se duplique
+                );
+            }
+            res.status(500).send({ codigo: 1, mensaje: 'lista de favoritos actualizada correctamente...', datos: _user === null || _user === void 0 ? void 0 : _user.favoritos });
+        }
+        catch (error) {
+            console.log('error al añadir el plato en la lista favoritos del usuario en node....', error);
+            res.status(500).send({ codigo: 1, mensaje: 'error al actualizar favoritos del usuario....' + error });
+        }
+    }),
+    //voy a  cargar de una los favoritos y las opiniones
+    CargarListas: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            let _idUser = req.query.idUser;
+            console.log('id del usuario, ', _idUser);
+            yield mongoose_1.default.connect(process.env.MONGODB_URL);
+            let _listas = yield usuario_1.default.findById(_idUser).populate('favoritos').populate('opiniones').lean();
+            console.log('listas del usuario a mostrar....', _listas);
+            res.status(200).send({ codigo: 0, mensaje: 'listas recuperadas correctamente....', datos: _listas });
+        }
+        catch (error) {
+            console.log('error al cargar la lista de favoritos del usuario...', error);
+            res.status(500).send({ codigo: 1, mensaje: 'error al cargar los favoritos del usuario en node..., ' + error });
+        }
     })
 };
 exports.default = UserController;

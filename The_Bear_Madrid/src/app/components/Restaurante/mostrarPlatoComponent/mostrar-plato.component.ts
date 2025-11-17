@@ -75,6 +75,8 @@ export class MostrarPlatoComponent {
   //boton para añadirlo me gusta del usuario
   toggleFavorito() {
     this.esFavorito.set(!this.esFavorito());
+    
+
   }
 
   public cambiarOpcion(event: Event) {

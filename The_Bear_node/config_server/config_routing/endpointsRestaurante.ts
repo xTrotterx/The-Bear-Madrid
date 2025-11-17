@@ -12,7 +12,6 @@ routingRestaurante.get('/Plato', RestauranteController.RecuperarPlato);
 
 //opinioncitas
 routingRestaurante.post('/GuardarOpinion', RestauranteController.GuardarOpinion);
-routingRestaurante.get('/CargarOpiniones', RestauranteController.CargarOpinones)
 
 
 export default routingRestaurante;

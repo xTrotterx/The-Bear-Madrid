@@ -9,4 +9,6 @@ const routingUser = express_1.default.Router();
 routingUser.post('/Registro', userController_1.default.Registro);
 routingUser.post('/Login', userController_1.default.Login);
 routingUser.post('/RefrescarToken', userController_1.default.RefrescarToken);
+routingUser.post('/ActualizarFav', userController_1.default.ActualizarFavoritos);
+routingUser.get('/Listas', userController_1.default.CargarListas);
 exports.default = routingUser;

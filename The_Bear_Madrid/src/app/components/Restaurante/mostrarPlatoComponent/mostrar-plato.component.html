@@ -58,9 +58,9 @@
                   <h5><strong>Lo que opinais vosotros nos importa</strong></h5>
                   <div class="d-flex align-items-center">
                     @for (i of estrellas(); track $index) {
-                    <i class="bi bi-star-fill" [style.color]="i <= valoracionRedondeada() ? '#0970e6' : '#ccc'"></i>
+                    <i class="bi bi-star-fill" [style.color]="i <= valoracionRedondeada() ? '#ffc107' : '#ccc'"></i>
                     }
-                    <span class="ms-2 fw-semibold" style="color: #ffc107;">
+                    <span class="ms-2 fw-semibold" style="color: #000000;">
                       {{ valoracionRedondeada().toFixed(2)}}
                     </span>
                     <small class="ms-2 text-muted">
@@ -70,8 +70,7 @@
                 </div>
 
                 <select class="form-select w-50" style='width: 40%;' (change)="cambiarOpcion($event)">
-                  <option value="todas" selected>Filtros</option>
-                  <option value="todas">Todas</option>
+                  <option value="todas"selected>Todas</option>
                   <option value="fecha">Más recientes</option>
                   <option value="puntuacion">Mayor puntuación</option>
                 </select>

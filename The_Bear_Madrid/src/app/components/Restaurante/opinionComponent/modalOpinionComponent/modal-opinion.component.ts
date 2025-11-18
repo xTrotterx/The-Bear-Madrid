@@ -1,4 +1,4 @@
-import { Component, effect, inject, Injector, input, Renderer2, Signal } from '@angular/core';
+import { Component, effect, inject, Injector, input, output, Renderer2, signal, Signal } from '@angular/core';
 import { RestClienteService } from '../../../../servicios/rest-cliente.service';
 import IPlato from '../../../../modelos/Interfaces/IPlato';
 import IUsuario from '../../../../modelos/Interfaces/IUsuario';
@@ -6,6 +6,7 @@ import IOpinion from '../../../../modelos/Interfaces/IOpinion';
 
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import IRestMessage from '../../../../modelos/IRestMessage';
 
 @Component({
   selector: 'app-modal-opinion',
@@ -24,61 +25,80 @@ export class ModalOpinionComponent {
   public plato = input.required<IPlato>();
   public datosUser = input.required<IUsuario | undefined>();
   formOpinion: FormGroup;
-   public valoresOpinion: Signal<Partial<{
+  public valoresOpinion: Signal<Partial<{
     titulo: string;
     comentario: string;
     estrellas: number;
     puntuacion: number | null;
   }>>;
   public estrellasHover = 0;
+  //es una señal para almacenar la respuesta, va a ser null hasta que se envie, la respuesta la trato con otra señal
+  //necesito mas explicacion
+  private _respuestaGuardar = signal<Signal<IRestMessage> | null>(null);
+  //mando la nueva opinion al comp padre para poder actualizar el componente y que s emuestre la nueva opinion automaticamente
+  public opinionGuardada = output<void>();
 
-   constructor() {
+  constructor() {
     this.formOpinion = new FormGroup({
       titulo: new FormControl('', [Validators.required, Validators.maxLength(50)]),
       opinion: new FormControl('', [Validators.required, Validators.maxLength(350)]),
       estrellas: new FormControl(0, [Validators.required, Validators.min(1)]),
       puntuacion: new FormControl(null, [Validators.required, Validators.min(1), Validators.max(5)])
     });
-    
-    this.valoresOpinion = toSignal(this.formOpinion.valueChanges, {initialValue: this.formOpinion.value});
+
+    this.valoresOpinion = toSignal(this.formOpinion.valueChanges, { initialValue: this.formOpinion.value });
+
+    effect(() => {
+      const respuestaSignal = this._respuestaGuardar();
+
+      // Si no hay respuesta aún, salir
+      if (!respuestaSignal) return;
+
+      const respuesta = respuestaSignal();
+
+      console.log('Respuesta del servidor:', respuesta);
+      // Emitir evento al padre
+      this.opinionGuardada.emit();
+
+      // Resetear formulario
+      this.formOpinion.reset();
+      this.estrellasHover = 0;
+
+      // Cerrar modal
+      setTimeout(() => {
+        const modalElement = document.getElementById('modalOpinion');
+        if (modalElement) {
+          const modalInstance = (window as any).bootstrap?.Modal?.getInstance(modalElement);
+          if (modalInstance) {
+            modalInstance.hide();
+          }
+        }
+       }
+      )
+     }
+    )
+
   }
 
   //#endregion--------------------
 
   //#region------metodos----------
-  EnviarOpinion($event:any){
-    console.log('datos del modal: ', this.formOpinion.value );
+  EnviarOpinion($event: any) {
+    console.log('datos del modal: ', this.formOpinion.value);
 
-  const opinionParaEnviar = {
+    const opinionParaEnviar = {
       titulo: this.formOpinion.value.titulo,
       opinion: this.formOpinion.value.opinion,
       estrellas: this.formOpinion.value.estrellas,
       puntuacion: this.formOpinion.value.puntuacion,
       fecha: new Date().toISOString(),
-      idUser: this.datosUser()?._id,  
-      idPlato: this.plato()._id,          
-             
-    };
-    const _resp =this._restSvc.GuardarOpinion(opinionParaEnviar);
-   
-    effect(()=> {
-       let _res= _resp();
-      console.log('si el codigo es 0 la opinion se ha guardado bien...', _res.codigo)//<-- me tiene que devolver 0
+      idUser: this.datosUser()?._id,
+      idPlato: this.plato()._id,
 
-      // Resetear formulario
-        this.formOpinion.reset();
-        this.estrellasHover = 0;
-        
-        // Cerrar modal
-        const modalElement = document.getElementById('modalOpinion');
-        if (modalElement) {
-          const modalInstance = (window as any).bootstrap?.Modal?.getInstance(modalElement);
-          modalInstance?.hide();
-        }
-        
-        return;
-    })
-    
+    };
+    let respuestaSignal = this._restSvc.GuardarOpinion(opinionParaEnviar);
+    this._respuestaGuardar.set(respuestaSignal);
+//aqui me da error el effect y no me cierra el modal, mejor hacerlo en el constructor
 
   }
   public estrellasSeleccionadas = 0;
@@ -94,14 +114,14 @@ export class ModalOpinionComponent {
     this.formOpinion.patchValue({ estrellas: valor });
   }
 
-   public seleccionarPuntuacion(valor: number) {
+  public seleccionarPuntuacion(valor: number) {
     this.formOpinion.patchValue({ puntuacion: valor });
   }
-    // ✅ Computed para saber qué estrellas pintar
+
   public get estrellasVisibles(): number {
     // Si hay hover, mostrar hover; si no, mostrar seleccionadas
-    return this.estrellasHover > 0 
-      ? this.estrellasHover 
+    return this.estrellasHover > 0
+      ? this.estrellasHover
       : (this.valoresOpinion()?.estrellas ?? 0);
   }
 

@@ -49,7 +49,7 @@ const UserController = {
             console.log('datos del body mandados desde el login  ', req.body);
             const { email, password } = req.body;
             yield mongoose_1.default.connect(process.env.MONGODB_URL);
-            let _user = yield usuario_1.default.findOne({ 'email': email }).lean(); //<-- .lean() me devuelve modelo js y reduce el consumo 
+            let _user = yield usuario_1.default.findOne({ 'email': email }).populate('opiniones').lean(); //<-- .lean() me devuelve modelo js y reduce el consumo 
             if (!_user)
                 throw new Error('no existe ese usuario con ese email');
             if (!bcrypt_1.default.compareSync(password, _user.password))

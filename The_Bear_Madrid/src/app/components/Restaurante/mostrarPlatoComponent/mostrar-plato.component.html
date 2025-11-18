@@ -39,14 +39,14 @@
               <div class="col-md">
                 <h5><strong>Dejanos tu opinión</strong></h5>
                 <button class="btn btn-outline-primary btn-sm"
-                        [attr.data-bs-toggle]="datosUsuario() ? 'modal' : null"
-                        [attr.data-bs-target]="datosUsuario() ? '#modalOpinion' : null" 
+                        [attr.data-bs-toggle]="! _valoracionHecha() && datosUsuario() ? 'modal' : null"
+                        [attr.data-bs-target]="!_valoracionHecha() && datosUsuario() ? '#modalOpinion' : null" 
                         (click)="intentarOpinar()">
-                  ¿Qué te ha parecido?
+                 {{_valoracionHecha() ? 'Ya has opinado sobre este plato': ' ¿Qué te ha parecido?' }}
                 </button>
 
                 <!-- Modal de opinión--> 
-                <app-modal-opinion [plato]="plato()" [datosUser]="datosUsuario()"></app-modal-opinion> 
+                <app-modal-opinion [plato]="plato()" [datosUser]="datosUsuario()" (opinionGuardada)="recargarPlato()"></app-modal-opinion> 
                 <hr>
               </div>
             </div>

@@ -21,14 +21,14 @@ export class MostrarPlatoComponent {
   private _injector = inject(Injector);
   private _activatedRoute = inject(ActivatedRoute);
   private _storageGlobal = inject(HTTP_INJECTIONTOKEN_STORAGE_SVCS);
-
   //#endregion
 
   //#region------------propiedades----------------
   public datosUsuario = signal<IUsuario | undefined>(this._storageGlobal.getDatosUsuario());
-
   private _idPlato = signal<string>(this._activatedRoute.snapshot.paramMap.get('idPlato') as string);
-  esFavorito = signal(false);
+
+  public esFavorito = signal(false);
+
   estrellas() { return [1, 2, 3, 4, 5] }
   //para listar las opiniones y usando la pipe 
   public _opciones = signal<'fecha' | 'puntuacion' | 'todas'>('todas');
@@ -69,13 +69,18 @@ export class MostrarPlatoComponent {
     return _suma / _plato.valoraciones.length;
   });
 
+  public _valoracionHecha = computed(() => {
+    let _aaa= this.datosUsuario()?.opiniones.find(opinion => opinion.idPlato === this._idPlato()) //me devuelve solo true, no el objeto d ela opinion entera porque no lo necesito
+    console.log('id del cliente en la valoracion hecha....', _aaa);
+    return _aaa
+  })
   valoracionRedondeada() {
     return Math.round(this._valoracionMedia());
   }
+
   //boton para añadirlo me gusta del usuario
   toggleFavorito() {
     this.esFavorito.set(!this.esFavorito());
-    
 
   }
 
@@ -97,8 +102,21 @@ export class MostrarPlatoComponent {
       });
       return;
     }
+    if (this._valoracionHecha()) {
+      Swal.fire({
+        icon: 'info',
+        title: 'Ya has valorado este plato',
+        confirmButtonText: 'Entendido',
+        confirmButtonColor: '#ad0011'
+      })
+    }
+
   }
 
-
+   public recargarPlato() {
+    console.log('Recargando opiniones del plato...');
+    //recargo la llamada a la bd
+    this._platoResource.reload();
+  }
   //#endregion
 }

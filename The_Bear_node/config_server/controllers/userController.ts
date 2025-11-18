@@ -51,7 +51,7 @@ const UserController = {
 
             await mongoose.connect(process.env.MONGODB_URL!);
 
-            let _user = await Usuario.findOne({ 'email': email }).lean();//<-- .lean() me devuelve modelo js y reduce el consumo 
+            let _user = await Usuario.findOne({ 'email': email }).populate('opiniones').lean();//<-- .lean() me devuelve modelo js y reduce el consumo 
             if (!_user) throw new Error('no existe ese usuario con ese email');
             if (!bcrypt.compareSync(password, _user.password)) throw new Error('contraseña incorrecta');
 

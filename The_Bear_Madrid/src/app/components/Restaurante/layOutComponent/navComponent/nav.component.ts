@@ -25,7 +25,7 @@ export class NavComponent {
   public breadCrumb = signal<ITipos[]>([{ nombreTipo: 'Atrás', pathTipo: 'raiz' }]);
   public tipo = signal<ITipos | null>(null);
 
-  public datosUsuario = signal<IUsuario  | undefined>(this._storageGlobal.getDatosUsuario());
+  public datosUsuario = computed<IUsuario  | undefined>(() => this._storageGlobal.getDatosUsuario());
 
   public btnCerrar = viewChild<ElementRef>('btnCerrar');
 
@@ -74,7 +74,10 @@ export class NavComponent {
     this.tipo.set(tip);
   }
 }
-
+ public cerrarSesion(){
+  this._storageGlobal.LogOut();
+  console.log('usuarioo...', this.datosUsuario());
+ }
   //#endregion
 
 }

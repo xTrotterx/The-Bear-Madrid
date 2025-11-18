@@ -13,5 +13,7 @@ export default interface IStorageSvc{
     //IsLogged:() => boolean,
 
     getOrder: ()=> IOrder,
-    setItemsOrder: (operacion:string,item:{plato:IPlato, cantidad:number})=> void
+    setItemsOrder: (operacion:string,item:{plato:IPlato, cantidad:number})=> void,
+    
+    LogOut:()=> void
 }

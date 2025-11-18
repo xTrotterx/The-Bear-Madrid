@@ -61,7 +61,7 @@
                     <i class="bi bi-star-fill" [style.color]="i <= valoracionRedondeada() ? '#ffc107' : '#ccc'"></i>
                     }
                     <span class="ms-2 fw-semibold" style="color: #000000;">
-                      {{ valoracionRedondeada().toFixed(2)}}
+                      {{ valoracionRedondeada()}}/5
                     </span>
                     <small class="ms-2 text-muted">
                       (basado en {{ plato()?.valoraciones?.length || 0}} opiniones)

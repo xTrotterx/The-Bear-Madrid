@@ -24,7 +24,7 @@ export class MostrarPlatoComponent {
   //#endregion
 
   //#region------------propiedades----------------
-  public datosUsuario = signal<IUsuario | undefined>(this._storageGlobal.getDatosUsuario());
+  public datosUsuario = computed<IUsuario | undefined>(()=>this._storageGlobal.getDatosUsuario());
   private _idPlato = signal<string>(this._activatedRoute.snapshot.paramMap.get('idPlato') as string);
 
   public esFavorito = signal(false);

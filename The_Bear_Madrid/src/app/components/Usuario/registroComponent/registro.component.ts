@@ -26,8 +26,8 @@ export class RegistroComponent {
   //#endregion
 
   //#region----------servicios-----------
-  private _restSvc: RestClienteService = inject(RestClienteService);
-  private _router: Router = inject(Router);
+  private _restSvc = inject(RestClienteService);
+  private _router = inject(Router);
   private _injector = inject(Injector);
   private _storeGlobal = inject(HTTP_INJECTIONTOKEN_STORAGE_SVCS);
 

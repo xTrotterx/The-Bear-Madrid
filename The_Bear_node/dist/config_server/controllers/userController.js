@@ -49,7 +49,7 @@ const UserController = {
             console.log('datos del body mandados desde el login  ', req.body);
             const { email, password } = req.body;
             yield mongoose_1.default.connect(process.env.MONGODB_URL);
-            let _user = yield usuario_1.default.findOne({ 'email': email }).populate('opiniones').lean(); //<-- .lean() me devuelve modelo js y reduce el consumo 
+            let _user = yield usuario_1.default.findOne({ 'email': email }).populate('opiniones').populate('favoritos').lean(); //<-- .lean() me devuelve modelo js y reduce el consumo 
             if (!_user)
                 throw new Error('no existe ese usuario con ese email');
             if (!bcrypt_1.default.compareSync(password, _user.password))
@@ -104,14 +104,17 @@ const UserController = {
                 yield usuario_1.default.updateOne({ _id: idUser }, { $addToSet: { favoritos: idPlato } } //con esto evito duplicaciones, solo lo mete si no existe, con un push si es posible que se duplique
                 );
             }
-            res.status(500).send({ codigo: 1, mensaje: 'lista de favoritos actualizada correctamente...', datos: _user === null || _user === void 0 ? void 0 : _user.favoritos });
+            let _userActualizado = yield usuario_1.default.findById(idUser);
+            console.log('favoritos acutalizados del usuario....', _userActualizado === null || _userActualizado === void 0 ? void 0 : _userActualizado.favoritos);
+            res.status(200).send({ codigo: 0, mensaje: 'lista de favoritos actualizada correctamente...', datos: _userActualizado === null || _userActualizado === void 0 ? void 0 : _userActualizado.favoritos });
         }
         catch (error) {
             console.log('error al añadir el plato en la lista favoritos del usuario en node....', error);
             res.status(500).send({ codigo: 1, mensaje: 'error al actualizar favoritos del usuario....' + error });
         }
     }),
-    //voy a  cargar de una los favoritos y las opiniones
+    //voy a  cargar de una los favoritos y las opiniones 
+    //no se si mantenerlo cuando puedo hacer un .populate en el login, ya vere que hago
     CargarListas: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             let _idUser = req.query.idUser;

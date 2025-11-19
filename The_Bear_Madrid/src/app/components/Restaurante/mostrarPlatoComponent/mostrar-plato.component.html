@@ -95,10 +95,13 @@
             <div class="row mt-4">
               <div class="col-md d-flex justify-content-end align-items-center gap-2">
                 <button class="btn flex-grow-1"
-                  style="background-color: #ad0011; border-color: #ad0011; color: white;">Añadir</button>
+                  style="background-color: #ad0011; border-color: #ad0011; color: white;">
+                  Añadir
+                </button>
                 <button class="btn btn-outline-danger rounded-circle p-0"
                   style="width: 42px; height: 42px; display: flex; align-items: center; justify-content: center;"
-                  (click)="toggleFavorito()">
+                  (click)="toggleFavorito()"
+                  [disabled]="!datosUsuario()">
                   <i [class]="esFavorito() ? 'bi bi-heart-fill' : 'bi bi-heart'"
                     [style.color]="esFavorito() ? '#c82333' : ''"></i>
                 </button>

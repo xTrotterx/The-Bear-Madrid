@@ -18,7 +18,7 @@ export class NavComponent {
   private _injector = inject(Injector);
   private _router = inject(Router);
   private _storageGlobal = inject(HTTP_INJECTIONTOKEN_STORAGE_SVCS);
-  private _restSvc: RestClienteService = inject(RestClienteService);
+  private _restSvc = inject(RestClienteService);
   //#endregion
 
   //#region---------propiedades-------

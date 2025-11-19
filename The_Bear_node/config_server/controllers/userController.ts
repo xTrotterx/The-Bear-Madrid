@@ -51,7 +51,7 @@ const UserController = {
 
             await mongoose.connect(process.env.MONGODB_URL!);
 
-            let _user = await Usuario.findOne({ 'email': email }).populate('opiniones').lean();//<-- .lean() me devuelve modelo js y reduce el consumo 
+            let _user = await Usuario.findOne({ 'email': email }).populate('opiniones').populate('favoritos').lean();//<-- .lean() me devuelve modelo js y reduce el consumo 
             if (!_user) throw new Error('no existe ese usuario con ese email');
             if (!bcrypt.compareSync(password, _user.password)) throw new Error('contraseña incorrecta');
 
@@ -123,14 +123,17 @@ const UserController = {
                     { $addToSet: { favoritos: idPlato } } //con esto evito duplicaciones, solo lo mete si no existe, con un push si es posible que se duplique
                 );
             }
+            let _userActualizado = await Usuario.findById(idUser);
+            console.log('favoritos acutalizados del usuario....', _userActualizado?.favoritos);
 
-            res.status(500).send({codigo:1, mensaje:'lista de favoritos actualizada correctamente...',datos: _user?.favoritos });
+            res.status(200).send({codigo:0, mensaje:'lista de favoritos actualizada correctamente...',datos: _userActualizado?.favoritos });
         } catch (error) {
             console.log('error al añadir el plato en la lista favoritos del usuario en node....', error);
             res.status(500).send({ codigo: 1, mensaje: 'error al actualizar favoritos del usuario....' + error });
         }
     },
-    //voy a  cargar de una los favoritos y las opiniones
+    //voy a  cargar de una los favoritos y las opiniones 
+    //no se si mantenerlo cuando puedo hacer un .populate en el login, ya vere que hago
     CargarListas: async (req: Request, res: Response, next: Function) => {
         try {
             let _idUser = req.query.idUser;

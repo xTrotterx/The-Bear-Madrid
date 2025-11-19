@@ -1,4 +1,4 @@
-import { Component, computed, inject, Injector, Resource, resource, signal } from '@angular/core';
+import { Component, computed, effect, inject, Injector, Resource, resource, signal, untracked } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import IRestMessage from '../../../modelos/IRestMessage';
 import IPlato from '../../../modelos/Interfaces/IPlato';
@@ -9,6 +9,7 @@ import { HTTP_INJECTIONTOKEN_STORAGE_SVCS } from '../../../app.config';
 import { OpinionComponent } from '../opinionComponent/opinion.component';
 import Swal from 'sweetalert2';
 import { ModalOpinionComponent } from '../opinionComponent/modalOpinionComponent/modal-opinion.component';
+import { RestClienteService } from '../../../servicios/rest-cliente.service';
 
 @Component({
   selector: 'app-mostrar-plato',
@@ -21,13 +22,19 @@ export class MostrarPlatoComponent {
   private _injector = inject(Injector);
   private _activatedRoute = inject(ActivatedRoute);
   private _storageGlobal = inject(HTTP_INJECTIONTOKEN_STORAGE_SVCS);
+  private _restSvc: RestClienteService = inject(RestClienteService);
   //#endregion
 
   //#region------------propiedades----------------
-  public datosUsuario = computed<IUsuario | undefined>(()=>this._storageGlobal.getDatosUsuario());
+  public datosUsuario = computed<IUsuario | undefined>(() => this._storageGlobal.getDatosUsuario());
   private _idPlato = signal<string>(this._activatedRoute.snapshot.paramMap.get('idPlato') as string);
 
-  public esFavorito = signal(false);
+  //con esto hace directamente que si esta logueado el usuario y es fav me aparezca marcado
+  public esFavorito = computed(() => {
+    let usuario = this.datosUsuario();
+    if (!usuario?.favoritos) return false;
+    return usuario.favoritos.some((fav: any) => fav === this._idPlato());
+  });
 
   estrellas() { return [1, 2, 3, 4, 5] }
   //para listar las opiniones y usando la pipe 
@@ -70,7 +77,7 @@ export class MostrarPlatoComponent {
   });
 
   public _valoracionHecha = computed(() => {
-    let _aaa= this.datosUsuario()?.opiniones.find(opinion => opinion.idPlato === this._idPlato()) //me devuelve solo true, no el objeto d ela opinion entera porque no lo necesito
+    let _aaa = this.datosUsuario()?.opiniones.find(opinion => opinion.idPlato === this._idPlato()) //me devuelve solo true, no el objeto d ela opinion entera porque no lo necesito
     console.log('id del cliente en la valoracion hecha....', _aaa);
     return _aaa
   })
@@ -80,8 +87,41 @@ export class MostrarPlatoComponent {
 
   //boton para añadirlo me gusta del usuario
   toggleFavorito() {
-    this.esFavorito.set(!this.esFavorito());
+    let _usuario = this.datosUsuario();
+    if (!_usuario) {
+      Swal.fire({
+        icon: 'info',
+        title: '¡Ups!',
+        text: 'Necesitas iniciar sesión para guardar favoritos',
+        timer: 3000,
+        timerProgressBar: true,
+        confirmButtonColor: '#ad0011'
+      });
+      return;
+    }
 
+    const marcar = this._restSvc.ActualizarFavoritos(_usuario._id, this._idPlato());
+
+    // Esperar a que la señal tenga un valor diferente de 100
+    const resp = marcar();
+
+    effect(() => {
+      const resp = marcar();
+
+      console.log('📡 Respuesta del backend:', resp);
+
+      if (resp.codigo === 0) {
+        console.log('✅ Favoritos actualizados:', resp.datos);
+        //con esto evito que vuelva a ejecutarse el efecto y asi evito bucle cuando la señal cambie
+        untracked(() => {
+          this._storageGlobal.setDatosUsuario({
+            ..._usuario,
+            favoritos: resp.datos
+          });
+          console.log('lista de favoritos del usuario: ', this.datosUsuario()?.favoritos);
+        });
+      }
+    }, { injector: this._injector });
   }
 
   public cambiarOpcion(event: Event) {
@@ -113,7 +153,7 @@ export class MostrarPlatoComponent {
 
   }
 
-   public recargarPlato() {
+  public recargarPlato() {
     console.log('Recargando opiniones del plato...');
     //recargo la llamada a la bd
     this._platoResource.reload();

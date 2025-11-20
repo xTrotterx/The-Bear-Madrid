@@ -1,11 +1,26 @@
 <div class="container mt-4">
-  @for(seccion of this.platosPorTipo(); track $index)
+  @for(seccion of platosPorTipo(); track seccion.pathTipo)
   {
     <div class="mb-5">
-      <h2 class="text-primary fw-bold border-bottom pb-2">{{ seccion.tipo }}</h2>
+      <h2 class="text-primary fw-bold border-bottom pb-2">{{ seccion.nombre }}</h2>
       
-      <div class="scroll-container mt-3">
-       
+      <div class="carousel-container mt-3">
+        <button class="btn btn-outline-primary btn-carousel" (click)="anterior(seccion.pathTipo, seccion.platos)">
+          ←
+        </button>
+        
+        <div class="platos-grid">
+          @for(plato of getPlatosVisibles(seccion.pathTipo, seccion.platos); track plato._id)
+          {
+            <div class="plato-card">
+              <app-platito [plato]="plato"></app-platito>
+            </div>
+          }
+        </div>
+        
+        <button class="btn btn-outline-primary btn-carousel" (click)="siguiente(seccion.pathTipo, seccion.platos)">
+          →
+        </button>
       </div>
     </div>
   }

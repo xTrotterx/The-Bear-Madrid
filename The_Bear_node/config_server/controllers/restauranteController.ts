@@ -45,11 +45,13 @@ const RestauranteController = {
     //hay que cambiar esta mierda angel espabila
     PlatosPorTipos: async (req: Request, res: Response, next: NextFunction) => {
         try {
-
             await mongoose.connect(process.env.MONGODB_URL!);
 
-            // Recupera todos los platos
             let _platos = await Plato.find({});
+
+            
+            let _tipos = await Tipo.find({});
+            let tiposMap = new Map(_tipos.map(t => [t.pathTipo, t.nombreTipo]));
 
             // Agrupa por tipo
             let _agrupados: Record<string, any[]> = {};
@@ -59,7 +61,14 @@ const RestauranteController = {
                 _agrupados[p.pathTipo ?? ''].push(p);
             });
 
-            res.status(200).send({ codigo: 0, mensaje: "Platos agrupados por tipo", datos: _agrupados });
+            // transformo la respuesta para incluir el nombreTipo
+            let resultado = Object.entries(_agrupados).map(([pathTipo, platos]) => ({
+                pathTipo,
+                nombreTipo: tiposMap.get(pathTipo) || pathTipo,
+                platos
+            }));
+
+            res.status(200).send({ codigo: 0, mensaje: "Platos agrupados por tipo", datos: resultado });
         } catch (error) {
             console.log('error al recuperar datos para el home en node...', error);
             res.status(500).send({ codigo: 1, mensaje: 'error al recuperar platosPorTipos...' + error });
@@ -106,12 +115,12 @@ const RestauranteController = {
             console.log('nueva opinion guardada correctamente', _op);
 
             //platp
-            let _plato = await Plato.findByIdAndUpdate(idPlato, { $push: {valoraciones: _op} }, { new: true });
+            let _plato = await Plato.findByIdAndUpdate(idPlato, { $push: { valoraciones: _op } }, { new: true });
             if (!_plato) throw new Error('no se ha podido actualizar el plato con la nueva opinion');
             console.log('plato actualizado, ', _plato.valoraciones);
 
             //user
-            let _user = await Usuario.findByIdAndUpdate(idUser, { $push: {opiniones: _op}}, { new: true });
+            let _user = await Usuario.findByIdAndUpdate(idUser, { $push: { opiniones: _op } }, { new: true });
             if (!_user) throw new Error('no se ha actualizado el usuario con la nueva opinon');
             console.log('usuario actualizado,', _user.opiniones);
 

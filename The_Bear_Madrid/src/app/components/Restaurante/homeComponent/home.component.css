@@ -1,21 +1,54 @@
-.scroll-container {
+
+.carousel-container {
   display: flex;
-  gap: 1.2rem;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  padding-bottom: 10px;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
 }
 
-.scroll-container::-webkit-scrollbar {
-  height: 8px;
+.btn-carousel {
+  flex-shrink: 0;
+  padding: 10px 15px;
+  font-size: 1.5rem;
 }
 
-.scroll-container::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
+.platos-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  flex-grow: 1;
+  min-height: 350px;
 }
 
-.scroll-container app-platito {
-  flex: 0 0 auto;
-  scroll-snap-align: start;
+.plato-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.plato-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .platos-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .platos-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .platos-grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }

@@ -108,10 +108,8 @@ export class MostrarPlatoComponent {
     effect(() => {
       const resp = marcar();
 
-      console.log('📡 Respuesta del backend:', resp);
-
       if (resp.codigo === 0) {
-        console.log('✅ Favoritos actualizados:', resp.datos);
+        console.log('Favoritos actualizados:', resp.datos);
         //con esto evito que vuelva a ejecutarse el efecto y asi evito bucle cuando la señal cambie
         untracked(() => {
           this._storageGlobal.setDatosUsuario({

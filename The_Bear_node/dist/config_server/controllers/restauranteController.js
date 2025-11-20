@@ -54,8 +54,9 @@ const RestauranteController = {
     PlatosPorTipos: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             yield mongoose_1.default.connect(process.env.MONGODB_URL);
-            // Recupera todos los platos
             let _platos = yield platos_1.default.find({});
+            let _tipos = yield tipo_1.default.find({});
+            let tiposMap = new Map(_tipos.map(t => [t.pathTipo, t.nombreTipo]));
             // Agrupa por tipo
             let _agrupados = {};
             _platos.forEach(p => {
@@ -64,7 +65,13 @@ const RestauranteController = {
                     _agrupados[(_b = p.pathTipo) !== null && _b !== void 0 ? _b : ''] = [];
                 _agrupados[(_c = p.pathTipo) !== null && _c !== void 0 ? _c : ''].push(p);
             });
-            res.status(200).send({ codigo: 0, mensaje: "Platos agrupados por tipo", datos: _agrupados });
+            // transformo la respuesta para incluir el nombreTipo
+            let resultado = Object.entries(_agrupados).map(([pathTipo, platos]) => ({
+                pathTipo,
+                nombreTipo: tiposMap.get(pathTipo) || pathTipo,
+                platos
+            }));
+            res.status(200).send({ codigo: 0, mensaje: "Platos agrupados por tipo", datos: resultado });
         }
         catch (error) {
             console.log('error al recuperar datos para el home en node...', error);

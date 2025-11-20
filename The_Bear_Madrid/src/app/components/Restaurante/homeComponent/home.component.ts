@@ -27,11 +27,42 @@ export class HomeComponent {
     injector: this._injector
   });
 
+  
   public platosPorTipo = computed(() => {
-    const data = this._platosResource.value();
-    if (!data || data.codigo !== 0) return [];
+    const dataPlatos = this._platosResource.value();
+    
+    if (!dataPlatos || dataPlatos.codigo !== 0) return [];
 
-    // Convierte Record<string, any[]> a array de secciones
-    return Object.entries(data.datos).map(([tipo, platos]) => ({ tipo, platos }));
-  })
+    return dataPlatos.datos.map((seccion: any) => ({ 
+      pathTipo: seccion.pathTipo,
+      nombre: seccion.nombreTipo,
+      platos: seccion.platos as IPlato[] 
+    }));
+  });
+
+  // Estado para el carrusel
+  currentIndexes: Record<string, number> = {};
+  platosVisibles = 4; // Cantidad de platos a mostrar
+
+  getPlatosVisibles(tipo: string, platos: IPlato[]): IPlato[] {
+    const startIndex = this.currentIndexes[tipo] ?? 0;
+    const resultado = [];
+    
+    for (let i = 0; i < this.platosVisibles; i++) {
+      const index = (startIndex + i) % platos.length;
+      resultado.push(platos[index]);
+    }
+    
+    return resultado;
+  }
+
+  anterior(tipo: string, platos: IPlato[]): void {
+    const index = this.currentIndexes[tipo] ?? 0;
+    this.currentIndexes[tipo] = (index - 1 + platos.length) % platos.length;
+  }
+
+  siguiente(tipo: string, platos: IPlato[]): void {
+    const index = this.currentIndexes[tipo] ?? 0;
+    this.currentIndexes[tipo] = (index + 1) % platos.length;
+  }
 }

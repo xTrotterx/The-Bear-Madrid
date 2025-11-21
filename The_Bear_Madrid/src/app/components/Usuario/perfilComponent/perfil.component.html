@@ -1,1 +1,77 @@
-<p>perfil works!</p>
+<div class="perfil-container">
+  <!-- Sección de datos del usuario -->
+  <div class="usuario-header">
+    <div class="usuario-card">
+      @if(datosUsuario(); as usuario) {
+        <div class="usuario-info">
+          <h1 class="usuario-nombre">{{ datosUsuario()?.nombre }}</h1>
+          <p class="usuario-email">{{ datosUsuario()?.email }}</p>
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="contenedor-perfil">
+    <!-- Columna izquierda: Platos favoritos -->
+    <div class="seccion-favoritos">
+      <h2 class="seccion-titulo">
+        <span class="bi bi-heart-fill" style="color: #c82333;"></span>
+        Mis Platos Favoritos
+      </h2>
+
+      @if(listaFav().length > 0) {
+        <div class="carousel-favoritos">
+          @if(mostrarBotonesFav()) {
+            <button class="btn-arrow-small" (click)="anteriorFav()" title="Anterior">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
+          }
+
+          <div class="platos-carrusel">
+            @for(plato of getPlatosVisibles(); track plato._id +plato.nombre) {
+              <div class="plato-item">
+                <app-platito [plato]="plato"></app-platito>
+              </div>
+            }
+          </div>
+
+          @if(mostrarBotonesFav()) {
+            <button class="btn-arrow-small" (click)="siguienteFav()" title="Siguiente">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+          }
+        </div>
+      } @else {
+        <div class="sin-datos">
+          <p>Aún no tienes platos favoritos</p>
+        </div>
+      }
+    </div>
+
+    <!-- Columna derecha: Opiniones -->
+    <div class="seccion-opiniones">
+      <h2 class="seccion-titulo">
+        <span class="bi bi-star-fill" style="color: #ffc107;"></span>
+        Mis Opiniones
+      </h2>
+
+      @if(listaOp().length > 0) {
+        <div class="opiniones-lista">
+          @for(opinion of listaOp(); track opinion._id) {
+            <div class="opinion-item">
+              <app-opinion-component [opinion]="opinion"></app-opinion-component>
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="sin-datos">
+          <p>Aún no has dejado opiniones</p>
+        </div>
+      }
+    </div>
+  </div>
+</div>

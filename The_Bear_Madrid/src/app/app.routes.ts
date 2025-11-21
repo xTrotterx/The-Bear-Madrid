@@ -16,8 +16,7 @@ export const routes: Routes = [
         path: 'Usuario',
         children: [
             { path: 'Registro', component: RegistroComponent },
-            { path: 'Login', component: LoginComponent },
-            { path: 'Perfil', canActivate: [controlGuard], component: PerfilComponent }
+            { path: 'Login', component: LoginComponent }
         ]
     },
     {
@@ -26,7 +25,8 @@ export const routes: Routes = [
             { path: 'Home', component: HomeComponent },
             { path: 'Platos/:pathTipo', component: PlatoComponent },
             {path:'Plato/:idPlato', component:MostrarPlatoComponent},
-            { path: 'Mapa', component:MostrarMapaComponent}
+            { path: 'Mapa', component:MostrarMapaComponent},
+            { path: 'Perfil', canActivate: [controlGuard], component: PerfilComponent }
             
         ]
     },

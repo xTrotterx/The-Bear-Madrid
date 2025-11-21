@@ -33,6 +33,35 @@
   transform: translateY(-5px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
+.btn-arrow {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 50%;
+  background: #5c4033;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(92, 64, 51, 0.4);
+}
+
+.btn-arrow:hover {
+  transform: scale(1.1);
+  background: #4a3228;
+  box-shadow: 0 6px 20px rgba(92, 64, 51, 0.6);
+}
+
+.btn-arrow:active {
+  transform: scale(0.95);
+}
+
+.btn-arrow svg {
+  display: block;
+}
 
 /* Responsive */
 @media (max-width: 1200px) {

@@ -8,14 +8,14 @@
     <!-- Botón Añadir o Control de Cantidad -->
     @if(this.cantidadPlatos() == 0)
     {
-      <button type="button" class="btn mt-auto w-100" style="background-color: #ad0011; border-color: #ad0011; color: white;" (click)="AddToOrder()">
+      <button type="button" class="btn mt-auto w-100" style="background-color: #4a3228; border-color: #4a3228; color: white;" (click)="AddToOrder()">
         Añadir
       </button>
     }
     @else {
       <div class="input-group input-group-sm mt-auto">
         <!-- Botón restar / eliminar -->
-        <button type="button" class="btn btn-sm" style="background-color: #ad0011; border-color: #ad0011; color: white;" (click)="ModificarCantidad('restar')">
+        <button type="button" class="btn btn-sm" style="background-color: #4a3228; border-color: #4a3228; color: white;" (click)="ModificarCantidad('restar')">
           @if (this.cantidadPlatos() == 1)
           {
             <i class="bi bi-trash-fill"></i>
@@ -34,7 +34,7 @@
                (blur)="ModificarCantidad('modifica')" />
 
         <!-- Botón sumar -->
-        <button type="button" class="btn btn-sm" style="background-color: #ad0011; border-color: #ad0011; color: white;" (click)="ModificarCantidad('sumar')">
+        <button type="button" class="btn btn-sm" style="background-color: #4a3228; border-color: #4a3228; color: white;" (click)="ModificarCantidad('sumar')">
           <i class="bi bi-plus-lg"></i>
         </button>
       </div>

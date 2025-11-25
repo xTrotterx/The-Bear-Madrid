@@ -80,7 +80,7 @@
       <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUser">
         <li>
           <a class="dropdown-item" [routerLink]="['/Restaurante/Perfil']">
-            <i class="fa-regular fa-heart"></i> Mis favoritos
+            <i class="fa-regular fa-heart"></i> Mi Perfil
           </a>
         </li>
         <li><hr class="dropdown-divider"></li>
@@ -96,6 +96,11 @@
           Iniciar sesión
         </a>
       }
+      <a class="btn btn-light rounded-circle ms-2 d-flex align-items-center justify-content-center" 
+          style="width: 40px; height: 40px; padding: 0;" 
+          [routerLink]="['/Restaurante/Order']" routerLinkActive="router-link-active">
+            <i class="bi bi-fork-knife fs-5"></i>
+          </a>
       
     </div>
       

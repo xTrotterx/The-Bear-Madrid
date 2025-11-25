@@ -126,6 +126,20 @@ const RestauranteController = {
             console.log('error al guardar la opinion en servicio node', error);
             res.status(500).send({ codigo: 1, mensaje: 'errpr al guardar la opinion....' + error });
         }
+    }),
+    CargarListas: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            let _idUser = req.query.idUser;
+            console.log('id del usuario, ', _idUser);
+            yield mongoose_1.default.connect(process.env.MONGODB_URL);
+            let _listas = yield usuario_1.default.findById(_idUser).populate('favoritos').populate('opiniones').lean();
+            console.log('listas del usuario a mostrar....', _listas);
+            res.status(200).send({ codigo: 0, mensaje: 'listas recuperadas correctamente....', datos: _listas });
+        }
+        catch (error) {
+            console.log('error al cargar la lista de favoritos del usuario...', error);
+            res.status(500).send({ codigo: 1, mensaje: 'error al cargar los favoritos del usuario en node..., ' + error });
+        }
     })
 };
 exports.default = RestauranteController;

@@ -51,7 +51,6 @@ export class PerfilComponent {
     return data?.datos?.opiniones ?? [];
   });
 
-  // Para el carrusel de favoritos
   favIndexes: Record<string, number> = {};
   platosVisibles = 3;
 
@@ -61,12 +60,12 @@ export class PerfilComponent {
   getPlatosVisibles(): any[] {
     const platos = this.listaFav();
     
-    // Si hay pocos platos, mostrarlos sin repetir
+    // si hay menos no me hace el carrusel
     if (platos.length <= this.platosVisibles) {
       return platos;
     }
 
-    // Si hay muchos, hacer carrusel
+    // si hay mas de 3 me hace el carrusel
     const startIndex = this.favIndexes['favoritos'] ?? 0;
     const resultado = [];
     

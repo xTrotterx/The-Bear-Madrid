@@ -76,6 +76,7 @@ export class NavComponent {
 }
  public cerrarSesion(){
   this._storageGlobal.LogOut();
+  this._router.navigate(['Restaurante/Home'])
   console.log('usuarioo...', this.datosUsuario());
  }
   //#endregion

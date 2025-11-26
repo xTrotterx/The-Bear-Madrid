@@ -1,0 +1,66 @@
+.mini-plato-card {
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: none;
+  margin-bottom: 0.75rem;
+}
+
+.mini-plato-card:last-child {
+  margin-bottom: 0;
+}
+
+.mini-plato-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.mini-plato-img {
+  height: 90px;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 10px 0 0 10px;
+}
+
+.btn-plato {
+  background-color: #4a3228;
+  border-color: #4a3228;
+  color: white;
+  width: 35px;
+  height: 35px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px; /* Bordes suavizados */
+  transition: all 0.2s ease;
+}
+
+.btn-plato:hover:not(:disabled) {
+  background-color: #3a2218;
+  border-color: #3a2218;
+  color: white;
+  transform: scale(1.05);
+}
+
+.btn-plato:disabled {
+  background-color: #6d5d52;
+  border-color: #6d5d52;
+  opacity: 0.6;
+}
+
+.cantidad-input {
+  max-width: 50px;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .mini-plato-card .row {
+    text-align: center;
+  }
+  
+  .mini-plato-img {
+    height: 80px;
+    border-radius: 10px 10px 0 0;
+  }
+}

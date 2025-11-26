@@ -1,1 +1,136 @@
-<p>order works!</p>
+<div class="container-fluid py-4">
+    <div class="row g-4">
+        <!-- Columna izquierda: Platos y Pago -->
+        <div class="col-lg-8">
+            <!-- Header -->
+            <div class="mb-4">
+                <h1 class="display-5 fw-bold text-dark">Lo que deseas</h1>
+                @if (mensaje()) {
+                <p class="text-muted mb-0">{{ mensaje() }}</p>
+                }
+            </div>
+
+            <!-- Lista de platos -->
+            <div class="mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="h4 mb-0 text-dark">Platos elegidos</h2>
+                    <span class="badge rounded-pill" style="background-color: #4a3228;">
+                        {{ obtenerTotalItems() }} {{ obtenerTotalItems() === 1 ? 'item' : 'items' }}
+                    </span>
+                </div>
+
+                @if (order().items && order().items.length > 0) {
+                <div class="platos-container">
+                    @for (item of order().items; track item.plato._id) {
+                    <app-mini-plato-order [plato]="item.plato" [cantidad]="item.cantidad"
+                        (operarEvent)="ModificaCantidadItem($event)">
+                    </app-mini-plato-order>
+                    }
+                </div>
+                } @else {
+                <div class="card border-0 shadow-sm text-center py-5">
+                    <div class="card-body">
+                        <i class="bi bi-basket3 text-muted mb-3" style="font-size: 3rem;"></i>
+                        <h5 class="text-muted mb-1">¿Todavía no has decidido?</h5>
+                        <p class="text-muted small mb-0">Elige alguno de nuestros platos para comer</p>
+                    </div>
+                </div>
+                }
+            </div>
+
+            <!-- Sección de pago (placeholder) -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h2 class="h4 card-title mb-4 text-dark">
+                        <i class="bi bi-credit-card me-2"></i>
+                        Método de pago
+                    </h2>
+                    <div class="text-center py-5 border border-2 border-dashed rounded"
+                        style="border-color: #dee2e6 !important;">
+                        <i class="bi bi-credit-card text-muted mb-3" style="font-size: 2.5rem;"></i>
+                        <p class="text-muted fst-italic mb-0">...</p>
+                        <p class="text-muted small mt-2">Aquí podrás seleccionar tu forma de pago preferida</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna derecha: Resumen sticky -->
+        <div class="col-lg-4">
+            <div class="position-sticky" style="top: 20px;">
+                <div class="card border-0 shadow">
+                    <div class="card-body p-4">
+                        <h2 class="h4 card-title mb-4 text-dark">
+                            <i class="bi bi-receipt me-2"></i>
+                            Resumen
+                        </h2>
+
+                        <!-- Items del resumen -->
+                        <div class="summary-items mb-3">
+                            @if (order().items && order().items.length > 0) {
+                            @for (item of order().items; track item.plato._id) {
+                            <div class="d-flex justify-content-between align-items-start mb-2 pb-2 border-bottom">
+                                <span class="text-muted small flex-grow-1">
+                                    <span class="badge bg-secondary me-1">{{ item.cantidad }}</span>
+                                    {{ item.plato.nombre }}
+                                </span>
+                                <span class="fw-bold small text-nowrap ms-2" style="color: #4a3228;">
+                                    {{ (item.plato.precio * item.cantidad).toFixed(2) }}€
+                                </span>
+                            </div>
+                            }
+                            } @else {
+                            <div class="text-center py-3">
+                                <i class="bi bi-inbox text-muted mb-2" style="font-size: 2rem;"></i>
+                                <p class="text-muted small mb-0">Sin items</p>
+                            </div>
+                            }
+                        </div>
+
+                        <!-- Totales -->
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between mb-2 pb-2">
+                                <span class="text-muted">Subtotal:</span>
+                                <span class="fw-semibold">{{ calcularSubtotal().toFixed(2) }}€</span>
+                            </div>
+
+                            <div class="d-flex justify-content-between pt-3 border-top border-2"
+                                style="border-color: #4a3228 !important;">
+                                <span class="fs-5 fw-bold">Total:</span>
+                                <span class="fs-5 fw-bold">{{ calcularTotal().toFixed(2) }}€</span>
+                            </div>
+                        </div>
+
+                        <!-- Botones -->
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-lg btn-confirmar"
+                                [disabled]="!order().items || order().items.length === 0">
+                                <i class="bi bi-check-circle me-2"></i>
+                                Confirmar Pedido
+                            </button>
+
+                            <button class="btn btn-outline-secondary" [routerLink]="['/']">
+                                <i class="bi bi-arrow-left me-2"></i>
+                                Volver a elegir
+                            </button>
+                        </div>
+
+                        <!-- Info adicional -->
+                        @if (order().items && order().items.length > 0) {
+                        <div class="mt-3 p-3 rounded" style="background-color: #f8f9fa;">
+                            <small class="text-muted d-block mb-1">
+                                <i class="bi bi-info-circle me-1"></i>
+                                Total de platos pedidos: <strong>{{ obtenerTotalItems() }}</strong>
+                            </small>
+                            <small class="text-muted d-block">
+                                <i class="bi bi-clock me-1"></i>
+                                Tiempo estimado: <strong>15-20 min</strong>
+                            </small>
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

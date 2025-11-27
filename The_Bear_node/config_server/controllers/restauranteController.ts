@@ -4,6 +4,7 @@ import Tipo from "../../modelos/tipo";
 import Plato from "../../modelos/platos"
 import Opinion from "../../modelos/opinion";
 import Usuario from "../../modelos/usuario";
+import paypal from "../../servicios/paypal";
 
 
 const RestauranteController = {
@@ -42,7 +43,7 @@ const RestauranteController = {
             res.status(500).send({ codigo: 1, mensaje: 'error al recuperar platos ' + error })
         }
     },
-    //hay que cambiar esta mierda angel espabila
+    
     PlatosPorTipos: async (req: Request, res: Response, next: NextFunction) => {
         try {
             await mongoose.connect(process.env.MONGODB_URL!);
@@ -131,7 +132,7 @@ const RestauranteController = {
             res.status(500).send({ codigo: 1, mensaje: 'errpr al guardar la opinion....' + error });
         }
     },
-       CargarListas: async (req: Request, res: Response, next: Function) => {
+    CargarListas: async (req: Request, res: Response, next: Function) => {
             try {
                 let _idUser = req.query.idUser;
                 console.log('id del usuario, ', _idUser);
@@ -145,6 +146,33 @@ const RestauranteController = {
                 console.log('error al cargar la lista de favoritos del usuario...', error);
                 res.status(500).send({ codigo: 1, mensaje: 'error al cargar los favoritos del usuario en node..., ' + error });
             }
+    },
+    
+    PaypalCallback: async (req:Request,res:Response,next:NextFunction)=>{
+        //paypal devuelve iUSer,idOrder y opcional cancel
+        console.log('parametros en req.query pasados por el servidor de paypal...', req.query);
+        const {idUser,idOrder,Cancel}=req.query;
+
+        try {
+            if (Cancel) throw new Error('Orden cancelado por usuario en el ultimo momento desde paypal....');
+
+            //el usuario acepta ek cobro....
+            await mongoose.connect(process.env.MONGODB_URL!);
+            let _paypalorder=await mongoose.connection.collection('paypalOrders').findOne({idUser, idOrder});
+            if (!_paypalorder) throw new Error(`no hay ningun pedido de paypal para ese idUsuario: ${idUser} y idOrder${idOrder}`);
+
+            let _idPedidoPayPal = _paypalorder.idPedidoPayPal;
+            let _finPago = await paypal.CobrarOrderPayPal(_idPedidoPayPal);
+
+            if (!_finPago) throw new Error('error cobro del pedido en paypal cagaste ...');
+            //redirijo a mi aplicacion de angular
+            res.status(200).redirect(`http://localhost:4200/PedidoResult?idUser=${idUser}&idOrder=${idOrder}&idPedidoPayPal=${_idPedidoPayPal}&opCode=0`);
+
+        } catch (error) {
+            console.log('error al finalizar pago del pedido...', error);
+            res.status(200).redirect(`http://localhost:4200/PedidoResult?idUser=${idUser}&idOrder=${idOrder}&opCode=1`);
+
         }
+    }
 }
 export default RestauranteController;

@@ -10,6 +10,7 @@ import { PlatoComponent } from './components/Restaurante/platoComponent/plato.co
 import { MostrarMapaComponent } from './components/Mapa/mostrar-mapa.component';
 import { MostrarPlatoComponent } from './components/Restaurante/mostrarPlatoComponent/mostrar-plato.component';
 import { OrderComponent } from './components/Restaurante/orderComponent/order.component';
+import { platosResolver } from './resolver/plato.resolver';
 
 export const routes: Routes = [
     { path: '', redirectTo:'/Restaurante/Home', pathMatch:'full'},//<---pendiente a cambiar
@@ -24,7 +25,7 @@ export const routes: Routes = [
         path: 'Restaurante', component: LayOutComponent,
         children: [
             { path: 'Home', component: HomeComponent },
-            { path: 'Platos/:pathTipo', component: PlatoComponent },
+            { path: 'Platos/:pathTipo', component: PlatoComponent, resolve:{platosData: platosResolver} },
             {path:'Plato/:idPlato', component:MostrarPlatoComponent},
             { path: 'Mapa', component:MostrarMapaComponent},
             { path: 'Perfil', canActivate: [controlGuard], component: PerfilComponent },

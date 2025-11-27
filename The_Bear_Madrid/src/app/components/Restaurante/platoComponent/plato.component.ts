@@ -15,13 +15,13 @@ import { map } from 'rxjs';
 export class PlatoComponent {
   //#region-----servicios------------
   private _activatedRoute = inject(ActivatedRoute)
-  private _injector = inject(Injector)
+ //private _injector = inject(Injector)
   //#endregion
 
   //private _pathTipo = signal<string>(this._activatedRoute.snapshot.paramMap.get('pathTipo') as string);
   //antes no me actualizaba porque con snapshot me coge solo el valor incial con toSginal y param map convierto
   //  el observable en señal que se actualiza automaticamente
-  private _pathTipo = toSignal(this._activatedRoute.paramMap.pipe(map(params => params.get('pathTipo') as string)),
+ /* private _pathTipo = toSignal(this._activatedRoute.paramMap.pipe(map(params => params.get('pathTipo') as string)),
     { initialValue: this._activatedRoute.snapshot.paramMap.get('pathTipo') as string }
   );
 
@@ -40,5 +40,14 @@ export class PlatoComponent {
       injector: this._injector
     }
   );
-  public platos = computed<IPlato[]>(() => this._platosResource.value() ? (this._platosResource.value().codigo == 0 ? this._platosResource.value().datos : []) : []);
+  */
+  //public platos = computed<IPlato[]>(() => this._platosResource.value() ? (this._platosResource.value().codigo == 0 ? this._platosResource.value().datos : []) : []);
+
+  //de esta forma lo hago con el resolve
+   private _platosData = toSignal(
+    this._activatedRoute.data.pipe(
+      map(data => data['platosData'] as IRestMessage)
+    )
+  );
+  public platos = computed<IPlato[]>(() => {const data = this._platosData(); return data && data.codigo === 0 ? data.datos : []; });
 }

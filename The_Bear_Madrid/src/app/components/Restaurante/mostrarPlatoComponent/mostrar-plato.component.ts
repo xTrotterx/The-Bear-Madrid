@@ -40,14 +40,21 @@ export class MostrarPlatoComponent {
   //para listar las opiniones y usando la pipe 
   public _opciones = signal<'fecha' | 'puntuacion' | 'todas'>('todas');
 
+  //pillo del store la cantidad que hay ya
+   public numPlatos = computed(() => {
+    let order = this._storageGlobal.getOrder();
+    let item = order.items.find(it => it.plato._id === this._idPlato());
+    return item ? item.cantidad : 0;
+  });
+
   //#region------------metodos--------------------
   private _platoResource: Resource<IRestMessage> = resource(
     {
-      request: this._idPlato,
+      request:() => this._idPlato(),
       loader: async ({ request, abortSignal, previous }) => {
         console.log('valor de la señal del id: ', this._idPlato())
         let _resp = await fetch(
-          `http://localhost:3003/api/Restaurante/Plato?idPlato=${this._idPlato()}`,
+          `http://localhost:3003/api/Restaurante/Plato?idPlato=${request}`,
           { method: 'GET', signal: abortSignal }
         );
         let _body = await _resp.json();
@@ -149,6 +156,47 @@ export class MostrarPlatoComponent {
       })
     }
 
+  }
+   public addToOrder() {
+    let _plato = this.plato();
+    if (!_plato) {
+      console.error('No hay plato disponible');
+      return;
+    }
+
+    // meter en el store el plato
+    this._storageGlobal.setItemsOrder('sumar', {
+      plato: _plato,
+      cantidad: 1
+    });
+
+  }
+
+  public modificarCantidad(operacion: 'sumar' | 'restar') {
+    let _plato = this.plato();
+    if (!_plato) return;
+
+    if (operacion === 'sumar') {
+      this._storageGlobal.setItemsOrder('sumar', {
+        plato: _plato,
+        cantidad: 1
+      });
+    } else if (operacion === 'restar') {
+      let cantidadActual = this.numPlatos();
+      if (cantidadActual === 1) {
+        // Si solo queda 1, eliminar
+        this._storageGlobal.setItemsOrder('eliminar', {
+          plato: _plato,
+          cantidad: 0
+        });
+      } else if (cantidadActual > 1) {
+        // Si hay más de 1, restar
+        this._storageGlobal.setItemsOrder('restar', {
+          plato: _plato,
+          cantidad: cantidadActual - 1
+        });
+      }
+    }
   }
 
   public recargarPlato() {

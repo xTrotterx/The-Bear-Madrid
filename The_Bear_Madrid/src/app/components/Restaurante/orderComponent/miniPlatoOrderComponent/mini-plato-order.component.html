@@ -49,7 +49,7 @@
     <!-- Subtotal -->
     <div class="col-md-2 col-4">
       <div class="text-center">
-        <strong class="fs-6 fs-md-5">{{ (plato()?.precio! * cantidadActual()) }}€</strong>
+        <strong class="fs-6 fs-md-5">{{ (plato()?.precio! * cantidadActual()).toFixed(2) }}€</strong>
       </div>
     </div>
   </div>

@@ -45,24 +45,31 @@ exports.default = {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let _accessToken = yield this.GetAccessToken();
+                // Recalcular total exacto desde los items
+                const totalItems = order.items
+                    .reduce((sum, item) => {
+                    return sum + (item.plato.precio * item.cantidad);
+                }, 0)
+                    .toFixed(2); // string con 2 decimales
                 let _order = {
                     intent: 'CAPTURE',
                     purchase_units: [
                         {
-                            items: order.items.map((itemOrder) => {
-                                return {
-                                    name: itemOrder.plato.nombre,
-                                    quantity: itemOrder.cantidad.toString(),
-                                    unit_amount: { currency_code: 'EUR', value: itemOrder.plato.precio.toString() }
-                                };
-                            }),
+                            items: order.items.map((item) => ({
+                                name: item.plato.nombre,
+                                quantity: item.cantidad.toString(), // string de entero
+                                unit_amount: {
+                                    currency_code: 'EUR',
+                                    value: item.plato.precio.toFixed(2) // string con 2 decimales
+                                }
+                            })),
                             amount: {
                                 currency_code: 'EUR',
-                                value: order.total.toString(),
+                                value: totalItems,
                                 breakdown: {
                                     item_total: {
                                         currency_code: 'EUR',
-                                        value: order.total.toString()
+                                        value: totalItems
                                     }
                                 }
                             }

@@ -106,7 +106,7 @@ export class StorageGlobalService implements IStorageSvc {
       default:
         break;
     }
-    let _total = Math.round(_items.reduce((ac, el) => (el.plato.precio * el.cantidad) + ac, 0) * 100 / 100);
+    let _total = _items.reduce((ac, el) => (el.plato.precio * el.cantidad) + ac, 0);
 
     this._datosOrder.update
     (

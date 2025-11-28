@@ -30,28 +30,35 @@ export default {
     CreateOrder: async function (order: any): Promise<any> {
         try {
             let _accessToken = await this.GetAccessToken();
+            // Recalcular total exacto desde los items
+            const totalItems = order.items
+                .reduce((sum: number, item: any) => {
+                    return sum + (item.plato.precio * item.cantidad);
+                }, 0)
+                .toFixed(2); // string con 2 decimales
+
             let _order = {
                 intent: 'CAPTURE',
                 purchase_units: [
                     {
-                        items: order.items.map((itemOrder: any) => {
-                            return {
-                                name: itemOrder.plato.nombre,
-                                quantity: itemOrder.cantidad.toString(),
-                                unit_amount: { currency_code: 'EUR', value: itemOrder.plato.precio.toString() }
+                        items: order.items.map((item: any) => ({
+                            name: item.plato.nombre,
+                            quantity: item.cantidad.toString(), // string de entero
+                            unit_amount: {
+                                currency_code: 'EUR',
+                                value: item.plato.precio.toFixed(2) // string con 2 decimales
                             }
-                        }),
+                        })),
                         amount: {
                             currency_code: 'EUR',
-                            value: order.total.toString(),
-                            breakdown:{
-                                item_total:{
-                                    currency_code:'EUR',
-                                    value:order.total.toString()
+                            value: totalItems,
+                            breakdown: {
+                                item_total: {
+                                    currency_code: 'EUR',
+                                    value: totalItems
                                 }
                             }
                         }
-
                     }
                 ],
                 application_context: {
@@ -92,24 +99,24 @@ export default {
         }
 
     },
-    CobrarOrderPayPal: async function (idPedidoPayPal:string):Promise<any> {
+    CobrarOrderPayPal: async function (idPedidoPayPal: string): Promise<any> {
         try {
-            let _accessToken=await this.GetAccessToken();
+            let _accessToken = await this.GetAccessToken();
 
-            let _petConfirm=await axios(
+            let _petConfirm = await axios(
                 {
-                    method:'POST',
-                    url:`https://api-m.sandbox.paypal.com/v2/checkout/orders/${idPedidoPayPal}/capture`,
-                    headers:{
-                        'Content-Type':'application/json',
+                    method: 'POST',
+                    url: `https://api-m.sandbox.paypal.com/v2/checkout/orders/${idPedidoPayPal}/capture`,
+                    headers: {
+                        'Content-Type': 'application/json',
                         'Authorization': `Bearer ${_accessToken}`,
                     }
                 }
             )
-            if(_petConfirm.status==201){
+            if (_petConfirm.status == 201) {
                 console.log('respuesta dada por paypall al pedir cobro del pedido...', _petConfirm.data);
                 return _petConfirm.data;
-            }else{
+            } else {
                 throw new Error("error al procesar pago en paypal");
 
             }

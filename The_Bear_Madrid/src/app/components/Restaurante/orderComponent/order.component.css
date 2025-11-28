@@ -1,0 +1,80 @@
+.btn-confirmar {
+  background-color: #4a3228;
+  border-color: #4a3228;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.btn-confirmar:hover:not(:disabled) {
+  background-color: #3a2218;
+  border-color: #3a2218;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(74, 50, 40, 0.3);
+}
+
+.btn-confirmar:disabled {
+  background-color: #6d5d52;
+  border-color: #6d5d52;
+  opacity: 0.6;
+}
+
+.payment-option {
+  transition: all 0.3s ease;
+}
+
+.payment-option:hover:not(.opacity-50) {
+  background-color: #f8f9fa;
+  border-color: #4a3228 !important;
+  box-shadow: 0 2px 8px rgba(74, 50, 40, 0.15);
+}
+
+.payment-option.selected {
+  background-color: #fff8f5;
+  border-color: #4a3228 !important;
+  border-width: 2px !important;
+  box-shadow: 0 2px 8px rgba(74, 50, 40, 0.2);
+}
+
+.form-check-input:checked {
+  background-color: #4a3228;
+  border-color: #4a3228;
+}
+
+.form-check-input:focus {
+  border-color: #4a3228;
+  box-shadow: 0 0 0 0.2rem rgba(74, 50, 40, 0.25);
+}
+
+.border-dashed {
+  border-style: dashed !important;
+}
+
+.summary-items {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.summary-items::-webkit-scrollbar {
+  width: 6px;
+}
+
+.summary-items::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.summary-items::-webkit-scrollbar-thumb {
+  background: #4a3228;
+  border-radius: 10px;
+}
+
+.summary-items::-webkit-scrollbar-thumb:hover {
+  background: #3a2218;
+}
+
+@media (max-width: 992px) {
+  .position-sticky {
+    position: static !important;
+  }
+}

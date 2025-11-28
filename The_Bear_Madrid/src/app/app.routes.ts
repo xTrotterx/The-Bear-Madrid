@@ -13,7 +13,7 @@ import { OrderComponent } from './components/Restaurante/orderComponent/order.co
 import { platosResolver } from './resolver/plato.resolver';
 
 export const routes: Routes = [
-    { path: '', redirectTo:'/Restaurante/Home', pathMatch:'full'},//<---pendiente a cambiar
+    { path: '', redirectTo: '/Restaurante/Home', pathMatch: 'full' },//<---pendiente a cambiar
     {
         path: 'Usuario',
         children: [
@@ -25,14 +25,14 @@ export const routes: Routes = [
         path: 'Restaurante', component: LayOutComponent,
         children: [
             { path: 'Home', component: HomeComponent },
-            { path: 'Platos/:pathTipo', component: PlatoComponent, resolve:{platosData: platosResolver} },
-            {path:'Plato/:idPlato', component:MostrarPlatoComponent},
-            { path: 'Mapa', component:MostrarMapaComponent},
+            { path: 'Platos/:pathTipo', component: PlatoComponent, resolve: { platosData: platosResolver } },
+            { path: 'Plato/:idPlato', component: MostrarPlatoComponent },
+            { path: 'Mapa', component: MostrarMapaComponent },
             { path: 'Perfil', canActivate: [controlGuard], component: PerfilComponent },
-            {path:'Order', component:OrderComponent}
-            
+            { path: 'Order', component: OrderComponent }
+
         ]
     },
-    
+
 
 ];

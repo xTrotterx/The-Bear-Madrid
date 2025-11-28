@@ -2,8 +2,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable, Injector, Signal } from '@angular/core';
 import IRestMessage from '../modelos/IRestMessage';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { Observable, startWith, tap } from 'rxjs';
+import { firstValueFrom, Observable, startWith, tap } from 'rxjs';
 import { HTTP_INJECTIONTOKEN_STORAGE_SVCS } from '../app.config';
+import IOrder from '../modelos/Interfaces/IOrder';
 
 @Injectable({
   providedIn: 'root'
@@ -83,4 +84,17 @@ export class RestClienteService {
       { injector: this._injector, requireSync: true }
     )
   }
+
+public FinalizarCompra(order: IOrder): Promise<IRestMessage> {
+  return firstValueFrom(
+    this._httpClient.post<IRestMessage>(
+      'http://localhost:3003/api/Restaurante/FinalizarCompra',
+      { ...order },
+      { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
+    )
+  );
+}
+
+  
+
 }

@@ -153,24 +153,15 @@ const RestauranteController = {
             const _order = new Order(req.body);
             await _order.save()
 
-            const { idUser, ...resto } = req as any;
-            console.log('id del usuario recogido....', idUser);
-            
             let datos = {}
             switch (_order.metodoPago?.tipo) {
                 case 'paypal':
-                    let _respOrder = await paypal.CreateOrder(idUser, _order);
-                    if (!_respOrder) throw new Error('Error al crear orden de pago en paypal para el pedido...');
+                    const _respOrder = await paypal.CreateOrder(_order);
+                    if (!_respOrder)
+                        throw new Error('Error al crear orden de pago en PayPal...');
 
-                    const { link, idPedidoPayPal } = _respOrder;
-                    await mongoose.connect(process.env.MONGODB_URL!);
-                    const _restInsert: mongoose.mongo.InsertOneResult = await mongoose.connection.collection('paypalOrders').insertOne({ idUser, idPedidoPayPal, idOrder: _order._id.toString() });
-
-                    console.log('resultado insert en coleccion paypalOrders...', _restInsert);
-                    if (!_restInsert.insertedId) throw new Error('error al insertar en mongo datos del pedido paypal...pero paypal lo ha creado ok, putadon');
-
-                    datos = { urlPayPal: link };
-
+                    // redirección a la pasarela
+                    datos = { urlPayPal: _respOrder.link };
                     break;
 
                 case 'tarjeta':
@@ -179,35 +170,33 @@ const RestauranteController = {
                 default:
                     break;
             }
-            res.status(200).send({codigo:0, mensaje:'pago realizado con exito', datos});
+            console.log('url:', datos);
+            res.status(200).send({ codigo: 0, mensaje: 'pago realizado con exito', datos });
         } catch (error) {
             console.log('error al finalizar el pago con paypal...', error);
-            res.status(500).send({codigo:1, mensaje:'Error al procesar el pago'});
+            res.status(500).send({ codigo: 1, mensaje: 'Error al procesar el pago' });
         }
     },
     PaypalCallback: async (req: Request, res: Response, next: NextFunction) => {
         //paypal devuelve iUSer,idOrder y opcional cancel
         console.log('parametros en req.query pasados por el servidor de paypal...', req.query);
-        const { idUser, idOrder, Cancel } = req.query;
+        const { idOrder, Cancel, tokenPaypal } = req.query;
 
         try {
             if (Cancel) throw new Error('Orden cancelado por usuario en el ultimo momento desde paypal....');
 
-            //el usuario acepta ek cobro....
-            await mongoose.connect(process.env.MONGODB_URL!);
-            let _paypalorder = await mongoose.connection.collection('paypalOrders').findOne({ idUser, idOrder });
-            if (!_paypalorder) throw new Error(`no hay ningun pedido de paypal para ese idUsuario: ${idUser} y idOrder${idOrder}`);
+            if (!idOrder || !tokenPaypal) throw new Error('Faltan parámetros obligatorios en la callback');
 
-            let _idPedidoPayPal = _paypalorder.idPedidoPayPal;
-            let _finPago = await paypal.CobrarOrderPayPal(_idPedidoPayPal);
+            
+            let _finPago = await paypal.CobrarOrderPayPal(tokenPaypal as string);
 
             if (!_finPago) throw new Error('error cobro del pedido en paypal cagaste ...');
             //redirijo a mi aplicacion de angular
-            res.status(200).redirect(`http://localhost:4200/PedidoResult?idUser=${idUser}&idOrder=${idOrder}&idPedidoPayPal=${_idPedidoPayPal}&opCode=0`);
+            res.status(200).redirect(`http://localhost:4200/OrderResult?idOrder=${idOrder}&idPedidoPayPal=${tokenPaypal}&opCode=0`);
 
         } catch (error) {
             console.log('error al finalizar pago del pedido...', error);
-            res.status(200).redirect(`http://localhost:4200/PedidoResult?idUser=${idUser}&idOrder=${idOrder}&opCode=1`);
+            res.status(200).redirect(`http://localhost:4200/OrderResult?idOrder=${idOrder}&opCode=1`);
 
         }
     }

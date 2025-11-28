@@ -75,48 +75,50 @@ export class StorageGlobalService implements IStorageSvc {
 
   //#region ------metodos del Restaurante--------
   getOrder(): IOrder {
-      return this._datosOrder();
-    };
+    return this._datosOrder();
+  };
   setItemsOrder(operacion: string, item: { plato: IPlato; cantidad: number; }) {
-      let _items: Array<{ plato: IPlato, cantidad: number }> = this._datosOrder().items;
-      let _pos: number = _items.findIndex(it => it.plato._id == item.plato._id);
+    let _items: Array<{ plato: IPlato, cantidad: number }> = this._datosOrder().items;
+    let _pos: number = _items.findIndex(it => it.plato._id == item.plato._id);
 
-      switch(operacion) {
+    switch (operacion) {
       case 'sumar':
-      if(_pos == -1) {
-      console.log('no existe el plato en el order, se añade');
-      _items.push(item);
-    } else {
-      console.log('ya hay este plato en el order vamos a meter otro');
-      _items = _items.map(it => it.plato._id !== item.plato._id ? it : { ...it, cantidad: it.cantidad + 1 })
-    }
-    break;
+        if (_pos == -1) {
+          console.log('no existe el plato en el order, se añade');
+          _items.push(item);
+        } else {
+          console.log('ya hay este plato en el order vamos a meter otro');
+          _items = _items.map(it => it.plato._id !== item.plato._id ? it : { ...it, cantidad: it.cantidad + 1 })
+        }
+        break;
 
       case 'eliminar':
-    console.log('vamos a eliminar el plato del order');
-    _items = _items.filter(it => it.plato._id !== item.plato._id);
-    break;
+        console.log('vamos a eliminar el plato del order');
+        _items = _items.filter(it => it.plato._id !== item.plato._id);
+        break;
 
       case 'restar':
-    console.log('restar item....');
-    if (_pos !== -1) {
-      _items = _items.map(it => it.plato._id !== item.plato._id ? it : { ...it, cantidad: item.cantidad })
-    }
-    break;
+        console.log('restar item....');
+        if (_pos !== -1) {
+          _items = _items.map(it => it.plato._id !== item.plato._id ? it : { ...it, cantidad: item.cantidad })
+        }
+        break;
       default:
-    break;
-}
-let _total = Math.round(_items.reduce((ac, el) => (el.plato.precio * el.cantidad) + ac, 0) * 100 / 100);
+        break;
+    }
+    let _total = Math.round(_items.reduce((ac, el) => (el.plato.precio * el.cantidad) + ac, 0) * 100 / 100);
 
-this._datosOrder.update(
-  (order: IOrder) => ({
-    ...order,
-    items: _items,
-    total: _total
-  })
-
-)
-console.log('Order actualizado...', this._datosOrder());
+    this._datosOrder.update
+    (
+      (order: IOrder) => (
+        {
+        ...order,
+        items: _items,
+        total: _total
+        }
+      )
+    )
+    console.log('Order actualizado despues de hacer un setItemsOrder...', this._datosOrder());
   }
   //#endregion
 }

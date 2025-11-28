@@ -35,7 +35,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       if (error.status == 403) {
 
         const _refresh = _jwts?.refresh;
-        if (!_refresh) return throwError(() => new Error('no existe refreshtoken'))//_router.navigateByUrl('/Cliente/Login');
+        if (!_refresh) return throwError(() => new Error('no existe refreshtoken'))
 
         _restCliente.RefrescarTokens(_refresh).pipe(
           tap((resp: IRestMessage) => console.log('evento interceptado en interceptor en observable peticion RefrescarTokens: ', resp)),
@@ -51,7 +51,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
             } else {
               //ha ido mal la generacion de nuevos tokens...al login directamente...
-              return throwError(() => new Error('fallo en regeneracion de token de sesion a partir del refresh-token'))//_router.navigateByUrl('/Cliente/Login');
+              return throwError(() => new Error('fallo en regeneracion de token de sesion a partir del refresh-token'))
             }
           })
 

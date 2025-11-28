@@ -15,4 +15,7 @@ routingRestaurante.get('/Plato', restauranteController_1.default.RecuperarPlato)
 //opinioncitas
 routingRestaurante.post('/GuardarOpinion', restauranteController_1.default.GuardarOpinion);
 routingRestaurante.get('/Listas', restauranteController_1.default.CargarListas);
+//paga cabron
+routingRestaurante.get('/PayPalCallback', restauranteController_1.default.PaypalCallback);
+routingRestaurante.post('/FinalizarCompra', restauranteController_1.default.FinalizarCompra);
 exports.default = routingRestaurante;

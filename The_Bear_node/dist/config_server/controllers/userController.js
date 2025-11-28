@@ -70,7 +70,7 @@ const UserController = {
                 throw new Error('no se ha mandado refresh-token....al login de cabeza');
             const _claims = jsonwebtoken_1.default.verify(refreshJWT, process.env.JWT_SECRET);
             yield mongoose_1.default.connect(process.env.MONGODB_URL);
-            let _datosUser = yield usuario_1.default.findOne({ _id: _claims.idUser, 'cuenta.email': _claims.email });
+            let _datosUser = yield usuario_1.default.findOne({ _id: _claims.idUser, email: _claims.email });
             if (!_datosUser)
                 throw new Error('no existe usuario con ese id o email');
             const _jwtSession = jsonwebtoken_1.default.sign({

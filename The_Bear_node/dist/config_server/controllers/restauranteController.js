@@ -17,6 +17,8 @@ const tipo_1 = __importDefault(require("../../modelos/tipo"));
 const platos_1 = __importDefault(require("../../modelos/platos"));
 const opinion_1 = __importDefault(require("../../modelos/opinion"));
 const usuario_1 = __importDefault(require("../../modelos/usuario"));
+const paypal_1 = __importDefault(require("../../servicios/paypal"));
+const order_1 = __importDefault(require("../../modelos/order"));
 const RestauranteController = {
     RecuperarTipos: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         try {
@@ -50,7 +52,6 @@ const RestauranteController = {
             res.status(500).send({ codigo: 1, mensaje: 'error al recuperar platos ' + error });
         }
     }),
-    //hay que cambiar esta mierda angel espabila
     PlatosPorTipos: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             yield mongoose_1.default.connect(process.env.MONGODB_URL);
@@ -139,6 +140,53 @@ const RestauranteController = {
         catch (error) {
             console.log('error al cargar la lista de favoritos del usuario...', error);
             res.status(500).send({ codigo: 1, mensaje: 'error al cargar los favoritos del usuario en node..., ' + error });
+        }
+    }),
+    FinalizarCompra: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        var _a;
+        try {
+            const _order = new order_1.default(req.body);
+            yield _order.save();
+            let datos = {};
+            switch ((_a = _order.metodoPago) === null || _a === void 0 ? void 0 : _a.tipo) {
+                case 'paypal':
+                    const _respOrder = yield paypal_1.default.CreateOrder(_order);
+                    if (!_respOrder)
+                        throw new Error('Error al crear orden de pago en PayPal...');
+                    // redirección a la pasarela
+                    datos = { urlPayPal: _respOrder.link };
+                    break;
+                case 'tarjeta':
+                    break;
+                default:
+                    break;
+            }
+            console.log('url:', datos);
+            res.status(200).send({ codigo: 0, mensaje: 'pago realizado con exito', datos });
+        }
+        catch (error) {
+            console.log('error al finalizar el pago con paypal...', error);
+            res.status(500).send({ codigo: 1, mensaje: 'Error al procesar el pago' });
+        }
+    }),
+    PaypalCallback: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        //paypal devuelve iUSer,idOrder y opcional cancel
+        console.log('parametros en req.query pasados por el servidor de paypal...', req.query);
+        const { idOrder, Cancel, tokenPaypal } = req.query;
+        try {
+            if (Cancel)
+                throw new Error('Orden cancelado por usuario en el ultimo momento desde paypal....');
+            if (!idOrder || !tokenPaypal)
+                throw new Error('Faltan parámetros obligatorios en la callback');
+            let _finPago = yield paypal_1.default.CobrarOrderPayPal(tokenPaypal);
+            if (!_finPago)
+                throw new Error('error cobro del pedido en paypal cagaste ...');
+            //redirijo a mi aplicacion de angular
+            res.status(200).redirect(`http://localhost:4200/OrderResult?idOrder=${idOrder}&idPedidoPayPal=${tokenPaypal}&opCode=0`);
+        }
+        catch (error) {
+            console.log('error al finalizar pago del pedido...', error);
+            res.status(200).redirect(`http://localhost:4200/OrderResult?idOrder=${idOrder}&opCode=1`);
         }
     })
 };

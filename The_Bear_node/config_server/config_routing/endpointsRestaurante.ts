@@ -16,6 +16,6 @@ routingRestaurante.get('/Listas', RestauranteController.CargarListas);
 
 //paga cabron
 routingRestaurante.get('/PayPalCallback', RestauranteController.PaypalCallback);
-routingRestaurante.post('FinalizarCompra', RestauranteController.FinalizarCompra);
+routingRestaurante.post('/FinalizarCompra', RestauranteController.FinalizarCompra);
 
 export default routingRestaurante;

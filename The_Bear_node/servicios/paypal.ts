@@ -27,7 +27,7 @@ export default {
             return '';
         }
     },
-    CreateOrder: async function (idUSer: string, order: any): Promise<any> {
+    CreateOrder: async function (order: any): Promise<any> {
         try {
             let _accessToken = await this.GetAccessToken();
             let _order = {
@@ -55,8 +55,8 @@ export default {
                     }
                 ],
                 application_context: {
-                    return_url: `http://localhost:3003/api/Restaurante/PayPalCallback?idUser=${idUSer}&idOrder=${order._id}`,
-                    cancel_url: `http://localhost:3003/api/Restaurante/PayPalCallback?idUser=${idUSer}&idOrder=${order._id}&Cancel=true`
+                    return_url: `http://localhost:3003/api/Restaurante/PayPalCallback?idOrder=${order._id}`,
+                    cancel_url: `http://localhost:3003/api/Restaurante/PayPalCallback?idOrder=${order._id}&Cancel=true`
                 }
             }
 

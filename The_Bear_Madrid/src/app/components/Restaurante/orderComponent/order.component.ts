@@ -1,12 +1,11 @@
-import { Component, inject, input, output, signal, computed, effect } from '@angular/core';
+import { Component, inject, input, output, signal, computed } from '@angular/core';
 import { HTTP_INJECTIONTOKEN_STORAGE_SVCS } from '../../../app.config';
 import IOrder from '../../../modelos/Interfaces/IOrder';
 import IPlato from '../../../modelos/Interfaces/IPlato';
 import { MiniPlatoOrderComponent } from "./miniPlatoOrderComponent/mini-plato-order.component";
 import { RouterLink } from "@angular/router";
 import { RestClienteService } from '../../../servicios/rest-cliente.service';
-import { firstValueFrom } from 'rxjs';
-import IRestMessage from '../../../modelos/IRestMessage';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-order',
@@ -18,26 +17,23 @@ export class OrderComponent {
   //#region-------servicios--------
   private _storageGlobal = inject(HTTP_INJECTIONTOKEN_STORAGE_SVCS);
   private _restSvc = inject(RestClienteService);
-
   //#endregion
 
   //#region------propiedades--------
   //señal que se sincroniza con mi storage
   public order = signal<IOrder>(this._storageGlobal.getOrder());
   metodoPago = signal<string>('');
+  numeroMesa = signal<number | null>(null);
 
-  //computed para calcular el subtotal
-  public calcularSubtotal = computed(() => {
-    const items = this.order().items || [];
-    return items.reduce((sum, item) => sum + (item.plato.precio * item.cantidad), 0);
+  //computed para validar si se puede seleccionar método de pago
+  public puedeSeleccionarPago = computed(() => {
+    return this.numeroMesa() !== null && this.numeroMesa()! > 0;
   });
 
-  //cmputed para calcular total 
   public calcularTotal = computed(() => {
     return this.order().total || 0;
   });
 
-  //computed para total de items
   public obtenerTotalItems = computed(() => {
     const items = this.order().items || [];
     return items.reduce((sum, item) => sum + item.cantidad, 0);
@@ -57,14 +53,11 @@ export class OrderComponent {
       cantidad: $event.cantidad
     };
 
-    //llamar al mrtodo del storage con la operación correcta
+    //llamar al método del storage con la operación correcta
     this._storageGlobal.setItemsOrder($event.operacion, item);
 
     // Actualizar el signal para refrescar la vista
-    // Como _datosOrder en el storage es un signal, podemos obtener su valor actualizado
     this.order.set({ ...this._storageGlobal.getOrder() });
-
-
     this.itemModificado.emit($event);
   }
 
@@ -72,37 +65,65 @@ export class OrderComponent {
     this.metodoPago.set(metodo);
   }
 
- async FinalizarCompra() {
-  const _datosOrder = this.order()!;
-
-  switch (this.metodoPago()) {
-    case 'paypal':
-      _datosOrder.metodoPago = { tipo: 'paypal' };
-      break;
-    case 'tarjeta':
-      _datosOrder.metodoPago = { 
-        tipo: 'tarjeta', 
-        datosTarjeta: { numeroTarjeta: '', cvv: '', fechaCaducidad: '', nombreTitular: '' } 
-      };
-  }
-
-  const popup = window.open('', '_blank', 'width=500,height=700');
-
-  try {
-    const resp = await this._restSvc.FinalizarCompra(_datosOrder);
-
-    if (resp.codigo === 0 && resp.datos?.urlPayPal) {
-      popup!.location.href = resp.datos.urlPayPal;
+  SetNumeroMesa(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const valor = parseInt(input.value, 10);
+    
+    if (isNaN(valor) || valor <= 0) {
+      this.numeroMesa.set(null);
     } else {
-      popup!.close();
-      console.error('Error al crear la orden de pago en Paypal:', resp.mensaje);
+      this.numeroMesa.set(valor);
     }
-  } catch (err) {
-    popup!.close();
-    console.error('Error al llamar al servidor:', err);
   }
-}
 
+  async FinalizarCompra() {
+    const _datosOrder = this.order()!;
+    
+    // Establecer el número de mesa en el order
+    _datosOrder.numMesa = this.numeroMesa()!;
 
+    // Si es efectivo, mostrar mensaje y redirigir
+    if (this.metodoPago() === 'efectivo') {
+      await Swal.fire({
+        icon: 'success',
+        title: '¡Gracias por elegirnos!',
+        text: 'Que disfrutes de la experiencia',
+        confirmButtonText: 'Entendido',
+        confirmButtonColor: '#4a3228',
+        timer: 3000,
+        timerProgressBar: true
+      });
+      
+      // Redirigir al home
+      window.location.href = '/';
+      return;
+    }
+
+    switch (this.metodoPago()) {
+      case 'paypal':
+        _datosOrder.metodoPago = { tipo: 'paypal' };
+        break;
+      case 'tarjeta':
+        _datosOrder.metodoPago = { 
+          tipo: 'tarjeta', 
+          datosTarjeta: { numeroTarjeta: '', cvv: '', fechaCaducidad: '', nombreTitular: '' } 
+        };
+    }
+
+    const popup = window.open('', '_blank', 'width=500,height=700');
+    try {
+      const resp = await this._restSvc.FinalizarCompra(_datosOrder);
+
+      if (resp.codigo === 0 && resp.datos?.urlPayPal) {
+        popup!.location.href = resp.datos.urlPayPal;
+      } else {
+        popup!.close();
+        console.error('Error al crear la orden de pago en Paypal:', resp.mensaje);
+      }
+    } catch (err) {
+      popup!.close();
+      console.error('Error al llamar al servidor:', err);
+    }
+  }
   //#endregion
 }

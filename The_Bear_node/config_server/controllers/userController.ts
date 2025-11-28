@@ -74,7 +74,7 @@ const UserController = {
             const _claims: { idUser: string, email: string } = jsonwebtoken.verify(refreshJWT, process.env.JWT_SECRET!) as { idUser: string, email: string };
 
             await mongoose.connect(process.env.MONGODB_URL!);
-            let _datosUser = await Usuario.findOne({ _id: _claims.idUser, 'cuenta.email': _claims.email });
+            let _datosUser = await Usuario.findOne({ _id: _claims.idUser, email: _claims.email });
             if (!_datosUser) throw new Error('no existe usuario con ese id o email');
 
             const _jwtSession = jsonwebtoken.sign({

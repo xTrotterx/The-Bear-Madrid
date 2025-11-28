@@ -5,6 +5,7 @@ import Plato from "../../modelos/platos"
 import Opinion from "../../modelos/opinion";
 import Usuario from "../../modelos/usuario";
 import paypal from "../../servicios/paypal";
+import Order from "../../modelos/order";
 
 
 const RestauranteController = {
@@ -43,14 +44,14 @@ const RestauranteController = {
             res.status(500).send({ codigo: 1, mensaje: 'error al recuperar platos ' + error })
         }
     },
-    
+
     PlatosPorTipos: async (req: Request, res: Response, next: NextFunction) => {
         try {
             await mongoose.connect(process.env.MONGODB_URL!);
 
             let _platos = await Plato.find({});
 
-            
+
             let _tipos = await Tipo.find({});
             let tiposMap = new Map(_tipos.map(t => [t.pathTipo, t.nombreTipo]));
 
@@ -133,32 +134,68 @@ const RestauranteController = {
         }
     },
     CargarListas: async (req: Request, res: Response, next: Function) => {
-            try {
-                let _idUser = req.query.idUser;
-                console.log('id del usuario, ', _idUser);
-    
-                await mongoose.connect(process.env.MONGODB_URL!);
-                let _listas = await Usuario.findById(_idUser).populate('favoritos').populate('opiniones').lean();
-                console.log('listas del usuario a mostrar....', _listas);
-    
-                res.status(200).send({ codigo: 0, mensaje: 'listas recuperadas correctamente....', datos: _listas });
-            } catch (error) {
-                console.log('error al cargar la lista de favoritos del usuario...', error);
-                res.status(500).send({ codigo: 1, mensaje: 'error al cargar los favoritos del usuario en node..., ' + error });
-            }
+        try {
+            let _idUser = req.query.idUser;
+            console.log('id del usuario, ', _idUser);
+
+            await mongoose.connect(process.env.MONGODB_URL!);
+            let _listas = await Usuario.findById(_idUser).populate('favoritos').populate('opiniones').lean();
+            console.log('listas del usuario a mostrar....', _listas);
+
+            res.status(200).send({ codigo: 0, mensaje: 'listas recuperadas correctamente....', datos: _listas });
+        } catch (error) {
+            console.log('error al cargar la lista de favoritos del usuario...', error);
+            res.status(500).send({ codigo: 1, mensaje: 'error al cargar los favoritos del usuario en node..., ' + error });
+        }
     },
-    
-    PaypalCallback: async (req:Request,res:Response,next:NextFunction)=>{
+    FinalizarCompra: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const _order = new Order(req.body);
+            await _order.save()
+
+            const { idUser, ...resto } = req as any;
+            console.log('id del usuario recogido....', idUser);
+            
+            let datos = {}
+            switch (_order.metodoPago?.tipo) {
+                case 'paypal':
+                    let _respOrder = await paypal.CreateOrder(idUser, _order);
+                    if (!_respOrder) throw new Error('Error al crear orden de pago en paypal para el pedido...');
+
+                    const { link, idPedidoPayPal } = _respOrder;
+                    await mongoose.connect(process.env.MONGODB_URL!);
+                    const _restInsert: mongoose.mongo.InsertOneResult = await mongoose.connection.collection('paypalOrders').insertOne({ idUser, idPedidoPayPal, idOrder: _order._id.toString() });
+
+                    console.log('resultado insert en coleccion paypalOrders...', _restInsert);
+                    if (!_restInsert.insertedId) throw new Error('error al insertar en mongo datos del pedido paypal...pero paypal lo ha creado ok, putadon');
+
+                    datos = { urlPayPal: link };
+
+                    break;
+
+                case 'tarjeta':
+                    break;
+
+                default:
+                    break;
+            }
+            res.status(200).send({codigo:0, mensaje:'pago realizado con exito', datos});
+        } catch (error) {
+            console.log('error al finalizar el pago con paypal...', error);
+            res.status(500).send({codigo:1, mensaje:'Error al procesar el pago'});
+        }
+    },
+    PaypalCallback: async (req: Request, res: Response, next: NextFunction) => {
         //paypal devuelve iUSer,idOrder y opcional cancel
         console.log('parametros en req.query pasados por el servidor de paypal...', req.query);
-        const {idUser,idOrder,Cancel}=req.query;
+        const { idUser, idOrder, Cancel } = req.query;
 
         try {
             if (Cancel) throw new Error('Orden cancelado por usuario en el ultimo momento desde paypal....');
 
             //el usuario acepta ek cobro....
             await mongoose.connect(process.env.MONGODB_URL!);
-            let _paypalorder=await mongoose.connection.collection('paypalOrders').findOne({idUser, idOrder});
+            let _paypalorder = await mongoose.connection.collection('paypalOrders').findOne({ idUser, idOrder });
             if (!_paypalorder) throw new Error(`no hay ningun pedido de paypal para ese idUsuario: ${idUser} y idOrder${idOrder}`);
 
             let _idPedidoPayPal = _paypalorder.idPedidoPayPal;

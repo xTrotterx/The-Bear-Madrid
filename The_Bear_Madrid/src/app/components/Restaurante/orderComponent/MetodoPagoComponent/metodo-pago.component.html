@@ -1,0 +1,173 @@
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+        <h2 class="h4 card-title mb-4 text-dark">
+            <i class="bi bi-credit-card me-2"></i>
+            Método de pago
+        </h2>
+
+        <!-- Campo de número de mesa -->
+        <div class="mb-4">
+            <div class="card bg-light border-0 p-3">
+                <label for="numeroMesa" class="form-label fw-semibold mb-2">
+                    Número de mesa
+                </label>
+                <input 
+                    type="number" 
+                    class="form-control form-control-lg" 
+                    id="numeroMesa" 
+                    placeholder="Ej: 5"
+                    min="1"
+                    [value]="numeroMesa() || ''"
+                    (input)="OnSetNumeroMesa($event)"
+                    style="border: 2px solid #4a3228; max-width: 150px;">
+                @if (!puedeSeleccionarPago()) {
+                    <small class="text-muted mt-2 d-block">
+                        <i class="bi bi-info-circle me-1"></i>
+                        Introduce tu número de mesa para continuar
+                    </small>
+                }
+            </div>
+        </div>
+
+        <!-- Opciones de pago -->
+        <div class="payment-methods mb-4">
+            <!-- PayPal -->
+            <div class="form-check payment-option mb-3 p-3 rounded border" 
+                 [class.selected]="metodoPago() === 'paypal'"
+                 [class.opacity-50]="!puedeSeleccionarPago()"
+                 [style.cursor]="puedeSeleccionarPago() ? 'pointer' : 'not-allowed'"
+                 style="transition: all 0.3s;"
+                 (click)="OnCambiarMetodo('paypal')">
+                <div class="d-flex align-items-center">
+                    <input class="form-check-input me-3" 
+                           type="radio" 
+                           name="metodoPago" 
+                           id="paypal"
+                           [checked]="metodoPago() === 'paypal'"
+                           [disabled]="!puedeSeleccionarPago()"
+                           style="width: 20px; height: 20px;">
+                    <label class="form-check-label flex-grow-1" for="paypal">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <h5 class="mb-1">
+                                    <i class="bi bi-paypal text-primary me-2"></i>
+                                    PayPal
+                                </h5>
+                                <small class="text-muted">Pago seguro con tu cuenta PayPal</small>
+                            </div>
+                            <i class="bi bi-chevron-right text-muted"></i>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Tarjeta de crédito/débito -->
+            <div class="form-check payment-option mb-3 p-3 rounded border" 
+                 [class.selected]="metodoPago() === 'tarjeta'"
+                 [class.opacity-50]="!puedeSeleccionarPago()"
+                 [style.cursor]="puedeSeleccionarPago() ? 'pointer' : 'not-allowed'"
+                 style="transition: all 0.3s;"
+                 (click)="OnCambiarMetodo('tarjeta')">
+                <div class="d-flex align-items-center">
+                    <input class="form-check-input me-3" 
+                           type="radio" 
+                           name="metodoPago" 
+                           id="tarjeta"
+                           [checked]="metodoPago() === 'tarjeta'"
+                           [disabled]="!puedeSeleccionarPago()"
+                           style="width: 20px; height: 20px;">
+                    <label class="form-check-label flex-grow-1" for="tarjeta">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <h5 class="mb-1">
+                                    <i class="bi bi-credit-card-2-front text-success me-2"></i>
+                                    Tarjeta de crédito/débito
+                                </h5>
+                                <small class="text-muted">Visa, Mastercard, American Express</small>
+                            </div>
+                            <i class="bi bi-chevron-right text-muted"></i>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Formulario de tarjeta (solo si está seleccionada) -->
+            @if (metodoPago() === 'tarjeta') {
+                <div class="card bg-light border-0 p-3 mt-3">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label for="numeroTarjeta" class="form-label small fw-semibold">Número de tarjeta</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="numeroTarjeta" 
+                                   placeholder="1234 5678 9012 3456"
+                                   maxlength="19">
+                        </div>
+                        <div class="col-12">
+                            <label for="nombreTitular" class="form-label small fw-semibold">Nombre del titular</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="nombreTitular" 
+                                   placeholder="Como aparece en la tarjeta">
+                        </div>
+                        <div class="col-6">
+                            <label for="fechaCaducidad" class="form-label small fw-semibold">Fecha de caducidad</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="fechaCaducidad" 
+                                   placeholder="MM/AA"
+                                   maxlength="5">
+                        </div>
+                        <div class="col-6">
+                            <label for="cvv" class="form-label small fw-semibold">CVV</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="cvv" 
+                                   placeholder="123"
+                                   maxlength="4">
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <!-- Efectivo en local -->
+            <div class="form-check payment-option mb-3 p-3 rounded border" 
+                 [class.selected]="metodoPago() === 'efectivo'"
+                 [class.opacity-50]="!puedeSeleccionarPago()"
+                 [style.cursor]="puedeSeleccionarPago() ? 'pointer' : 'not-allowed'"
+                 style="transition: all 0.3s;"
+                 (click)="OnCambiarMetodo('efectivo')">
+                <div class="d-flex align-items-center">
+                    <input class="form-check-input me-3" 
+                           type="radio" 
+                           name="metodoPago" 
+                           id="efectivo"
+                           [checked]="metodoPago() === 'efectivo'"
+                           [disabled]="!puedeSeleccionarPago()"
+                           style="width: 20px; height: 20px;">
+                    <label class="form-check-label flex-grow-1" for="efectivo">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <h5 class="mb-1">
+                                    <i class="bi bi-cash-coin text-warning me-2"></i>
+                                    Efectivo 
+                                </h5>
+                                <small class="text-muted">Vendrá un camarero a cobrarle</small>
+                            </div>
+                            <i class="bi bi-chevron-right text-muted"></i>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Información de seguridad -->
+        <div class="alert alert-info d-flex align-items-start mb-0" role="alert">
+            <i class="bi bi-shield-check fs-4 me-2"></i>
+            <div>
+                <strong class="d-block mb-1">Pago seguro</strong>
+                <small>Tu información está protegida con encriptación SSL de 256 bits</small>
+            </div>
+        </div>
+    </div>
+</div>

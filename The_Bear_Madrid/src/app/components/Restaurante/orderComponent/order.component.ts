@@ -6,10 +6,11 @@ import { MiniPlatoOrderComponent } from "./miniPlatoOrderComponent/mini-plato-or
 import { RouterLink } from "@angular/router";
 import { RestClienteService } from '../../../servicios/rest-cliente.service';
 import Swal from 'sweetalert2';
+import { MetodoPagoComponent } from './MetodoPagoComponent/metodo-pago.component';
 
 @Component({
   selector: 'app-order',
-  imports: [MiniPlatoOrderComponent, RouterLink],
+  imports: [MiniPlatoOrderComponent, MetodoPagoComponent, RouterLink],
   templateUrl: './order.component.html',
   styleUrl: './order.component.css'
 })

@@ -11,20 +11,14 @@
                 <label for="numeroMesa" class="form-label fw-semibold mb-2">
                     Número de mesa
                 </label>
-                <input 
-                    type="number" 
-                    class="form-control form-control-lg" 
-                    id="numeroMesa" 
-                    placeholder="Ej: 5"
-                    min="1"
-                    [value]="numeroMesa() || ''"
-                    (input)="OnSetNumeroMesa($event)"
+                <input type="number" class="form-control form-control-lg" id="numeroMesa" placeholder="Ej: 5" min="1"
+                    [value]="numeroMesa() || ''" (input)="OnSetNumeroMesa($event)"
                     style="border: 2px solid #4a3228; max-width: 150px;">
                 @if (!puedeSeleccionarPago()) {
-                    <small class="text-muted mt-2 d-block">
-                        <i class="bi bi-info-circle me-1"></i>
-                        Introduce tu número de mesa para continuar
-                    </small>
+                <small class="text-muted mt-2 d-block">
+                    <i class="bi bi-info-circle me-1"></i>
+                    Introduce tu número de mesa para continuar
+                </small>
                 }
             </div>
         </div>
@@ -32,20 +26,14 @@
         <!-- Opciones de pago -->
         <div class="payment-methods mb-4">
             <!-- PayPal -->
-            <div class="form-check payment-option mb-3 p-3 rounded border" 
-                 [class.selected]="metodoPago() === 'paypal'"
-                 [class.opacity-50]="!puedeSeleccionarPago()"
-                 [style.cursor]="puedeSeleccionarPago() ? 'pointer' : 'not-allowed'"
-                 style="transition: all 0.3s;"
-                 (click)="OnCambiarMetodo('paypal')">
+            <div class="form-check payment-option mb-3 p-3 rounded border" [class.selected]="metodoPago() === 'paypal'"
+                [class.opacity-50]="!puedeSeleccionarPago()"
+                [style.cursor]="puedeSeleccionarPago() ? 'pointer' : 'not-allowed'" style="transition: all 0.3s;"
+                (click)="OnCambiarMetodo('paypal')">
                 <div class="d-flex align-items-center">
-                    <input class="form-check-input me-3" 
-                           type="radio" 
-                           name="metodoPago" 
-                           id="paypal"
-                           [checked]="metodoPago() === 'paypal'"
-                           [disabled]="!puedeSeleccionarPago()"
-                           style="width: 20px; height: 20px;">
+                    <input class="form-check-input me-3" type="radio" name="metodoPago" id="paypal"
+                        [checked]="metodoPago() === 'paypal'" [disabled]="!puedeSeleccionarPago()"
+                        style="width: 20px; height: 20px;">
                     <label class="form-check-label flex-grow-1" for="paypal">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
@@ -62,20 +50,14 @@
             </div>
 
             <!-- Tarjeta de crédito/débito -->
-            <div class="form-check payment-option mb-3 p-3 rounded border" 
-                 [class.selected]="metodoPago() === 'tarjeta'"
-                 [class.opacity-50]="!puedeSeleccionarPago()"
-                 [style.cursor]="puedeSeleccionarPago() ? 'pointer' : 'not-allowed'"
-                 style="transition: all 0.3s;"
-                 (click)="OnCambiarMetodo('tarjeta')">
+            <div class="form-check payment-option mb-3 p-3 rounded border" [class.selected]="metodoPago() === 'tarjeta'"
+                [class.opacity-50]="!puedeSeleccionarPago()"
+                [style.cursor]="puedeSeleccionarPago() ? 'pointer' : 'not-allowed'" style="transition: all 0.3s;"
+                (click)="OnCambiarMetodo('tarjeta')">
                 <div class="d-flex align-items-center">
-                    <input class="form-check-input me-3" 
-                           type="radio" 
-                           name="metodoPago" 
-                           id="tarjeta"
-                           [checked]="metodoPago() === 'tarjeta'"
-                           [disabled]="!puedeSeleccionarPago()"
-                           style="width: 20px; height: 20px;">
+                    <input class="form-check-input me-3" type="radio" name="metodoPago" id="tarjeta"
+                        [checked]="metodoPago() === 'tarjeta'" [disabled]="!puedeSeleccionarPago()"
+                        style="width: 20px; height: 20px;">
                     <label class="form-check-label flex-grow-1" for="tarjeta">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
@@ -91,66 +73,106 @@
                 </div>
             </div>
 
-            <!-- Formulario de tarjeta (solo si está seleccionada) -->
             @if (metodoPago() === 'tarjeta') {
-                <div class="card bg-light border-0 p-3 mt-3">
+            <div class="card bg-light border-0 p-3 mt-3">
+                <form [formGroup]="formTarjeta">
                     <div class="row g-3">
+                        <!-- Número de tarjeta -->
                         <div class="col-12">
-                            <label for="numeroTarjeta" class="form-label small fw-semibold">Número de tarjeta</label>
-                            <input type="text" 
-                                   class="form-control" 
-                                   id="numeroTarjeta" 
-                                   placeholder="1234 5678 9012 3456"
-                                   maxlength="19">
+                            <label for="numeroTarjeta" class="form-label small fw-semibold">
+                                Número de tarjeta <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" class="form-control" formControlName="numeroTarjeta"
+                                placeholder="1234 5678 9012 3456" (input)="FormatearNumeroTarjeta($event)"
+                                [class.is-invalid]="mostrarError('numeroTarjeta')">
+                            @if (mostrarError('numeroTarjeta')) {
+                            <div class="invalid-feedback d-block">
+                                <i class="bi bi-exclamation-circle me-1"></i>
+                                {{ obtenerMensajeError('numeroTarjeta') }}
+                            </div>
+                            }
                         </div>
+
+                        <!-- Nombre del titular -->
                         <div class="col-12">
-                            <label for="nombreTitular" class="form-label small fw-semibold">Nombre del titular</label>
-                            <input type="text" 
-                                   class="form-control" 
-                                   id="nombreTitular" 
-                                   placeholder="Como aparece en la tarjeta">
+                            <label for="nombreTitular" class="form-label small fw-semibold">
+                                Nombre del titular <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" class="form-control" formControlName="nombreTitular"
+                                placeholder="Como aparece en la tarjeta"
+                                [class.is-invalid]="mostrarError('nombreTitular')">
+                            @if (mostrarError('nombreTitular')) {
+                            <div class="invalid-feedback d-block">
+                                <i class="bi bi-exclamation-circle me-1"></i>
+                                {{ obtenerMensajeError('nombreTitular') }}
+                            </div>
+                            }
                         </div>
+
+                        <!-- Fecha de caducidad -->
                         <div class="col-6">
-                            <label for="fechaCaducidad" class="form-label small fw-semibold">Fecha de caducidad</label>
-                            <input type="text" 
-                                   class="form-control" 
-                                   id="fechaCaducidad" 
-                                   placeholder="MM/AA"
-                                   maxlength="5">
+                            <label for="fechaCaducidad" class="form-label small fw-semibold">
+                                Fecha de caducidad <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" class="form-control" formControlName="fechaCaducidad" placeholder="MM/AA"
+                                (input)="FormatearFechaCaducidad($event)"
+                                [class.is-invalid]="mostrarError('fechaCaducidad')">
+                            @if (mostrarError('fechaCaducidad')) {
+                            <div class="invalid-feedback d-block">
+                                <i class="bi bi-exclamation-circle me-1"></i>
+                                {{ obtenerMensajeError('fechaCaducidad') }}
+                            </div>
+                            }
                         </div>
+
+                        <!-- CVV -->
                         <div class="col-6">
-                            <label for="cvv" class="form-label small fw-semibold">CVV</label>
-                            <input type="text" 
-                                   class="form-control" 
-                                   id="cvv" 
-                                   placeholder="123"
-                                   maxlength="4">
+                            <label for="cvv" class="form-label small fw-semibold">
+                                CVV <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" class="form-control" id="cvv" formControlName="cvv" placeholder="123"
+                                [class.is-invalid]="mostrarError('cvv')">
+                            @if (mostrarError('cvv')) {
+                            <div class="invalid-feedback d-block">
+                                <i class="bi bi-exclamation-circle me-1"></i>
+                                {{ obtenerMensajeError('cvv') }}
+                            </div>
+                            }
                         </div>
                     </div>
-                </div>
+
+                    <!-- Estado del formulario -->
+                    @if (formTarjeta.touched && formTarjeta.invalid) {
+                    <div class="alert alert-warning mt-3 mb-0 py-2 px-3 d-flex align-items-center" role="alert">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <small>Por favor, completa todos los campos correctamente</small>
+                    </div>
+                    }
+                    @if (formTarjeta.valid) {
+                    <div class="alert alert-success mt-3 mb-0 py-2 px-3 d-flex align-items-center" role="alert">
+                        <i class="bi bi-check-circle me-2"></i>
+                        <small>Datos de tarjeta válidos</small>
+                    </div>
+                    }
+                </form>
+            </div>
             }
 
             <!-- Efectivo en local -->
-            <div class="form-check payment-option mb-3 p-3 rounded border" 
-                 [class.selected]="metodoPago() === 'efectivo'"
-                 [class.opacity-50]="!puedeSeleccionarPago()"
-                 [style.cursor]="puedeSeleccionarPago() ? 'pointer' : 'not-allowed'"
-                 style="transition: all 0.3s;"
-                 (click)="OnCambiarMetodo('efectivo')">
+            <div class="form-check payment-option mb-3 p-3 rounded border"
+                [class.selected]="metodoPago() === 'efectivo'" [class.opacity-50]="!puedeSeleccionarPago()"
+                [style.cursor]="puedeSeleccionarPago() ? 'pointer' : 'not-allowed'" style="transition: all 0.3s;"
+                (click)="OnCambiarMetodo('efectivo')">
                 <div class="d-flex align-items-center">
-                    <input class="form-check-input me-3" 
-                           type="radio" 
-                           name="metodoPago" 
-                           id="efectivo"
-                           [checked]="metodoPago() === 'efectivo'"
-                           [disabled]="!puedeSeleccionarPago()"
-                           style="width: 20px; height: 20px;">
+                    <input class="form-check-input me-3" type="radio" name="metodoPago" id="efectivo"
+                        [checked]="metodoPago() === 'efectivo'" [disabled]="!puedeSeleccionarPago()"
+                        style="width: 20px; height: 20px;">
                     <label class="form-check-label flex-grow-1" for="efectivo">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
                                 <h5 class="mb-1">
                                     <i class="bi bi-cash-coin text-warning me-2"></i>
-                                    Efectivo 
+                                    Efectivo
                                 </h5>
                                 <small class="text-muted">Vendrá un camarero a cobrarle</small>
                             </div>

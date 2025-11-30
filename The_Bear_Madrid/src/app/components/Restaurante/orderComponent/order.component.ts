@@ -1,4 +1,4 @@
-import { Component, inject, input, output, signal, computed } from '@angular/core';
+import { Component, inject, input, output, signal, computed, viewChild } from '@angular/core';
 import { HTTP_INJECTIONTOKEN_STORAGE_SVCS } from '../../../app.config';
 import IOrder from '../../../modelos/Interfaces/IOrder';
 import IPlato from '../../../modelos/Interfaces/IPlato';
@@ -18,6 +18,10 @@ export class OrderComponent {
   //#region-------servicios--------
   private _storageGlobal = inject(HTTP_INJECTIONTOKEN_STORAGE_SVCS);
   private _restSvc = inject(RestClienteService);
+  //#endregion
+
+  //#region------referencias a componentes hijos--------
+  metodoPagoComponent = viewChild.required(MetodoPagoComponent);
   //#endregion
 
   //#region------propiedades--------
@@ -105,10 +109,36 @@ export class OrderComponent {
         _datosOrder.metodoPago = { tipo: 'paypal' };
         break;
       case 'tarjeta':
+        // Validar que el formulario de tarjeta sea válido
+        const metodoPagoComp = this.metodoPagoComponent();
+        
+        if (!metodoPagoComp.esFormularioValido()) {
+          // Marcar todos los campos como touched para mostrar errores
+          metodoPagoComp.marcarComoTocado();
+          
+          await Swal.fire({
+            icon: 'error',
+            title: 'Datos incompletos',
+            text: 'Por favor, completa correctamente todos los datos de la tarjeta',
+            confirmButtonText: 'Entendido',
+            confirmButtonColor: '#4a3228'
+          });
+          return;
+        }
+
+        // Obtener los datos de la tarjeta desde el componente hijo
+        const datosTarjeta = metodoPagoComp.obtenerDatosTarjeta();
+        
+        if (!datosTarjeta) {
+          console.error('No se pudieron obtener los datos de la tarjeta');
+          return;
+        }
+
         _datosOrder.metodoPago = { 
           tipo: 'tarjeta', 
-          datosTarjeta: { numeroTarjeta: '', cvv: '', fechaCaducidad: '', nombreTitular: '' } 
+          datosTarjeta: datosTarjeta
         };
+        break;
     }
 
     const popup = window.open('', '_blank', 'width=500,height=700');
@@ -126,5 +156,4 @@ export class OrderComponent {
       console.error('Error al llamar al servidor:', err);
     }
   }
-  //#endregion
 }

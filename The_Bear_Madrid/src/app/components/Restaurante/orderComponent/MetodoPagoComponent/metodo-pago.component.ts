@@ -1,5 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormControl } from '@angular/forms';
+import { FormGroup, Validators, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 interface DatosTarjeta {
@@ -19,14 +19,16 @@ interface DatosTarjeta {
 export class MetodoPagoComponent {
 
   //#region -----propiedades-------------
-
+  // Inputs
   metodoPago = input.required<string>();
   numeroMesa = input.required<number | null>();
   puedeSeleccionarPago = input.required<boolean>();
 
+  // Outputs
   cambiarMetodo = output<string>();
   setNumeroMesa = output<Event>();
 
+  // FormGroup para la tarjeta
   formTarjeta: FormGroup;
   //#endregion--------------------------
 
@@ -34,17 +36,18 @@ export class MetodoPagoComponent {
   constructor() {
     this.formTarjeta = new FormGroup(
       {
-      numeroTarjeta: new FormControl('', [Validators.required,Validators.minLength(13),Validators.maxLength(19),Validators.pattern(/^[0-9\s]+$/) ]),
-      nombreTitular: new FormControl('', [Validators.required,Validators.minLength(3),Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/)]),
-      fechaCaducidad: new FormControl('', [Validators.required,Validators.pattern(/^(0[1-9]|1[0-2])\/([0-9]{2})$/)]),
-      cvv: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(4), Validators.pattern(/^[0-9]+$/)])
-     }
-   );
+        numeroTarjeta: new FormControl('', [Validators.required, Validators.minLength(13), Validators.maxLength(19), Validators.pattern(/^[0-9\s]+$/)]),
+        nombreTitular: new FormControl('', [Validators.required, Validators.minLength(3), Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/)]),
+        fechaCaducidad: new FormControl('', [Validators.required, Validators.pattern(/^(0[1-9]|1[0-2])\/([0-9]{2})$/)]),
+        cvv: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(4), Validators.pattern(/^[0-9]+$/)])
+      }
+    );
   }
 
   OnCambiarMetodo(metodo: string) {
     if (this.puedeSeleccionarPago()) {
       this.cambiarMetodo.emit(metodo);
+
       // Si cambia a otro método que no sea tarjeta, limpiar el formulario
       if (metodo !== 'tarjeta') {
         this.formTarjeta.reset();
@@ -59,25 +62,54 @@ export class MetodoPagoComponent {
   // Formatear número de tarjeta mientras escribe (agregar espacios cada 4 dígitos)
   FormatearNumeroTarjeta(event: Event) {
     const input = event.target as HTMLInputElement;
-    let valor = input.value.replace(/\s/g, ''); // Quitar espacios
+
+    // Quitar todo lo que no sea número
+    let valor = input.value.replace(/\D/g, '');
+
+    // Limitar a 16 dígitos
+    if (valor.length > 16) {
+      valor = valor.substring(0, 16);
+    }
 
     // Agregar espacio cada 4 dígitos
     const formatted = valor.match(/.{1,4}/g)?.join(' ') || valor;
 
+    // Actualizar el FormControl
     this.formTarjeta.patchValue({ numeroTarjeta: formatted }, { emitEvent: false });
+
+    // Actualizar el input visual
     input.value = formatted;
   }
 
   // Formatear fecha mientras escribe (agregar / automáticamente)
   FormatearFechaCaducidad(event: Event) {
     const input = event.target as HTMLInputElement;
-    let valor = input.value.replace(/\D/g, ''); // Solo números
+    let valor = input.value.replace(/\D/g, '');
+
+    if (valor.length > 4) {
+      valor = valor.substring(0, 4);
+    }
 
     if (valor.length >= 2) {
       valor = valor.substring(0, 2) + '/' + valor.substring(2, 4);
     }
 
     this.formTarjeta.patchValue({ fechaCaducidad: valor }, { emitEvent: false });
+
+    input.value = valor;
+  }
+
+  // Limitar CVV a solo números y máximo 4 dígitos
+  LimitarCVV(event: Event) {
+    const input = event.target as HTMLInputElement;
+    let valor = input.value.replace(/\D/g, '');
+
+    if (valor.length > 3) {
+      valor = valor.substring(0, 3);
+    }
+
+    this.formTarjeta.patchValue({ cvv: valor }, { emitEvent: false });
+
     input.value = valor;
   }
 

@@ -8,10 +8,10 @@
         <!-- Campo de número de mesa -->
         <div class="mb-4">
             <div class="card bg-light border-0 p-3">
-                <label for="numeroMesa" class="form-label fw-semibold mb-2">
+                <label class="form-label fw-semibold mb-2">
                     Número de mesa
                 </label>
-                <input type="number" class="form-control form-control-lg" id="numeroMesa" placeholder="Ej: 5" min="1"
+                <input type="number" class="form-control form-control-lg" placeholder="Ej: 5" min="1"
                     [value]="numeroMesa() || ''" (input)="OnSetNumeroMesa($event)"
                     style="border: 2px solid #4a3228; max-width: 150px;">
                 @if (!puedeSeleccionarPago()) {
@@ -31,10 +31,10 @@
                 [style.cursor]="puedeSeleccionarPago() ? 'pointer' : 'not-allowed'" style="transition: all 0.3s;"
                 (click)="OnCambiarMetodo('paypal')">
                 <div class="d-flex align-items-center">
-                    <input class="form-check-input me-3" type="radio" name="metodoPago" id="paypal"
+                    <input class="form-check-input me-3" type="radio" name="metodoPago"
                         [checked]="metodoPago() === 'paypal'" [disabled]="!puedeSeleccionarPago()"
                         style="width: 20px; height: 20px;">
-                    <label class="form-check-label flex-grow-1" for="paypal">
+                    <label class="form-check-label flex-grow-1">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
                                 <h5 class="mb-1">
@@ -55,10 +55,10 @@
                 [style.cursor]="puedeSeleccionarPago() ? 'pointer' : 'not-allowed'" style="transition: all 0.3s;"
                 (click)="OnCambiarMetodo('tarjeta')">
                 <div class="d-flex align-items-center">
-                    <input class="form-check-input me-3" type="radio" name="metodoPago" id="tarjeta"
+                    <input class="form-check-input me-3" type="radio" name="metodoPago"
                         [checked]="metodoPago() === 'tarjeta'" [disabled]="!puedeSeleccionarPago()"
                         style="width: 20px; height: 20px;">
-                    <label class="form-check-label flex-grow-1" for="tarjeta">
+                    <label class="form-check-label flex-grow-1">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
                                 <h5 class="mb-1">
@@ -73,13 +73,14 @@
                 </div>
             </div>
 
+            <!-- Formulario de tarjeta -->
             @if (metodoPago() === 'tarjeta') {
             <div class="card bg-light border-0 p-3 mt-3">
                 <form [formGroup]="formTarjeta">
                     <div class="row g-3">
                         <!-- Número de tarjeta -->
                         <div class="col-12">
-                            <label for="numeroTarjeta" class="form-label small fw-semibold">
+                            <label class="form-label small fw-semibold">
                                 Número de tarjeta <span class="text-danger">*</span>
                             </label>
                             <input type="text" class="form-control" formControlName="numeroTarjeta"
@@ -95,7 +96,7 @@
 
                         <!-- Nombre del titular -->
                         <div class="col-12">
-                            <label for="nombreTitular" class="form-label small fw-semibold">
+                            <label class="form-label small fw-semibold">
                                 Nombre del titular <span class="text-danger">*</span>
                             </label>
                             <input type="text" class="form-control" formControlName="nombreTitular"
@@ -111,7 +112,7 @@
 
                         <!-- Fecha de caducidad -->
                         <div class="col-6">
-                            <label for="fechaCaducidad" class="form-label small fw-semibold">
+                            <label class="form-label small fw-semibold">
                                 Fecha de caducidad <span class="text-danger">*</span>
                             </label>
                             <input type="text" class="form-control" formControlName="fechaCaducidad" placeholder="MM/AA"
@@ -127,11 +128,11 @@
 
                         <!-- CVV -->
                         <div class="col-6">
-                            <label for="cvv" class="form-label small fw-semibold">
+                            <label class="form-label small fw-semibold">
                                 CVV <span class="text-danger">*</span>
                             </label>
-                            <input type="text" class="form-control" id="cvv" formControlName="cvv" placeholder="123"
-                                [class.is-invalid]="mostrarError('cvv')">
+                            <input type="text" class="form-control" formControlName="cvv" placeholder="123"
+                                (input)="LimitarCVV($event)" [class.is-invalid]="mostrarError('cvv')">
                             @if (mostrarError('cvv')) {
                             <div class="invalid-feedback d-block">
                                 <i class="bi bi-exclamation-circle me-1"></i>
@@ -164,10 +165,10 @@
                 [style.cursor]="puedeSeleccionarPago() ? 'pointer' : 'not-allowed'" style="transition: all 0.3s;"
                 (click)="OnCambiarMetodo('efectivo')">
                 <div class="d-flex align-items-center">
-                    <input class="form-check-input me-3" type="radio" name="metodoPago" id="efectivo"
+                    <input class="form-check-input me-3" type="radio" name="metodoPago"
                         [checked]="metodoPago() === 'efectivo'" [disabled]="!puedeSeleccionarPago()"
                         style="width: 20px; height: 20px;">
-                    <label class="form-check-label flex-grow-1" for="efectivo">
+                    <label class="form-check-label flex-grow-1">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
                                 <h5 class="mb-1">

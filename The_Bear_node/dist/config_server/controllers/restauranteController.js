@@ -19,6 +19,7 @@ const opinion_1 = __importDefault(require("../../modelos/opinion"));
 const usuario_1 = __importDefault(require("../../modelos/usuario"));
 const paypal_1 = __importDefault(require("../../servicios/paypal"));
 const order_1 = __importDefault(require("../../modelos/order"));
+const stripe_1 = __importDefault(require("../../servicios/stripe"));
 const RestauranteController = {
     RecuperarTipos: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         try {
@@ -150,13 +151,17 @@ const RestauranteController = {
             let datos = {};
             switch ((_a = _order.metodoPago) === null || _a === void 0 ? void 0 : _a.tipo) {
                 case 'paypal':
-                    const _respOrder = yield paypal_1.default.CreateOrder(_order);
-                    if (!_respOrder)
+                    const _respOrderPP = yield paypal_1.default.CreateOrder(_order);
+                    if (!_respOrderPP)
                         throw new Error('Error al crear orden de pago en PayPal...');
                     // redirección a la pasarela
-                    datos = { urlPayPal: _respOrder.link };
+                    datos = { urlPayPal: _respOrderPP.link };
                     break;
                 case 'tarjeta':
+                    const _respOrderST = yield stripe_1.default.CreateCharge(_order);
+                    if (!_respOrderST)
+                        throw new Error('Error al procesar elpago con Stripe....');
+                    datos = { idPagoStripe: _respOrderST.idPagoStripe, estado: _respOrderST.status };
                     break;
                 default:
                     break;
@@ -165,7 +170,7 @@ const RestauranteController = {
             res.status(200).send({ codigo: 0, mensaje: 'pago realizado con exito', datos });
         }
         catch (error) {
-            console.log('error al finalizar el pago con paypal...', error);
+            console.log('error al finalizar el pago con este metodo de pago...', error);
             res.status(500).send({ codigo: 1, mensaje: 'Error al procesar el pago' });
         }
     }),

@@ -4,7 +4,7 @@ const orderSchema = new mongoose.Schema(
     {
         items: [{ plato: platos.schema, cantidad: Number }],
         numMesa: Number,
-        metodoPago: { tipo: String, datosTarjeta: { numTarjeta: String, cvv: String, fechCaducidad: String, nombreTitular: String } },
+        metodoPago: { tipo: String, datosTarjeta: { numeroTarjeta: String, cvv: String, fechaCaducidad: String, nombreTitular: String } },
         total: Number,
         
     }

@@ -6,6 +6,7 @@ import Opinion from "../../modelos/opinion";
 import Usuario from "../../modelos/usuario";
 import paypal from "../../servicios/paypal";
 import Order from "../../modelos/order";
+import stripe from "../../servicios/stripe";
 
 
 const RestauranteController = {
@@ -149,22 +150,26 @@ const RestauranteController = {
         }
     },
     FinalizarCompra: async (req: Request, res: Response, next: NextFunction) => {
-        try {
+        try { 
             const _order = new Order(req.body);
             await _order.save()
 
             let datos = {}
             switch (_order.metodoPago?.tipo) {
                 case 'paypal':
-                    const _respOrder = await paypal.CreateOrder(_order);
-                    if (!_respOrder)
-                        throw new Error('Error al crear orden de pago en PayPal...');
+                    const _respOrderPP = await paypal.CreateOrder(_order);
+
+                    if (!_respOrderPP)throw new Error('Error al crear orden de pago en PayPal...');
 
                     // redirección a la pasarela
-                    datos = { urlPayPal: _respOrder.link };
+                    datos = { urlPayPal: _respOrderPP.link };
                     break;
 
                 case 'tarjeta':
+                    const _respOrderST=await stripe.CreateCharge(_order);
+                    if(!_respOrderST) throw new Error('Error al procesar elpago con Stripe....');
+
+                    datos={idPagoStripe:_respOrderST.idPagoStripe, estado: _respOrderST.status}
                     break;
 
                 default:
@@ -173,7 +178,7 @@ const RestauranteController = {
             console.log('url:', datos);
             res.status(200).send({ codigo: 0, mensaje: 'pago realizado con exito', datos });
         } catch (error) {
-            console.log('error al finalizar el pago con paypal...', error);
+            console.log('error al finalizar el pago con este metodo de pago...', error);
             res.status(500).send({ codigo: 1, mensaje: 'Error al procesar el pago' });
         }
     },

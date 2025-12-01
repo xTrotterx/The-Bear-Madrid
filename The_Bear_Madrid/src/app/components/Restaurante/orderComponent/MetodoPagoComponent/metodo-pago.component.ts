@@ -115,10 +115,18 @@ export class MetodoPagoComponent {
 
   // Método público para obtener los datos de la tarjeta
   obtenerDatosTarjeta(): DatosTarjeta | null {
-    if (this.formTarjeta.valid) {
-      return this.formTarjeta.value;
+    if (!this.formTarjeta.valid) {
+      return null;
     }
-    return null;
+
+    const datos = this.formTarjeta.value;
+
+    return {
+      numeroTarjeta: datos.numeroTarjeta?.replace(/\s+/g, ''), 
+      cvv: datos.cvv?.trim(),
+      fechaCaducidad: datos.fechaCaducidad?.trim(),
+      nombreTitular: datos.nombreTitular?.trim()
+    };
   }
 
   // Método público para validar el formulario

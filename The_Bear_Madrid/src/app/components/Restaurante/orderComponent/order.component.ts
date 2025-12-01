@@ -73,7 +73,7 @@ export class OrderComponent {
   SetNumeroMesa(event: Event) {
     const input = event.target as HTMLInputElement;
     const valor = parseInt(input.value, 10);
-    
+
     if (isNaN(valor) || valor <= 0) {
       this.numeroMesa.set(null);
     } else {
@@ -83,7 +83,7 @@ export class OrderComponent {
 
   async FinalizarCompra() {
     const _datosOrder = this.order()!;
-    
+
     // Establecer el número de mesa en el order
     _datosOrder.numMesa = this.numeroMesa()!;
 
@@ -98,7 +98,7 @@ export class OrderComponent {
         timer: 3000,
         timerProgressBar: true
       });
-      
+
       // Redirigir al home
       window.location.href = '/';
       return;
@@ -108,14 +108,15 @@ export class OrderComponent {
       case 'paypal':
         _datosOrder.metodoPago = { tipo: 'paypal' };
         break;
+
       case 'tarjeta':
         // Validar que el formulario de tarjeta sea válido
         const metodoPagoComp = this.metodoPagoComponent();
-        
+
         if (!metodoPagoComp.esFormularioValido()) {
           // Marcar todos los campos como touched para mostrar errores
           metodoPagoComp.marcarComoTocado();
-          
+
           await Swal.fire({
             icon: 'error',
             title: 'Datos incompletos',
@@ -128,31 +129,41 @@ export class OrderComponent {
 
         // Obtener los datos de la tarjeta desde el componente hijo
         const datosTarjeta = metodoPagoComp.obtenerDatosTarjeta();
-        
+
         if (!datosTarjeta) {
           console.error('No se pudieron obtener los datos de la tarjeta');
           return;
         }
 
-        _datosOrder.metodoPago = { 
-          tipo: 'tarjeta', 
+        _datosOrder.metodoPago = {
+          tipo: 'tarjeta',
           datosTarjeta: datosTarjeta
         };
+        console.log('datos del order con tarjeta ....', _datosOrder)
         break;
     }
-
-    const popup = window.open('', '_blank', 'width=500,height=700');
     try {
       const resp = await this._restSvc.FinalizarCompra(_datosOrder);
 
-      if (resp.codigo === 0 && resp.datos?.urlPayPal) {
-        popup!.location.href = resp.datos.urlPayPal;
-      } else {
-        popup!.close();
-        console.error('Error al crear la orden de pago en Paypal:', resp.mensaje);
+      if (_datosOrder.metodoPago.tipo === 'paypal') {
+        if (resp.datos?.urlPayPal) {
+          const popup = window.open('', '_blank', 'width=500,height=700');
+          popup!.location.href = resp.datos.urlPayPal;
+        }
       }
+
+      if (_datosOrder.metodoPago.tipo === 'tarjeta') {
+        if (resp.datos?.estado === 'succeeded') {
+          await Swal.fire({
+            icon: 'success',
+            title: 'Pago completado',
+            text: 'Tu pago con tarjeta se realizó correctamente',
+            confirmButtonText: 'Aceptar'
+          });
+        }
+      }
+
     } catch (err) {
-      popup!.close();
       console.error('Error al llamar al servidor:', err);
     }
   }

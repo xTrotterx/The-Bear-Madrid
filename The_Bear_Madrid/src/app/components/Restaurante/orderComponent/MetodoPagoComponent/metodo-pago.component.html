@@ -26,8 +26,7 @@
             <!-- PayPal -->
             <div class="form-check payment-option mb-3 p-3 rounded border" [class.selected]="metodoPago() === 'paypal'"
                 [class.opacity-50]="!puedeSeleccionarPago()"
-                [style.cursor]="puedeSeleccionarPago() ? 'pointer' : 'not-allowed'"
-                style="transition: all 0.3s;"
+                [style.cursor]="puedeSeleccionarPago() ? 'pointer' : 'not-allowed'" style="transition: all 0.3s;"
                 (click)="OnCambiarMetodo('paypal')">
                 <div class="d-flex align-items-center">
                     <input class="form-check-input me-3" type="radio" name="metodoPago"
@@ -49,11 +48,9 @@
             </div>
 
             <!-- Tarjeta de crédito/débito -->
-            <div class="form-check payment-option mb-3 p-3 rounded border"
-                [class.selected]="metodoPago() === 'tarjeta'"
+            <div class="form-check payment-option mb-3 p-3 rounded border" [class.selected]="metodoPago() === 'tarjeta'"
                 [class.opacity-50]="!puedeSeleccionarPago()"
-                [style.cursor]="puedeSeleccionarPago() ? 'pointer' : 'not-allowed'"
-                style="transition: all 0.3s;"
+                [style.cursor]="puedeSeleccionarPago() ? 'pointer' : 'not-allowed'" style="transition: all 0.3s;"
                 (click)="OnCambiarMetodo('tarjeta')">
                 <div class="d-flex align-items-center">
                     <input class="form-check-input me-3" type="radio" name="metodoPago"
@@ -76,77 +73,17 @@
 
             <!-- Formulario de tarjeta -->
             <div *ngIf="metodoPago() === 'tarjeta'" class="card bg-light border-0 p-3 mt-3">
-                <form [formGroup]="formTarjeta">
-                    <div class="row g-3">
-                        <!-- Número de tarjeta -->
-                        <div class="col-12">
-                            <label class="form-label small fw-semibold">
-                                Número de tarjeta <span class="text-danger">*</span>
-                            </label>
-                            <input type="text" class="form-control" formControlName="numeroTarjeta"
-                                placeholder="1234 5678 9012 3456" (input)="FormatearNumeroTarjeta($event)"
-                                [class.is-invalid]="mostrarError('numeroTarjeta')">
-                            <div *ngIf="mostrarError('numeroTarjeta')" class="invalid-feedback d-block">
-                                <i class="bi bi-exclamation-circle me-1"></i>
-                                {{ obtenerMensajeError('numeroTarjeta') }}
-                            </div>
-                        </div>
 
-                        <!-- Nombre del titular -->
-                        <div class="col-12">
-                            <label class="form-label small fw-semibold">
-                                Nombre del titular <span class="text-danger">*</span>
-                            </label>
-                            <input type="text" class="form-control" formControlName="nombreTitular"
-                                placeholder="Como aparece en la tarjeta"
-                                [class.is-invalid]="mostrarError('nombreTitular')">
-                            <div *ngIf="mostrarError('nombreTitular')" class="invalid-feedback d-block">
-                                <i class="bi bi-exclamation-circle me-1"></i>
-                                {{ obtenerMensajeError('nombreTitular') }}
-                            </div>
-                        </div>
+                <label class="form-label fw-semibold mb-2">
+                    Datos de tarjeta
+                </label>
 
-                        <!-- Fecha de caducidad -->
-                        <div class="col-6">
-                            <label class="form-label small fw-semibold">
-                                Fecha de caducidad <span class="text-danger">*</span>
-                            </label>
-                            <input type="text" class="form-control" formControlName="fechaCaducidad"
-                                placeholder="MM/AA" (input)="FormatearFechaCaducidad($event)"
-                                [class.is-invalid]="mostrarError('fechaCaducidad')">
-                            <div *ngIf="mostrarError('fechaCaducidad')" class="invalid-feedback d-block">
-                                <i class="bi bi-exclamation-circle me-1"></i>
-                                {{ obtenerMensajeError('fechaCaducidad') }}
-                            </div>
-                        </div>
+                <div id="card-element" style="padding: 12px; border: 1px solid #ccc; border-radius: 6px;">
+                </div>
 
-                        <!-- CVV -->
-                        <div class="col-6">
-                            <label class="form-label small fw-semibold">
-                                CVV <span class="text-danger">*</span>
-                            </label>
-                            <input type="text" class="form-control" formControlName="cvv"
-                                placeholder="123" (input)="LimitarCVV($event)"
-                                [class.is-invalid]="mostrarError('cvv')">
-                            <div *ngIf="mostrarError('cvv')" class="invalid-feedback d-block">
-                                <i class="bi bi-exclamation-circle me-1"></i>
-                                {{ obtenerMensajeError('cvv') }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Estado del formulario -->
-                    <div *ngIf="formTarjeta.touched && formTarjeta.invalid"
-                        class="alert alert-warning mt-3 mb-0 py-2 px-3 d-flex align-items-center" role="alert">
-                        <i class="bi bi-exclamation-triangle me-2"></i>
-                        <small>Por favor, completa todos los campos correctamente</small>
-                    </div>
-                    <div *ngIf="formTarjeta.valid"
-                        class="alert alert-success mt-3 mb-0 py-2 px-3 d-flex align-items-center" role="alert">
-                        <i class="bi bi-check-circle me-2"></i>
-                        <small>Datos de tarjeta válidos</small>
-                    </div>
-                </form>
+                <small class="text-muted">
+                    Pagos seguros con Stripe • No almacenamos tu tarjeta
+                </small>
             </div>
 
             <!-- Efectivo en local -->

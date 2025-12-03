@@ -7,6 +7,7 @@ import { RouterLink } from "@angular/router";
 import { RestClienteService } from '../../../servicios/rest-cliente.service';
 import Swal from 'sweetalert2';
 import { MetodoPagoComponent } from './MetodoPagoComponent/metodo-pago.component';
+import { loadStripe } from '@stripe/stripe-js';
 
 @Component({
   selector: 'app-order',
@@ -81,90 +82,126 @@ export class OrderComponent {
     }
   }
 
-  async FinalizarCompra() {
-    const _datosOrder = this.order()!;
+ async FinalizarCompra() {
+  const _datosOrder = this.order()!;
 
-    // Establecer el número de mesa en el order
-    _datosOrder.numMesa = this.numeroMesa()!;
+  // Establecer el número de mesa en el order
+  _datosOrder.numMesa = this.numeroMesa()!;
 
-    // Si es efectivo, mostrar mensaje y redirigir
-    if (this.metodoPago() === 'efectivo') {
-      await Swal.fire({
-        icon: 'success',
-        title: '¡Gracias por elegirnos!',
-        text: 'Que disfrutes de la experiencia',
-        confirmButtonText: 'Entendido',
-        confirmButtonColor: '#4a3228',
-        timer: 3000,
-        timerProgressBar: true
-      });
+  // Si es efectivo, mostrar mensaje y redirigir
+  if (this.metodoPago() === 'efectivo') {
+    await Swal.fire({
+      icon: 'success',
+      title: '¡Gracias por elegirnos!',
+      text: 'Que disfrutes de la experiencia',
+      confirmButtonText: 'Entendido',
+      confirmButtonColor: '#4a3228',
+      timer: 3000,
+      timerProgressBar: true
+    });
 
-      // Redirigir al home
-      window.location.href = '/';
+    // Redirigir al home
+    window.location.href = '/';
+    return;
+  }
+
+  switch (this.metodoPago()) {
+    case 'paypal':
+      _datosOrder.metodoPago = { tipo: 'paypal' };
+      break;
+
+    case 'tarjeta':
+      const metodoPagoComp = this.metodoPagoComponent();
+
+      if (!metodoPagoComp.card) {
+        await Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pudo inicializar el formulario de tarjeta'
+        });
+        return;
+      }
+
+      _datosOrder.metodoPago = { tipo: 'tarjeta' };
+      break;
+  }
+
+  try {
+    const resp = await this._restSvc.FinalizarCompra(_datosOrder);
+
+    if (_datosOrder.metodoPago.tipo === 'paypal') {
+      if (resp.datos?.urlPayPal) {
+        const popup = window.open('', '_blank', 'width=500,height=700');
+        popup!.location.href = resp.datos.urlPayPal;
+      }
+    }
+
+    if (_datosOrder.metodoPago.tipo === 'tarjeta') {
+      const clientSecret = resp.datos?.clientSecret;
+      console.log('Client secret recibido:', clientSecret);
+
+      if (!clientSecret) {
+        await Swal.fire({
+          icon: 'error',
+          title: 'Error en el pago',
+          text: 'No se pudo iniciar el pago con tarjeta'
+        });
+        return;
+      }
+
+      // ⚠️ CLAVE: Usar la MISMA instancia de Stripe que creó el card
+      const metodoPagoComp = this.metodoPagoComponent();
+      const stripe = metodoPagoComp.stripe;
+      const cardElement = metodoPagoComp.card;
+
+      if (!stripe) {
+        await Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Stripe no está inicializado correctamente'
+        });
+        return;
+      }
+
+      // Confirmar el pago con la misma instancia
+      const { error, paymentIntent } = await stripe.confirmCardPayment(
+        clientSecret,
+        {
+          payment_method: {
+            card: cardElement
+          }
+        }
+      );
+
+      if (error) {
+        await Swal.fire({
+          icon: 'error',
+          title: 'Tarjeta rechazada',
+          text: error.message ?? 'No se pudo procesar la tarjeta'
+        });
+        return;
+      }
+
+      if (paymentIntent?.status === 'succeeded') {
+        await Swal.fire({
+          icon: 'success',
+          title: 'Pago completado',
+          text: 'Tu pago con tarjeta se realizó correctamente'
+        });
+      
+        window.location.href = '/';
+      }
+
       return;
     }
 
-    switch (this.metodoPago()) {
-      case 'paypal':
-        _datosOrder.metodoPago = { tipo: 'paypal' };
-        break;
-
-      case 'tarjeta':
-        // Validar que el formulario de tarjeta sea válido
-        const metodoPagoComp = this.metodoPagoComponent();
-
-        if (!metodoPagoComp.esFormularioValido()) {
-          // Marcar todos los campos como touched para mostrar errores
-          metodoPagoComp.marcarComoTocado();
-
-          await Swal.fire({
-            icon: 'error',
-            title: 'Datos incompletos',
-            text: 'Por favor, completa correctamente todos los datos de la tarjeta',
-            confirmButtonText: 'Entendido',
-            confirmButtonColor: '#4a3228'
-          });
-          return;
-        }
-
-        // Obtener los datos de la tarjeta desde el componente hijo
-        const datosTarjeta = metodoPagoComp.obtenerDatosTarjeta();
-
-        if (!datosTarjeta) {
-          console.error('No se pudieron obtener los datos de la tarjeta');
-          return;
-        }
-
-        _datosOrder.metodoPago = {
-          tipo: 'tarjeta',
-          datosTarjeta: datosTarjeta
-        };
-        console.log('datos del order con tarjeta ....', _datosOrder)
-        break;
-    }
-    try {
-      const resp = await this._restSvc.FinalizarCompra(_datosOrder);
-
-      if (_datosOrder.metodoPago.tipo === 'paypal') {
-        if (resp.datos?.urlPayPal) {
-          const popup = window.open('', '_blank', 'width=500,height=700');
-          popup!.location.href = resp.datos.urlPayPal;
-        }
-      }
-
-      if (_datosOrder.metodoPago.tipo === 'tarjeta') {
-        if (resp.datos?.estado === 'succeeded') {
-          await Swal.fire({
-            icon: 'success',
-            title: 'Pago completado',
-            text: 'Tu pago con tarjeta se realizó correctamente',
-            confirmButtonText: 'Aceptar'
-          });
-        }
-      }
-
-    } catch (err) {
-      console.error('Error al llamar al servidor:', err);
-    }
+  } catch (err) {
+    console.error('Error al llamar al servidor:', err);
+    await Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'Hubo un problema al procesar el pago'
+    });
   }
+}
 }

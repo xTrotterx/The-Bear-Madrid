@@ -97,7 +97,7 @@
                         <div class="d-grid gap-2">
                             <button 
                                 class="btn btn-lg btn-confirmar"
-                                [disabled]="!order().items || order().items.length === 0 || !metodoPago()"
+                                [disabled]="!order().items || order().items.length === 0 || !metodoPago() || !numeroMesa() || numeroMesa()! <= 0"
                                 (click)="FinalizarCompra()">
                                 <i class="bi bi-check-circle me-2"></i>
                                 @if (metodoPago() === 'paypal') {

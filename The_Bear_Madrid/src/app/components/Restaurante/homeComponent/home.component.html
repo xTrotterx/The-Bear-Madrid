@@ -5,11 +5,14 @@
       <h2 class="text fw-bold border-bottom pb-2">{{ seccion.nombre }}</h2>
       
       <div class="carousel-container mt-3">
-        <button class="btn-arrow btn-arrow-left" (click)="anterior(seccion.pathTipo, seccion.platos)" title="Anterior">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="15 18 9 12 15 6"></polyline>
-          </svg>
-        </button>
+        <!-- Solo mostrar flechas si hay más platos que los visibles -->
+        @if(seccion.platos.length > 4) {
+          <button class="btn-arrow btn-arrow-left" (click)="anterior(seccion.pathTipo, seccion.platos)" title="Anterior">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+        }
         
         <div class="platos-grid">
           @for(plato of getPlatosVisibles(seccion.pathTipo, seccion.platos); track plato._id)
@@ -20,11 +23,13 @@
           }
         </div>
         
-        <button class="btn-arrow btn-arrow-right" (click)="siguiente(seccion.pathTipo, seccion.platos)" title="Siguiente">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
-        </button>
+        @if(seccion.platos.length > 4) {
+          <button class="btn-arrow btn-arrow-right" (click)="siguiente(seccion.pathTipo, seccion.platos)" title="Siguiente">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+        }
       </div>
     </div>
   }

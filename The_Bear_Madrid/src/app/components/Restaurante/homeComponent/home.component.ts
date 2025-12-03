@@ -45,9 +45,17 @@ export class HomeComponent {
   platosVisibles = 4; // Cantidad de platos a mostrar
 
   getPlatosVisibles(tipo: string, platos: IPlato[]): IPlato[] {
-    const startIndex = this.currentIndexes[tipo] ?? 0;
-    const resultado = [];
+    if (!platos || platos.length === 0) return [];
     
+    const startIndex = this.currentIndexes[tipo] ?? 0;
+    
+    // Si hay menos platos que los visibles, mostrar solo los disponibles
+    if (platos.length <= this.platosVisibles) {
+      return platos;
+    }
+    
+    // Si hay suficientes platos, hacer el carrusel circular
+    const resultado = [];
     for (let i = 0; i < this.platosVisibles; i++) {
       const index = (startIndex + i) % platos.length;
       resultado.push(platos[index]);
@@ -57,11 +65,17 @@ export class HomeComponent {
   }
 
   anterior(tipo: string, platos: IPlato[]): void {
+    // No hacer nada si no hay suficientes platos para hacer carrusel
+    if (platos.length <= this.platosVisibles) return;
+    
     const index = this.currentIndexes[tipo] ?? 0;
     this.currentIndexes[tipo] = (index - 1 + platos.length) % platos.length;
   }
 
   siguiente(tipo: string, platos: IPlato[]): void {
+    // No hacer nada si no hay suficientes platos para hacer carrusel
+    if (platos.length <= this.platosVisibles) return;
+    
     const index = this.currentIndexes[tipo] ?? 0;
     this.currentIndexes[tipo] = (index + 1) % platos.length;
   }

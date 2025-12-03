@@ -7,6 +7,7 @@ import Usuario from "../../modelos/usuario";
 import paypal from "../../servicios/paypal";
 import Order from "../../modelos/order";
 import stripe from "../../servicios/stripe";
+import { StripeService } from "../../servicios/stripev2";
 
 
 const RestauranteController = {
@@ -150,7 +151,7 @@ const RestauranteController = {
         }
     },
     FinalizarCompra: async (req: Request, res: Response, next: NextFunction) => {
-        try { 
+        try {
             const _order = new Order(req.body);
             await _order.save()
 
@@ -159,17 +160,21 @@ const RestauranteController = {
                 case 'paypal':
                     const _respOrderPP = await paypal.CreateOrder(_order);
 
-                    if (!_respOrderPP)throw new Error('Error al crear orden de pago en PayPal...');
+                    if (!_respOrderPP) throw new Error('Error al crear orden de pago en PayPal...');
 
                     // redirección a la pasarela
                     datos = { urlPayPal: _respOrderPP.link };
                     break;
 
                 case 'tarjeta':
-                    const _respOrderST=await stripe.CreateCharge(_order);
-                    if(!_respOrderST) throw new Error('Error al procesar elpago con Stripe....');
+                    const _respOrderST = await StripeService.createPaymentIntent(_order)
+                    if (!_respOrderST) throw new Error('Error al procesar elpago con Stripe....');
 
-                    datos={idPagoStripe:_respOrderST.idPagoStripe, estado: _respOrderST.status}
+                    datos = {
+                        clientSecret: _respOrderST.clientSecret,
+                        idPagoStripe: _respOrderST.id,
+                        estado: _respOrderST.status
+                    }
                     break;
 
                 default:
@@ -192,7 +197,7 @@ const RestauranteController = {
 
             if (!idOrder || !tokenPaypal) throw new Error('Faltan parámetros obligatorios en la callback');
 
-            
+
             let _finPago = await paypal.CobrarOrderPayPal(tokenPaypal as string);
 
             if (!_finPago) throw new Error('error cobro del pedido en paypal cagaste ...');

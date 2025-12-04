@@ -8,16 +8,13 @@ export default {
                 throw new Error("STRIPE_SECRET_KEY no está configurada");
             }
 
-            console.log('🔍 Iniciando pago con Stripe');
-            console.log('💰 Total:', order.total);
-
             const numeroTarjeta = (order.metodoPago?.datosTarjeta?.numeroTarjeta || '4242424242424242').replace(/\s+/g, '');
             const cvv = (order.metodoPago?.datosTarjeta?.cvv || '123').toString().trim();
             const fechaCaducidad = order.metodoPago?.datosTarjeta?.fechaCaducidad || '12/34';
             const [mes, anio] = fechaCaducidad.split("/");
             const nombreTitular = order.metodoPago?.datosTarjeta?.nombreTitular || 'Test User';
 
-            console.log('📝 Datos:', { numeroTarjeta: numeroTarjeta.slice(-4), mes, anio, cvv });
+            console.log(' datos:', { numeroTarjeta: numeroTarjeta.slice(-4), mes, anio, cvv });
 
             // 1. Crear PaymentMethod
             const paymentMethodData = new URLSearchParams({
@@ -29,7 +26,7 @@ export default {
                 "billing_details[name]": nombreTitular
             }).toString();
 
-            console.log('📤 Creando PaymentMethod...');
+            console.log('creando PaymentMethod...');
 
             const paymentMethodResp = await axios.post(
                 "https://api.stripe.com/v1/payment_methods",
@@ -43,11 +40,10 @@ export default {
             );
 
             const paymentMethodId = paymentMethodResp.data.id;
-            console.log('✅ PaymentMethod creado:', paymentMethodId);
+            console.log('paymentMethod creado:', paymentMethodId);
 
             // 2. Crear PaymentIntent
             const amount = Math.round(order.total * 100);
-            console.log('💰 Monto:', amount, 'céntimos');
 
             const paymentIntentData = new URLSearchParams({
                 "amount": amount.toString(),
@@ -58,7 +54,7 @@ export default {
                 "description": `Pedido restaurante #${order._id}`
             }).toString();
 
-            console.log('📤 Creando PaymentIntent...');
+            console.log('creando PaymentIntent...');
 
             const paymentIntentResp = await axios.post(
                 "https://api.stripe.com/v1/payment_intents",
@@ -71,7 +67,7 @@ export default {
                 }
             );
 
-            console.log('✅ PaymentIntent status:', paymentIntentResp.data.status);
+            console.log('paymentIntent status:', paymentIntentResp.data.status);
 
             if (paymentIntentResp.data.status !== "succeeded") {
                 throw new Error(`Pago no completado. Status: ${paymentIntentResp.data.status}`);

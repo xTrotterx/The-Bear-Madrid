@@ -5,7 +5,6 @@
       <h2 class="text fw-bold border-bottom pb-2">{{ seccion.nombre }}</h2>
       
       <div class="carousel-container mt-3">
-        <!-- Solo mostrar flechas si hay más platos que los visibles -->
         @if(seccion.platos.length > 4) {
           <button class="btn-arrow btn-arrow-left" (click)="anterior(seccion.pathTipo, seccion.platos)" title="Anterior">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

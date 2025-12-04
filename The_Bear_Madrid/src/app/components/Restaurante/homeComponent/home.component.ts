@@ -54,7 +54,7 @@ export class HomeComponent {
       return platos;
     }
     
-    // Si hay suficientes platos, hacer el carrusel circular
+    // si hay suficientes platos se hace el carrusel infinito weee
     const resultado = [];
     for (let i = 0; i < this.platosVisibles; i++) {
       const index = (startIndex + i) % platos.length;
@@ -65,7 +65,7 @@ export class HomeComponent {
   }
 
   anterior(tipo: string, platos: IPlato[]): void {
-    // No hacer nada si no hay suficientes platos para hacer carrusel
+
     if (platos.length <= this.platosVisibles) return;
     
     const index = this.currentIndexes[tipo] ?? 0;
@@ -73,7 +73,7 @@ export class HomeComponent {
   }
 
   siguiente(tipo: string, platos: IPlato[]): void {
-    // No hacer nada si no hay suficientes platos para hacer carrusel
+
     if (platos.length <= this.platosVisibles) return;
     
     const index = this.currentIndexes[tipo] ?? 0;

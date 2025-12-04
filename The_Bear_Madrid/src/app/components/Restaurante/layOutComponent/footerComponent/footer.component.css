@@ -1,4 +1,3 @@
-/* ===== FOOTER ===== */
 .footer {
   background-color: #000;
   color: #fff;
@@ -11,51 +10,237 @@
   text-align: center;
 }
 
-/* Contenedor de columnas */
 .footer .footer-columns {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 2rem;
   width: 100%;
-  max-width: 1000px;
+  max-width: 1200px;
   margin-bottom: 1.5rem;
 }
 
-/* Cada columna */
 .footer .col-md-4 {
   flex: 1;
-  min-width: 200px;
+  min-width: 250px;
+}
+
+.footer .col-md-4 h5 {
+  color: #fff;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
 }
 
 .footer .col-md-4 a {
-  display: block;              
-  margin: 0.3rem 0;            
-  color: #fff;
+  display: block;
+  margin: 0.5rem 0;
+  color: #ccc;
   text-decoration: none;
-  transition: color 0.3s ease;
+  transition: color 0.3s ease, transform 0.2s ease;
+  font-size: 0.95rem;
 }
 
-/* Hover */
+.footer .col-md-4 p {
+  color: #ccc;
+  margin: 0.5rem 0;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
 .footer .col-md-4 a:hover {
   color: #fff;
+  transform: translateX(3px);
 }
 
-/* Línea divisoria */
 .footer hr {
   border-color: #444;
   width: 100%;
-  max-width: 900px;
+  max-width: 1000px;
+  margin: 1.5rem 0;
 }
 
-/* Texto inferior */
-.footer p,
-.footer small {
+.footer > p {
   color: #ccc;
-  margin: 0.25rem 0;
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
 }
+
+.footer > div {
+  margin-top: 0.5rem;
+}
+
 .footer > div a {
-  color: #fff;                /* blanco por defecto */
+  color: #ccc;
   text-decoration: none;
   transition: color 0.3s ease;
+  font-size: 0.85rem;
+  margin: 0 0.5rem;
+}
+
+.footer > div a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+@media (max-width: 992px) {
+  .footer .footer-columns {
+    gap: 1.5rem;
+  }
+
+  .footer .col-md-4 {
+    min-width: 220px;
+  }
+
+  .footer .col-md-4 h5 {
+    font-size: 1.05rem;
+  }
+
+  .footer .col-md-4 a,
+  .footer .col-md-4 p {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 1.75rem 1rem;
+  }
+
+  .footer .footer-columns {
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .footer .col-md-4 {
+    width: 100%;
+    max-width: 400px;
+    min-width: unset;
+  }
+
+  .footer .col-md-4 h5 {
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .footer .col-md-4 a,
+  .footer .col-md-4 p {
+    font-size: 0.9rem;
+  }
+
+  .footer hr {
+    margin: 1.25rem 0;
+  }
+
+  .footer > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .footer > div a {
+    margin: 0.25rem 0;
+  }
+}
+
+
+@media (max-width: 576px) {
+  .footer {
+    padding: 1.5rem 0.75rem;
+  }
+
+  .footer .footer-columns {
+    gap: 1.75rem;
+  }
+
+  .footer .col-md-4 {
+    max-width: 350px;
+    margin-bottom: 0;
+  }
+
+  .footer .col-md-4 h5 {
+    font-size: 1.05rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .footer .col-md-4 a,
+  .footer .col-md-4 p {
+    font-size: 0.85rem;
+    margin: 0.4rem 0;
+  }
+
+  .footer .col-md-4 a i {
+    font-size: 0.9rem;
+  }
+
+  .footer > p {
+    font-size: 0.85rem;
+  }
+
+  .footer > div a {
+    font-size: 0.8rem;
+  }
+
+  .footer hr {
+    margin: 1rem 0;
+  }
+}
+
+@media (max-width: 400px) {
+  .footer {
+    padding: 1.25rem 0.5rem;
+  }
+
+  .footer .footer-columns {
+    gap: 1.5rem;
+  }
+
+  .footer .col-md-4 {
+    max-width: 100%;
+    padding: 0 0.5rem;
+  }
+
+  .footer .col-md-4 h5 {
+    font-size: 1rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .footer .col-md-4 a,
+  .footer .col-md-4 p {
+    font-size: 0.8rem;
+    margin: 0.35rem 0;
+  }
+
+  .footer > p {
+    font-size: 0.8rem;
+  }
+
+  .footer > div a {
+    font-size: 0.75rem;
+  }
+}
+
+.footer a:focus {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.footer .col-md-4 a:active {
+  color: #0b1fd7;
+}
+
+.footer .col-md-4 {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

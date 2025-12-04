@@ -19,8 +19,7 @@ export class MetodoPagoComponent implements OnInit {
 
   stripe: Stripe | null = null;
   card!: StripeCardElement;
-
-  // Hacer pública la key para que el padre pueda usarla
+  //si no la hago publica no puedo acceder a la instancia desde el orderComponent
   public publicKey = 'pk_test_51O5nh1JrgdkrfrxrA54H605IdtWTQTSY6PVo2c5db5AZwqbwdScBMkEVcghzIfQagwVpZawOOyoKCl8SaLctnLFx007WZ5ppXZ';
 
   constructor() {
@@ -76,12 +75,9 @@ export class MetodoPagoComponent implements OnInit {
   }
 
   OnCambiarMetodo(metodo: string) {
-    if (!this.puedeSeleccionarPago()) {
-      return; // No permitir cambiar si no se puede seleccionar
-    }
+    if (!this.puedeSeleccionarPago()) return; // No permitir cambiar si no se puede seleccionar
     
     this.cambiarMetodo.emit(metodo);
-    // El effect se encargará de montar/desmontar el card
   }
 
   OnSetNumeroMesa(event: Event) {

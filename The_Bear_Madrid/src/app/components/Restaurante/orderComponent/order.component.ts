@@ -84,11 +84,9 @@ export class OrderComponent {
 
  async FinalizarCompra() {
   const _datosOrder = this.order()!;
-
-  // Establecer el número de mesa en el order
+  //meto el numero de mesa
   _datosOrder.numMesa = this.numeroMesa()!;
-
-  // Si es efectivo, mostrar mensaje y redirigir
+  //si es efectivo muestro mensaje y redirijo
   if (this.metodoPago() === 'efectivo') {
     await Swal.fire({
       icon: 'success',
@@ -100,7 +98,6 @@ export class OrderComponent {
       timerProgressBar: true
     });
 
-    // Redirigir al home
     window.location.href = '/';
     return;
   }
@@ -149,7 +146,6 @@ export class OrderComponent {
         return;
       }
 
-      // ⚠️ CLAVE: Usar la MISMA instancia de Stripe que creó el card
       const metodoPagoComp = this.metodoPagoComponent();
       const stripe = metodoPagoComp.stripe;
       const cardElement = metodoPagoComp.card;
@@ -163,7 +159,6 @@ export class OrderComponent {
         return;
       }
 
-      // Confirmar el pago con la misma instancia
       const { error, paymentIntent } = await stripe.confirmCardPayment(
         clientSecret,
         {

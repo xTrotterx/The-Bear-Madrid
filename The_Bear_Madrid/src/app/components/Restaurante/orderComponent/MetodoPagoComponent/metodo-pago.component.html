@@ -73,7 +73,6 @@
 
             <!-- Formulario de tarjeta -->
             <div *ngIf="metodoPago() === 'tarjeta'" class="card bg-light border-0 p-3 mt-3">
-
                 <label class="form-label fw-semibold mb-2">
                     Datos de tarjeta
                 </label>
@@ -81,9 +80,34 @@
                 <div id="card-element" style="padding: 12px; border: 1px solid #ccc; border-radius: 6px;">
                 </div>
 
-                <small class="text-muted">
+                <small class="text-muted mt-2">
+                    <i class="bi bi-shield-check me-1"></i>
                     Pagos seguros con Stripe • No almacenamos tu tarjeta
                 </small>
+            </div>
+
+            <!-- Revolut Pay -->
+            <div class="form-check payment-option mb-3 p-3 rounded border" [class.selected]="metodoPago() === 'revolut'"
+                [class.opacity-50]="!puedeSeleccionarPago()"
+                [style.cursor]="puedeSeleccionarPago() ? 'pointer' : 'not-allowed'" style="transition: all 0.3s;"
+                (click)="OnCambiarMetodo('revolut')">
+                <div class="d-flex align-items-center">
+                    <input class="form-check-input me-3" type="radio" name="metodoPago"
+                        [checked]="metodoPago() === 'revolut'" [disabled]="!puedeSeleccionarPago()"
+                        style="width: 20px; height: 20px;">
+                    <label class="form-check-label flex-grow-1">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <h5 class="mb-1">
+                                    <i class="bi bi-phone text-info me-2"></i>
+                                    Revolut Pay
+                                </h5>
+                                <small class="text-muted">Pago rápido con Revolut</small>
+                            </div>
+                            <i class="bi bi-chevron-right text-muted"></i>
+                        </div>
+                    </label>
+                </div>
             </div>
 
             <!-- Efectivo en local -->

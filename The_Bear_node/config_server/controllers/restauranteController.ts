@@ -6,9 +6,7 @@ import Opinion from "../../modelos/opinion";
 import Usuario from "../../modelos/usuario";
 import paypal from "../../servicios/paypal";
 import Order from "../../modelos/order";
-import stripe from "../../servicios/stripe";
-import { StripeService } from "../../servicios/stripev2";
-
+import stripev2 from "../../servicios/stripev2";
 
 const RestauranteController = {
     RecuperarTipos: async (req: Request, res: Response, next: NextFunction) => {
@@ -156,6 +154,8 @@ const RestauranteController = {
             await _order.save()
 
             let datos = {}
+            console.log('metodo de pago', _order.metodoPago?.tipo);
+
             switch (_order.metodoPago?.tipo) {
                 case 'paypal':
                     const _respOrderPP = await paypal.CreateOrder(_order);
@@ -167,20 +167,32 @@ const RestauranteController = {
                     break;
 
                 case 'tarjeta':
-                    const _respOrderST = await StripeService.createPaymentIntent(_order)
+                    const _respOrderST = await stripev2.CreatePaymentIntent(_order)
                     if (!_respOrderST) throw new Error('Error al procesar elpago con Stripe....');
 
                     datos = {
                         clientSecret: _respOrderST.clientSecret,
                         idPagoStripe: _respOrderST.id,
                         estado: _respOrderST.status
-                    }
+                    };
+                    break;
+
+                case 'revolut':
+                    console.log('Entrando en caso Revolut');
+                    const _respOrderRV = await stripev2.CreateRevolutCheckoutSession(_order);
+                    console.log('Respuesta de Revolut PaymentIntent:', _respOrderRV);
+                    if (!_respOrderRV) throw new Error('Error al procesar el pago con Revolut....');
+
+                    datos = {
+                        urlRevolut: _respOrderRV.url,
+                        sessionId: _respOrderRV.id
+                    };
                     break;
 
                 default:
                     break;
             }
-            console.log('url:', datos);
+            console.log('datos a mandar :', datos);
             res.status(200).send({ codigo: 0, mensaje: 'pago realizado con exito', datos });
         } catch (error) {
             console.log('error al finalizar el pago con este metodo de pago...', error);

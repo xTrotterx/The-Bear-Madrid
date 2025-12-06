@@ -19,16 +19,15 @@ export class MetodoPagoComponent implements OnInit {
 
   stripe: Stripe | null = null;
   card!: StripeCardElement;
-  //si no la hago publica no puedo acceder a la instancia desde el orderComponent
+  
   public publicKey = 'pk_test_51O5nh1JrgdkrfrxrA54H605IdtWTQTSY6PVo2c5db5AZwqbwdScBMkEVcghzIfQagwVpZawOOyoKCl8SaLctnLFx007WZ5ppXZ';
 
   constructor() {
-    // Effect para detectar cambios en metodoPago
+    // Effect solo para manejar tarjetas
     effect(() => {
       const metodo = this.metodoPago();
       
       if (metodo === 'tarjeta') {
-        // Pequeño delay para asegurar que el DOM esté listo
         setTimeout(() => this.initStripeCard(), 100);
       } else if (this.card) {
         this.card.unmount();
@@ -53,7 +52,6 @@ export class MetodoPagoComponent implements OnInit {
       return;
     }
 
-    // Verificar que el elemento existe en el DOM
     const cardElement = document.getElementById('card-element');
     if (!cardElement) {
       console.error('Elemento card-element no encontrado en el DOM');
@@ -75,8 +73,7 @@ export class MetodoPagoComponent implements OnInit {
   }
 
   OnCambiarMetodo(metodo: string) {
-    if (!this.puedeSeleccionarPago()) return; // No permitir cambiar si no se puede seleccionar
-    
+    if (!this.puedeSeleccionarPago()) return;
     this.cambiarMetodo.emit(metodo);
   }
 

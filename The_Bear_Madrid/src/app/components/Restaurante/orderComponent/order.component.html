@@ -1,8 +1,6 @@
 <div class="container-fluid py-4">
     <div class="row g-4">
-        <!-- Columna izquierda: Platos y Pago -->
         <div class="col-lg-8">
-            <!-- Header -->
             <div class="mb-4">
                 <h1 class="display-5 fw-bold text-dark">Lo que deseas</h1>
                 @if (mensaje()) {
@@ -42,7 +40,6 @@
                 }
             </div>
 
-            <!-- Sección de pago - AHORA ES UN COMPONENTE -->
             <app-metodo-pago 
                 [metodoPago]="metodoPago()"
                 [numeroMesa]="numeroMesa()"
@@ -52,7 +49,6 @@
             </app-metodo-pago>
         </div>
 
-        <!-- Columna derecha: Resumen sticky -->
         <div class="col-lg-4">
             <div class="position-sticky" style="top: 20px;">
                 <div class="card border-0 shadow">
@@ -62,7 +58,6 @@
                             Resumen
                         </h2>
 
-                        <!-- Items del resumen -->
                         <div class="summary-items mb-3">
                             @if (order().items && order().items.length > 0) {
                             @for (item of order().items; track item.plato._id) {
@@ -103,11 +98,13 @@
                                 @if (metodoPago() === 'paypal') {
                                     Pagar con PayPal
                                 } @else if (metodoPago() === 'tarjeta') {
-                                    Procesar pago
+                                    Procesar pago con tarjeta
+                                } @else if (metodoPago() === 'revolut') {
+                                    Pagar con Revolut
                                 } @else if (metodoPago() === 'efectivo') {
-                                    Confirmar 
+                                    Confirmar pedido
                                 } @else {
-                                    Confirmar 
+                                    Confirmar pedido
                                 }
                             </button>
 
@@ -117,7 +114,6 @@
                             </button>
                         </div>
 
-                        <!-- Info adicional -->
                         @if (order().items && order().items.length > 0) {
                         <div class="mt-3 p-3 rounded" style="background-color: #f8f9fa;">
                             <small class="text-muted d-block mb-1">

@@ -19,7 +19,7 @@ const opinion_1 = __importDefault(require("../../modelos/opinion"));
 const usuario_1 = __importDefault(require("../../modelos/usuario"));
 const paypal_1 = __importDefault(require("../../servicios/paypal"));
 const order_1 = __importDefault(require("../../modelos/order"));
-const stripev2_1 = require("../../servicios/stripev2");
+const stripev2_1 = __importDefault(require("../../servicios/stripev2"));
 const RestauranteController = {
     RecuperarTipos: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         try {
@@ -144,12 +144,13 @@ const RestauranteController = {
         }
     }),
     FinalizarCompra: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-        var _a;
+        var _a, _b;
         try {
             const _order = new order_1.default(req.body);
             yield _order.save();
             let datos = {};
-            switch ((_a = _order.metodoPago) === null || _a === void 0 ? void 0 : _a.tipo) {
+            console.log('metodo de pago', (_a = _order.metodoPago) === null || _a === void 0 ? void 0 : _a.tipo);
+            switch ((_b = _order.metodoPago) === null || _b === void 0 ? void 0 : _b.tipo) {
                 case 'paypal':
                     const _respOrderPP = yield paypal_1.default.CreateOrder(_order);
                     if (!_respOrderPP)
@@ -158,7 +159,7 @@ const RestauranteController = {
                     datos = { urlPayPal: _respOrderPP.link };
                     break;
                 case 'tarjeta':
-                    const _respOrderST = yield stripev2_1.StripeService.createPaymentIntent(_order);
+                    const _respOrderST = yield stripev2_1.default.CreatePaymentIntent(_order);
                     if (!_respOrderST)
                         throw new Error('Error al procesar elpago con Stripe....');
                     datos = {
@@ -167,10 +168,21 @@ const RestauranteController = {
                         estado: _respOrderST.status
                     };
                     break;
+                case 'revolut':
+                    console.log('Entrando en caso Revolut');
+                    const _respOrderRV = yield stripev2_1.default.CreateRevolutCheckoutSession(_order);
+                    console.log('Respuesta de Revolut PaymentIntent:', _respOrderRV);
+                    if (!_respOrderRV)
+                        throw new Error('Error al procesar el pago con Revolut....');
+                    datos = {
+                        urlRevolut: _respOrderRV.url,
+                        sessionId: _respOrderRV.id
+                    };
+                    break;
                 default:
                     break;
             }
-            console.log('url:', datos);
+            console.log('datos a mandar :', datos);
             res.status(200).send({ codigo: 0, mensaje: 'pago realizado con exito', datos });
         }
         catch (error) {

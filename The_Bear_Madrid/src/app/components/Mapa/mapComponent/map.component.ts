@@ -1,18 +1,17 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import mapboxgl from 'mapbox-gl';
-//import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
+import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
+
 @Component({
   selector: 'app-map',
   imports: [],
   templateUrl: './map.component.html',
   styleUrl: './map.component.css'
 })
-export class MapComponent implements OnInit, OnDestroy{
-
-  //#region----propiedades--------
+export class MapComponent implements OnInit, OnDestroy {
+//#region------------propiedades--------------
   private _accessToken: string = 'pk.eyJ1IjoieHRyb3R0ZXJ4IiwiYSI6ImNtaDh6dHRmNTE3Z2kyanBnY2pjOWg1aGkifQ.SF2nKkiE6Eq4cNxHBXZzlQ';
 
-  //coordenadas 
   private _long: number = -3.6894651276835533;
   private _lat: number = 40.42156473252101;
 
@@ -21,54 +20,54 @@ export class MapComponent implements OnInit, OnDestroy{
   private _map?: mapboxgl.Map;
   private _marker?: mapboxgl.Marker;
   private _nombreMarker: string = 'Ubicacion';
- // private _directions?:MapboxDirections;
-  //#endregion
+  private _directions?: MapboxDirections;
 
-  //#region------metodos-----
-
-  ngOnInit():void {
+//#endregion
+//#region-------------metodos-------------------
+  ngOnInit(): void {
     this.InitMap();
   }
-  ngOnDestroy():void {
-  this._map?.remove();
+
+  ngOnDestroy(): void {
+    this._map?.remove();
   }
 
   private InitMap(): void {
-    //configuracion del token
     (mapboxgl as any).accessToken = this._accessToken;
 
-    this._map = new mapboxgl.Map(
-      {
-        container: 'map',
-        style: 'mapbox://styles/mapbox/streets-v12',
-        center: [this._long, this._lat],
-        zoom: this._zoom
-      }
-    );
-    //con esto meto los botones para controlar el mapa a parte de que se puede con el raton 
+    this._map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/streets-v12',
+      center: [this._long, this._lat],
+      zoom: this._zoom
+    });
+    //esto e spara añadir botones para controlar el mapa
     this._map.addControl(new mapboxgl.NavigationControl());
 
-    // plugin de Directions 
-   /* this._directions = new MapboxDirections({
+    //donde puedo meter las rutas
+    this._directions = new MapboxDirections({
       accessToken: this._accessToken,
-      unit: 'metric', 
-      profile: 'mapbox/driving', // opciones: 'driving', 'walking', 'cycling', 'driving-traffic'
+      unit: 'metric',
+      profile: 'mapbox/driving',
       controls: {
-        inputs: true, // muestra inputs de origen/destino
-        instructions: true, // muestra instrucciones de la ruta
-        profileSwitcher: true // permite cambiar entre coche/pie/bici
+        inputs: true,
+        instructions: true, //instrucciones de la ruta
+        profileSwitcher: true //permite cambiar entre caminar bici...etc
       },
       interactive: true,
-      language: 'es' 
+      language: 'es'
     });
-*/
-    //esto es para poner un marcador
-    this._marker = new mapboxgl.Marker({ color: '#FF0000' })
-                               .setLngLat([this._long, this._lat])
-                               .setPopup(new mapboxgl.Popup({ offset: 25 })
-                               .setHTML(`<h3>${this._nombreMarker}</h3>`))
-                               .addTo(this._map);
-  }
 
+    this._map.addControl(this._directions, 'top-left');
+
+    // Establecer el destino en las direcciones con las coordenadas del marcador
+    this._directions.setDestination([this._long, this._lat]);
+
+    this._marker = new mapboxgl.Marker({ color: '#FF0000' })
+      .setLngLat([this._long, this._lat])
+      .setPopup(new mapboxgl.Popup({ offset: 25 })
+        .setHTML(`<h3>${this._nombreMarker}</h3>`))
+      .addTo(this._map);
+  }
   //#endregion
 }

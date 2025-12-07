@@ -83,8 +83,8 @@ exports.default = {
                             quantity: 1,
                         }],
                     mode: 'payment',
-                    success_url: `${process.env.FRONTEND_URL || 'http://localhost:4200'}/?pago=success`,
-                    cancel_url: `${process.env.FRONTEND_URL || 'http://localhost:4200'}/?pago=canceled`,
+                    success_url: 'http://localhost:4200/?pago=success',
+                    cancel_url: 'http://localhost:4200/?pago=canceled',
                 });
                 return {
                     url: session.url,

@@ -37,7 +37,7 @@
   margin: 0.5rem 0;
   color: #ccc;
   text-decoration: none;
-  transition: color 0.3s ease, transform 0.2s ease;
+  transition: color 0.3s ease, text-decoration 0.3s ease;
   font-size: 0.95rem;
 }
 
@@ -50,7 +50,7 @@
 
 .footer .col-md-4 a:hover {
   color: #fff;
-  transform: translateX(3px);
+  text-decoration: underline;
 }
 
 .footer hr {
@@ -73,7 +73,7 @@
 .footer > div a {
   color: #ccc;
   text-decoration: none;
-  transition: color 0.3s ease;
+  transition: color 0.3s ease, text-decoration 0.3s ease;
   font-size: 0.85rem;
   margin: 0 0.5rem;
 }
@@ -222,12 +222,11 @@
 }
 
 .footer a:focus {
-  outline: 2px solid #fff;
-  outline-offset: 2px;
+  outline: none;
 }
 
 .footer .col-md-4 a:active {
-  color: #0b1fd7;
+  color: #ccc;
 }
 
 .footer .col-md-4 {

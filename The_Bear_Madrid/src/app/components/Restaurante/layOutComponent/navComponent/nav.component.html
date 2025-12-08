@@ -1,81 +1,84 @@
 <nav class="navbar custom-navbar">
-      <div class="container-fluid d-flex justify-content-between align-items-center">
+  <div class="container-fluid d-flex justify-content-between align-items-center">
 
-      <!-- Botón del menú a la izquierda -->
-      <button class="navbar-toggler me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar"
-        aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation" (click)="InnitTipos()">
-        ☰
-      </button>
+    <!-- Botón del menú a la izquierda -->
+    <button class="navbar-toggler me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar"
+      aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation" (click)="InnitTipos()">
+      ☰
+    </button>
 
-      <!-- Contenedor centrado del logo -->
-      <div class="logo-center mx-auto">
-        <a [routerLink]="['/']" class="d-flex justify-content-center align-items-center">
-          <img src="/the_bear_logo.jpg" alt="Logo The Bear" class="logo">
-        </a>
-      </div>
- <div class="d-flex">
+    <!-- Contenedor centrado del logo -->
+    <div class="logo-center mx-auto">
+      <a [routerLink]="['/']" class="d-flex justify-content-center align-items-center">
+        <img src="/the_bear_logo.jpg" alt="Logo The Bear" class="logo">
+      </a>
+    </div>
+    <div class="d-flex">
       @if(this.datosUsuario()) {
-       <div class="dropdown">
-      <button class="btn btn-light" type="button" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="fa-regular fa-user "></i> Bienvenid&#64; {{this.datosUsuario()?.nombre}} {{this.datosUsuario()?.apellidos}}
-      </button>
-      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUser">
-        <li>
-          <a class="dropdown-item" [routerLink]="['/Restaurante/Perfil']">
-            <i class="fa-regular fa-heart"></i> Mi Perfil
-          </a>
-        </li>
-        <li><hr class="dropdown-divider"></li>
-        <li>
-          <a class="dropdown-item text-danger" (click)="cerrarSesion()" style="cursor: pointer;">
-            <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
-          </a>
-        </li>
-      </ul>
-    </div>
-      } @else {
-        <a class="btn btn-light" [routerLink]="['/Usuario/Login']" routerLinkActive="router-link-active">
-          Iniciar sesión
-        </a>
-      }
-      <a class="btn btn-light rounded-circle ms-2 d-flex align-items-center justify-content-center" 
-          style="width: 40px; height: 40px; padding: 0;" 
-          [routerLink]="['/Restaurante/Order']" routerLinkActive="router-link-active">
-            <i class="bi bi-fork-knife fs-5"></i>
-          </a>
-      
-    </div>
-      
-      <!-- Offcanvas -->
-      <div class="offcanvas offcanvas-start custom-offcanvas" tabindex="-1" id="offcanvasDarkNavbar"
-        aria-labelledby="offcanvasDarkNavbarLabel">
-        <div class="offcanvas-header">
-          <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">The Bear Menu</h5>
-          <button #btnCerrar type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
-            aria-label="Close"></button>
-        </div>
-
-        <div class="offcanvas-body">
-          <nav aria-label="breadcrumb">
-            <ul class="breadcrumb">
-              @for(tip of this.breadCrumb(); track $index)
-              {
-              <li class="breadcrumb-item" [ngClass]="{ 'active': $index === this.breadCrumb().length - 1 }">
-                <a (click)="RecuperarSubTipo(tip)">{{ tip.nombreTipo }}</a>
-              </li>
-              }
-            </ul>
-          </nav>
-          <div class="list-group">
-            @for(tipo of this.tipos(); track $index)
-            {
-            <a class="list-group-item list-group-item-action" (click)="RecuperarSubTipo(tipo)">
-              {{tipo.nombreTipo}}
+      <div class="dropdown">
+        <button class="btn btn-light" type="button" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="fa-regular fa-user "></i> Bienvenid&#64; {{this.datosUsuario()?.nombre}}
+          {{this.datosUsuario()?.apellidos}}
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUser">
+          <li>
+            <a class="dropdown-item" [routerLink]="['/Restaurante/Perfil']">
+              <i class="fa-regular fa-heart"></i> Mi Perfil
             </a>
-            }
-          </div>
-        </div>
-
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+          <li>
+            <a class="dropdown-item text-danger" (click)="cerrarSesion()" style="cursor: pointer;">
+              <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
+            </a>
+          </li>
+        </ul>
       </div>
+      } @else {
+      <a class="btn btn-light" [routerLink]="['/Usuario/Login']" routerLinkActive="router-link-active">
+        Iniciar sesión
+      </a>
+      }
+      <a class="btn btn-light rounded-circle ms-2 d-flex align-items-center justify-content-center"
+        style="width: 40px; height: 40px; padding: 0;" [routerLink]="['/Restaurante/Order']"
+        routerLinkActive="router-link-active">
+        <i class="bi bi-fork-knife fs-5"></i>
+      </a>
+
     </div>
-  </nav>
+
+    <!-- Offcanvas -->
+    <div class="offcanvas offcanvas-start custom-offcanvas" tabindex="-1" id="offcanvasDarkNavbar"
+      aria-labelledby="offcanvasDarkNavbarLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">The Bear Menu</h5>
+        <button #btnCerrar type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+          aria-label="Close"></button>
+      </div>
+
+      <div class="offcanvas-body">
+        <nav aria-label="breadcrumb">
+          <ul class="breadcrumb">
+            @for(tip of this.breadCrumb(); track $index)
+            {
+            <li class="breadcrumb-item" [ngClass]="{ 'active': $index === this.breadCrumb().length - 1 }">
+              <a (click)="RecuperarSubTipo(tip)">{{ tip.nombreTipo }}</a>
+            </li>
+            }
+          </ul>
+        </nav>
+        <div class="list-group">
+          @for(tipo of this.tipos(); track $index)
+          {
+          <a class="list-group-item list-group-item-action" (click)="RecuperarSubTipo(tipo)">
+            {{tipo.nombreTipo}}
+          </a>
+          }
+        </div>
+      </div>
+
+    </div>
+  </div>
+</nav>

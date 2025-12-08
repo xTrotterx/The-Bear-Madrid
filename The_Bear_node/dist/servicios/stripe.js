@@ -73,10 +73,9 @@ exports.default = {
                 };
             }
             catch (error) {
-                console.error('❌ ========== ERROR STRIPE ==========');
-                // ESTO ES LO CRÍTICO - Ver el error completo de Stripe
+                console.error(' ========== ERROR STRIPE ==========');
                 if ((_k = (_j = error.response) === null || _j === void 0 ? void 0 : _j.data) === null || _k === void 0 ? void 0 : _k.error) {
-                    console.error('🔴 DETALLES DEL ERROR:');
+                    console.error('   DETALLES DEL ERROR:');
                     console.error('   Tipo:', error.response.data.error.type);
                     console.error('   Código:', error.response.data.error.code);
                     console.error('   Mensaje:', error.response.data.error.message);

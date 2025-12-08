@@ -13,7 +13,6 @@ function configPipeline(serverWeb: Express) {
         allowedHeaders: ['Content-Type', 'Authorization'],
     }));
 
-    //midlewere de enrutamiento
     serverWeb.use('/api/Usuario', routingUsuario);
     serverWeb.use('/api/Restaurante', routingRestaurante);
 }

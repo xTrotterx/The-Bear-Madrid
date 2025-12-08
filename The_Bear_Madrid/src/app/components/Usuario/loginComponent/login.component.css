@@ -7,16 +7,16 @@ html, body {
 }
 
 .header {
-  background-color: #0b1fd7; /* azul */
-  height: 85px; /* un poco más delgada */
+  background-color: #0b1fd7; 
+  height: 85px; 
   display: flex;
-  justify-content: center; /* centra horizontalmente */
-  align-items: center;     /* centra verticalmente */
-  position: fixed;          /* fijo al hacer scroll */
+  justify-content: center; 
+  align-items: center;     
+  position: fixed;          
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 1000;           /* sobre todo lo demás */
+  z-index: 1000;          
   padding: 0;
   box-shadow: 0 2px 6px rgba(0,0,0,0.25);
   
@@ -30,7 +30,7 @@ html, body {
 }
 
 .header img {
-  height: 70px;  /* 🔹 Ajustado al nuevo alto */
+  height: 70px;  
   width: auto;
   object-fit: contain;
   display: block;
@@ -39,20 +39,20 @@ html, body {
 
 .container {
   background-image: url('/fondo.jpg');
-  background-size: cover;       /* cubre todo el espacio */
-  background-repeat: no-repeat; /* no se repite */
-  background-position: center;  /* centrada */
+  background-size: cover;      
+  background-repeat: no-repeat; 
+  background-position: center; 
   background-attachment: fixed;
   flex: 1;
   display: flex;
   justify-content: center;
-  align-items: flex-start;      /* empieza justo debajo del header */
+  align-items: flex-start;      
   position: relative;
 
   margin: 0 !important;
   max-width: 100% !important;
   width: 100% !important;
-  padding: 120px 0 40px 0 !important; /* espacio superior para el header fijo */
+  padding: 120px 0 40px 0 !important; 
 }
 
 .container::before {
@@ -139,11 +139,11 @@ html, body {
 
 @media (max-width: 576px) {
   .header {
-    height: 70px; /* 🔹 Más pequeño en móvil */
+    height: 70px; 
   }
 
   .header img {
-    height: 55px; /* 🔹 Ajuste proporcional */
+    height: 55px; 
   }
 
   .login-container {

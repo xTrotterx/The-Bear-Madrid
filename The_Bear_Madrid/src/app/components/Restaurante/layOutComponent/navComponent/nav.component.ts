@@ -67,8 +67,6 @@ export class NavComponent {
     // es un subtipo final, navegar a platos y cerrar el menú
     this.btnCerrar()?.nativeElement.click();
     this._router.navigate(['/Restaurante/Platos', tip.pathTipo]);
-    // no se si reinciarlo 
-    // this.InnitTipos();
   } else {
     // si no es subtipo final, actualizo el tipo para cargar subcategorías
     this.tipo.set(tip);

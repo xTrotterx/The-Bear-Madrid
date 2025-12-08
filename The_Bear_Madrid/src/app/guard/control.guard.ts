@@ -14,7 +14,7 @@ export const controlGuard: CanActivateFn = (route, state) => {
         return true; 
     } else {
         //return false; // <---- si lo dejo asi, salta en navegador error 501 de acceso denegado
-        //...mejor redirigimos al login
+        // redirijo al login
         return  _router.navigateByUrl('/Usuario/Login');
     }
   

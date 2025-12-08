@@ -1,10 +1,12 @@
 .platito-card {
   width: 100%;
-  max-width: 220px; /* ancho máximo de la tarjeta */
+  max-width: 220px; 
   margin: auto;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.15);
   transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+  z-index: 1;
 }
 
 .platito-card:hover {
@@ -18,8 +20,20 @@
   object-fit: cover;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+  cursor: pointer;
 }
 
 .input-group input.form-control {
   max-width: 50px;
+}
+
+
+.platito-card .btn,
+.platito-card .input-group {
+  position: relative;
+  z-index: 1;
+}
+
+.platito-card .input-group .btn {
+  z-index: 1;
 }

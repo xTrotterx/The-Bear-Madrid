@@ -96,7 +96,6 @@ const RestauranteController = {
     },
     GuardarOpinion: async (req: Request, res: Response, next: NextFunction) => {
         try {
-
             //primaero debo de guardar la opinion y luego en el usuario que la escribe y en el plato que la recibe
             const { titulo, opinion, puntuacion, estrellas, fecha, idUser, idPlato } = req.body;
             console.log('req.body...', req.body);

@@ -19,7 +19,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   private _map?: mapboxgl.Map;
   private _marker?: mapboxgl.Marker;
-  private _nombreMarker: string = 'Ubicacion';
+  private _nombreMarker: string = 'The Bear Madrid';
   private _directions?: MapboxDirections;
 
 //#endregion

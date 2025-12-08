@@ -35,8 +35,8 @@
             placeholder="Contraseña*"
             formControlName="password"
           />
-          <span class="input-group-text" (click)="SetPswdVisible()">
-            <img src="https://cdn-icons-png.flaticon.com/512/159/159604.png" alt="icono ojo" style="height: 20px;">
+          <span class="input-group-text" (click)="SetPswdVisible()" style="cursor: pointer;">
+            <i [class]="pswdVisible() ? 'bi bi-eye-slash' : 'bi bi-eye-fill'"></i>
           </span>
         </div>
 

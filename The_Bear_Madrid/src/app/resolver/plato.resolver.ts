@@ -2,7 +2,7 @@ import { ResolveFn } from '@angular/router';
 import { catchError, from, of } from 'rxjs';
 import IRestMessage from '../modelos/IRestMessage';
 
-
+//resolver para cargar los platos cuando los muestro en platoComponent para que no haga una mini carga y sea instantaneo
 export const platosResolver: ResolveFn<IRestMessage> = (route, state) => {
   const pathTipo = route.paramMap.get('pathTipo') as string;
   

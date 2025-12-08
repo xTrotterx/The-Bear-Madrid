@@ -63,7 +63,6 @@
   display: block;
 }
 
-/* Responsive */
 @media (max-width: 1200px) {
   .platos-grid {
     grid-template-columns: repeat(3, 1fr);

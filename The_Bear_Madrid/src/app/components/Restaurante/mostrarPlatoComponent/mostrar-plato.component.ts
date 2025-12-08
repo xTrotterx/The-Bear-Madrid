@@ -29,7 +29,7 @@ export class MostrarPlatoComponent {
   public datosUsuario = computed<IUsuario | undefined>(() => this._storageGlobal.getDatosUsuario());
   private _idPlato = signal<string>(this._activatedRoute.snapshot.paramMap.get('idPlato') as string);
 
-  //con esto hace directamente que si esta logueado el usuario y es fav me aparezca marcado
+  //con esto hago directamente que si esta logueado el usuario y es fav me aparezca marcado
   public esFavorito = computed(() => {
     let usuario = this.datosUsuario();
     if (!usuario?.favoritos) return false;
@@ -41,7 +41,7 @@ export class MostrarPlatoComponent {
   public _opciones = signal<'fecha' | 'puntuacion' | 'todas'>('todas');
 
   //pillo del store la cantidad que hay ya
-   public numPlatos = computed(() => {
+  public numPlatos = computed(() => {
     let order = this._storageGlobal.getOrder();
     let item = order.items.find(it => it.plato._id === this._idPlato());
     return item ? item.cantidad : 0;
@@ -50,7 +50,7 @@ export class MostrarPlatoComponent {
   //#region------------metodos--------------------
   private _platoResource: Resource<IRestMessage> = resource(
     {
-      request:() => this._idPlato(),
+      request: () => this._idPlato(),
       loader: async ({ request, abortSignal, previous }) => {
         console.log('valor de la señal del id: ', this._idPlato())
         let _resp = await fetch(
@@ -157,19 +157,17 @@ export class MostrarPlatoComponent {
     }
 
   }
-   public addToOrder() {
+  public addToOrder() {
     let _plato = this.plato();
     if (!_plato) {
       console.error('No hay plato disponible');
       return;
     }
 
-    // meter en el store el plato
     this._storageGlobal.setItemsOrder('sumar', {
       plato: _plato,
       cantidad: 1
     });
-
   }
 
   public modificarCantidad(operacion: 'sumar' | 'restar') {
@@ -183,14 +181,14 @@ export class MostrarPlatoComponent {
       });
     } else if (operacion === 'restar') {
       let cantidadActual = this.numPlatos();
+
       if (cantidadActual === 1) {
-        // Si solo queda 1, eliminar
         this._storageGlobal.setItemsOrder('eliminar', {
           plato: _plato,
           cantidad: 0
         });
       } else if (cantidadActual > 1) {
-        // Si hay más de 1, restar
+
         this._storageGlobal.setItemsOrder('restar', {
           plato: _plato,
           cantidad: cantidadActual - 1
@@ -201,7 +199,6 @@ export class MostrarPlatoComponent {
 
   public recargarPlato() {
     console.log('Recargando opiniones del plato...');
-    //recargo la llamada a la bd
     this._platoResource.reload();
   }
   //#endregion

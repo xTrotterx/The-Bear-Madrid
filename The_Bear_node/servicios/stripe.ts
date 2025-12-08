@@ -79,11 +79,10 @@ export default {
             };
 
         } catch (error: any) {
-            console.error('❌ ========== ERROR STRIPE ==========');
+            console.error(' ========== ERROR STRIPE ==========');
             
-            // ESTO ES LO CRÍTICO - Ver el error completo de Stripe
             if (error.response?.data?.error) {
-                console.error('🔴 DETALLES DEL ERROR:');
+                console.error('   DETALLES DEL ERROR:');
                 console.error('   Tipo:', error.response.data.error.type);
                 console.error('   Código:', error.response.data.error.code);
                 console.error('   Mensaje:', error.response.data.error.message);

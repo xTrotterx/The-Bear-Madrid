@@ -1,4 +1,4 @@
-/* 🔷 Navbar azul personalizada */
+
 .custom-navbar {
   background-color: #0b1fd7 !important;
   height: 90px;
@@ -14,7 +14,6 @@
   width: 100%;
 }
 
-/* Centrado absoluto del logo */
 .logo-center {
   position: absolute;
   left: 50%;
@@ -22,7 +21,6 @@
   z-index: 1;
 }
 
-/* Tamaño del logo */
 .logo {
   height: 70px;
   width: auto;
@@ -33,7 +31,6 @@
   transform: scale(1.05);
 }
 
-/* 🔸 Botón ☰ más grande y centrado verticalmente */
 .navbar-toggler {
   font-size: 1.8rem;
   padding: 0.6rem 0.9rem;
@@ -49,13 +46,11 @@
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Contenedor derecho con botones */
 .d-flex {
   z-index: 2;
   gap: 0.5rem;
 }
 
-/* Dropdown del usuario */
 .dropdown .btn {
   white-space: nowrap;
   overflow: hidden;
@@ -63,12 +58,10 @@
   max-width: 250px;
 }
 
-/* Botón de pedido circular */
 .btn.rounded-circle {
   flex-shrink: 0;
 }
 
-/* Breadcrumb */
 .breadcrumb {
   list-style: none;
   margin: 0;
@@ -98,7 +91,6 @@
   pointer-events: none;
 }
 
-/* 🔷 Offcanvas personalizado */
 .custom-offcanvas {
   background-color: #000 !important;
   color: #fff;
@@ -141,7 +133,6 @@
   cursor: pointer;
 }
 
-/* 🔸 RESPONSIVE - Tablets */
 @media (max-width: 992px) {
   .dropdown .btn {
     max-width: 200px;
@@ -153,7 +144,6 @@
   }
 }
 
-/* 🔸 RESPONSIVE - Móviles grandes */
 @media (max-width: 768px) {
   .custom-navbar {
     height: 75px;
@@ -168,8 +158,6 @@
     font-size: 1.6rem;
     padding: 0.5rem 0.8rem;
   }
-
-  /* Ocultar texto del usuario, solo mostrar icono */
   .dropdown .btn {
     max-width: 45px;
     padding: 0.5rem;
@@ -180,7 +168,6 @@
     margin: 0;
   }
 
-  /* Ocultar el texto "Bienvenid@..." en móviles */
   .dropdown .btn-light {
     font-size: 0;
   }
@@ -189,19 +176,16 @@
     font-size: 1.2rem;
   }
 
-  /* Ajustar botón de login */
   .btn-light:not(.rounded-circle) {
     font-size: 0.85rem;
     padding: 0.5rem 0.75rem;
   }
 
-  /* Reducir espacio entre botones */
   .d-flex {
     gap: 0.35rem;
   }
 }
 
-/* 🔸 RESPONSIVE - Móviles pequeños */
 @media (max-width: 576px) {
   .custom-navbar {
     height: 70px;
@@ -218,7 +202,6 @@
     margin-right: 0.25rem;
   }
 
-  /* Botones más compactos */
   .btn-light:not(.rounded-circle) {
     font-size: 0.8rem;
     padding: 0.4rem 0.6rem;
@@ -233,7 +216,6 @@
     font-size: 1rem;
   }
 
-  /* Dropdown más compacto */
   .dropdown .btn {
     max-width: 42px;
     padding: 0.4rem;
@@ -244,7 +226,6 @@
   }
 }
 
-/* 🔸 RESPONSIVE - Móviles muy pequeños */
 @media (max-width: 400px) {
   .custom-navbar {
     height: 65px;

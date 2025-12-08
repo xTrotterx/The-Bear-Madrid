@@ -1,43 +1,44 @@
 <div class="card h-100 platito-card">
-  <img [src]="this.plato()!.imagen" class="card-img-top mx-auto d-block" alt="{{ this.plato()!.nombre }}" (click)="ElPlatito()">
-  
+  <img [src]="this.plato()!.imagen" class="card-img-top mx-auto d-block" alt="{{ this.plato()!.nombre }}"
+    (click)="ElPlatito()">
+
   <div class="card-body d-flex flex-column">
     <h5 class="card-title text-center">{{ this.plato()!.nombre }}</h5>
     <p class="card-text text-center fw-bold">{{ this.plato()!.precio }} €</p>
 
     <!-- Botón Añadir o Control de Cantidad -->
-    @if(this.cantidadPlatos() == 0)
+    @if(this.cantidadPlatos() === 0)
     {
-      <button type="button" class="btn mt-auto w-100" style="background-color: #4a3228; border-color: #4a3228; color: white;" (click)="AddToOrder()">
-        Añadir
-      </button>
+    <button type="button" class="btn mt-auto w-100"
+      style="background-color: #4a3228; border-color: #4a3228; color: white; border-radius: 8px;"
+      (click)="AddToOrder()">
+      Añadir
+    </button>
     }
     @else {
-      <div class="input-group input-group-sm mt-auto">
-        <!-- Botón restar / eliminar -->
-        <button type="button" class="btn btn-sm" style="background-color: #4a3228; border-color: #4a3228; color: white;" (click)="ModificarCantidad('restar')">
-          @if (this.cantidadPlatos() == 1)
-          {
-            <i class="bi bi-trash-fill"></i>
-          }
-          @else {
-            <i class="bi bi-dash-lg"></i>
-          }
-        </button>
+    <div class="input-group input-group-sm mt-auto">
+      <!-- Botón restar / eliminar -->
+      <button type="button" class="btn btn-sm"
+        style="background-color: #4a3228; border-color: #4a3228; color: white; border-radius: 8px 0 0 8px;"
+        (click)="ModificarCantidad('restar')">
+        @if (this.cantidadPlatos() === 1)
+        {
+        <i class="bi bi-trash-fill"></i>
+        }
+        @else {
+        <i class="bi bi-dash-lg"></i>
+        }
+      </button>
+      <!-- Input cantidad (solo lectura) -->
+      <input type="text" class="form-control text-center" style="max-width: 50px;" [value]="this.cantidadPlatos()"
+        readonly />
 
-        <!-- Input cantidad -->
-        <input type="text" 
-               class="form-control text-center" 
-               maxlength="2"
-               [value]="this.cantidadPlatos()"
-               (change)="SetCantidadPlatosFromInput($event)"
-               (blur)="ModificarCantidad('modifica')" />
-
-        <!-- Botón sumar -->
-        <button type="button" class="btn btn-sm" style="background-color: #4a3228; border-color: #4a3228; color: white;" (click)="ModificarCantidad('sumar')">
-          <i class="bi bi-plus-lg"></i>
-        </button>
-      </div>
+      <button type="button" class="btn btn-sm"
+        style="background-color: #4a3228; border-color: #4a3228; color: white; border-radius: 0 8px 8px 0;"
+        (click)="ModificarCantidad('sumar')">
+        <i class="bi bi-plus-lg"></i>
+      </button>
+    </div>
     }
   </div>
 </div>

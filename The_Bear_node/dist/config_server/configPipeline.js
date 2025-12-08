@@ -15,7 +15,6 @@ function configPipeline(serverWeb) {
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         allowedHeaders: ['Content-Type', 'Authorization'],
     }));
-    //midlewere de enrutamiento
     serverWeb.use('/api/Usuario', endpointsUser_1.default);
     serverWeb.use('/api/Restaurante', endpointsRestaurante_1.default);
 }

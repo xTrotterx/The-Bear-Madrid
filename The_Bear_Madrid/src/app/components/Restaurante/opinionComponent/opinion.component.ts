@@ -12,9 +12,9 @@ export class OpinionComponent {
   
   @Input() opinion!: IOpinion;
 public getPuntuacionColor(puntuacion: number): string {
-    if (puntuacion >= 4) return '#28a745'; // Verde - Excelente
-    if (puntuacion >= 3) return '#ffc107'; // Amarillo - Bueno
-    if (puntuacion >= 2) return '#fd7e14'; // Naranja - Regular
-    return '#dc3545'; // Rojo - Malo
+    if (puntuacion >= 4) return '#28a745'; 
+    if (puntuacion >= 3) return '#ffc107'; 
+    if (puntuacion >= 2) return '#fd7e14'; 
+    return '#dc3545';
   }
 }

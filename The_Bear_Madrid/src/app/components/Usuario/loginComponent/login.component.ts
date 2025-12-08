@@ -10,28 +10,23 @@ import { NavComponent } from '../../Restaurante/layOutComponent/navComponent/nav
 
 @Component({
   selector: 'app-login',
-  imports: [RouterLink, RouterLinkActive, FormsModule, ReactiveFormsModule, FooterComponent, NavComponent],
+  imports: [RouterLink, RouterLinkActive, FormsModule, ReactiveFormsModule, FooterComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
+  //#region -----servicios-------
+  private _router = inject(Router);
+  private _restSvc = inject(RestClienteService);
+  private _injector = inject(Injector);
+  private _storeGlobal = inject(HTTP_INJECTIONTOKEN_STORAGE_SVCS);
+  //#endregion
+
   //#region----------------propiedades----------------
   formLogin: FormGroup;
   valoresFormLogin: Signal<IForm>;
   pswdVisible = signal<boolean>(false);
   mensajeError = signal<string>('');
-
-
-  //#endregion
-
-  //#region -----servicios-------
-  private _router = inject(Router);
-  private _restSvc = inject(RestClienteService);
-  private _injector = inject(Injector)
-  private _storeGlobal = inject(HTTP_INJECTIONTOKEN_STORAGE_SVCS)
-
-
-
 
   constructor() {
     this.formLogin = new FormGroup(
@@ -43,6 +38,8 @@ export class LoginComponent {
     this.valoresFormLogin = toSignal(this.formLogin.valueChanges)
 
   }
+  //#endregion
+
   //#region------metodos-----------
   LoginUser($event: any) {
     console.log('datos del login....', this.formLogin.value);

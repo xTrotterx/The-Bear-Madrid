@@ -3,7 +3,7 @@
     <div class="modal-content">
 
       <div class="modal-header">
-        <h5 class="modal-title" id="modalOpinionLabel">Tu opinión sobre {{ plato()?.nombre }}</h5>
+        <h5 class="modal-title" id="modalOpinionLabel">Tu opinión sobre {{ plato().nombre }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
@@ -11,7 +11,6 @@
         <form [formGroup]="formOpinion" (ngSubmit)="EnviarOpinion($event)">
           <div class="container">
 
-            <!-- Título de la opinión -->
             <div class="row mb-4">
               <div class="col-md">
                 <div class="mb-3">
@@ -21,7 +20,6 @@
               </div>
             </div>
 
-            <!-- Estrellas -->
             <div class="row mb-4">
               <div class="col-md d-flex flex-row justify-content-between align-items-center">
                 <div>
@@ -36,7 +34,6 @@
               </div>
             </div>
 
-            <!-- Textarea opinión -->
             <div class="row mb-4">
               <div class="col-md">
                 <div class="mb-3">
@@ -46,21 +43,20 @@
               </div>
             </div>
 
-            <!-- Recomendación -->
             <div class="row mb-3">
               <div class="col-md">
-                <small>¿Cómo calificarias la presentacion del plato por parte del servicio?<strong>(Recuerda esto es parte de la experiencia para tener una mejor degustación)</strong> (Obligatorio)</small>
+                <small>¿Cómo calificarias la presentacion del plato por parte del servicio?<strong>(Recuerda esto es
+                    parte de la experiencia para tener una mejor degustación)</strong> (Obligatorio)</small>
               </div>
             </div>
 
-            <!-- Puntuación 1-5 -->
             <div class="row mb-4">
               <div class="col-md d-flex flex-row justify-content-between flex-wrap gap-2">
                 @for(i of punctuacionModal; track $index){
                 <div class="puntuacion" (click)="seleccionarPuntuacion(i)"
-                  [style.backgroundColor]="i === valoresOpinion()?.puntuacion ? '#BFB2B2' : 'transparent'"
-                  [style.color]="i === valoresOpinion()?.puntuacion ? 'white' : 'black'"
-                  [style.fontWeight]="i === valoresOpinion()?.puntuacion ? 'bold' : 'normal'"
+                  [style.backgroundColor]="i === valoresOpinion().puntuacion ? '#BFB2B2' : 'transparent'"
+                  [style.color]="i === valoresOpinion().puntuacion ? 'white' : 'black'"
+                  [style.fontWeight]="i === valoresOpinion().puntuacion ? 'bold' : 'normal'"
                   style="cursor: pointer; padding: 8px 12px; border-radius: 5px; border: 1px solid #dee2e6; min-width: 40px; text-align: center;">
                   {{i}}
                 </div>
@@ -68,7 +64,6 @@
               </div>
             </div>
 
-            <!-- Botón de submit DENTRO del form -->
             <div class="modal-footer">
               <button type="submit" class="btn" [disabled]="formOpinion.invalid"
                 style="background-color: #ad0011; border-color: #ad0011; color: white;">

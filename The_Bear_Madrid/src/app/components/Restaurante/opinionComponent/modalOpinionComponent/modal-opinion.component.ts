@@ -54,17 +54,16 @@ export class ModalOpinionComponent {
       // Si no hay respuesta aún, salir
       if (!respuestaSignal) return;
 
-      const respuesta = respuestaSignal();
+      const resp = respuestaSignal();
 
-      console.log('Respuesta del servidor:', respuesta);
-      // Emitir evento al padre
+      console.log('Respuesta del servidor:', resp);
+      // le paso  evento al padre para que se actualice para que cargue la nueva opinion
       this.opinionGuardada.emit();
 
-      // Resetear formulario
+      // 
       this.formOpinion.reset();
       this.estrellasHover = 0;
 
-      // Cerrar modal
       setTimeout(() => {
         const modalElement = document.getElementById('modalOpinion');
         if (modalElement) {
@@ -77,9 +76,7 @@ export class ModalOpinionComponent {
       )
      }
     )
-
   }
-
   //#endregion--------------------
 
   //#region------metodos----------
@@ -119,7 +116,6 @@ export class ModalOpinionComponent {
   }
 
   public get estrellasVisibles(): number {
-    // Si hay hover, mostrar hover; si no, mostrar seleccionadas
     return this.estrellasHover > 0
       ? this.estrellasHover
       : (this.valoresOpinion()?.estrellas ?? 0);

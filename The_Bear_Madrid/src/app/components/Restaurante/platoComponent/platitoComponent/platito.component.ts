@@ -1,4 +1,4 @@
-import { Component, inject, input, signal } from '@angular/core';
+import { Component, computed, inject, input, signal } from '@angular/core';
 import IPlato from '../../../../modelos/Interfaces/IPlato';
 import { HTTP_INJECTIONTOKEN_STORAGE_SVCS } from '../../../../app.config';
 import { Router } from '@angular/router';
@@ -12,40 +12,56 @@ import { Router } from '@angular/router';
 export class PlatitoComponent {
   //#region---servicios--------
   private _storage = inject(HTTP_INJECTIONTOKEN_STORAGE_SVCS);
-  private _router=inject(Router);
+  private _router = inject(Router);
 
   //#endregion
 
   //#region----propiedades-----
   plato = input.required<IPlato>();
-  cantidadPlatos = signal<number>(0);
 
+  cantidadPlatos = computed(() => {
+    let order = this._storage.getOrder();
+    let item = order.items.find(it => it.plato._id === this.plato()._id);
+    return item ? item.cantidad : 0;
+  });
   //#endregion
 
-
   //#region----metodos-----
-
-  SetCantidadPlatosFromInput(ev: any) {
-    ev.target.value !== '' ? this.cantidadPlatos.set(parseInt(ev.target.value)) : this.cantidadPlatos.set(1)
-  }
-  AddToOrder():void{
-    this.cantidadPlatos.set(1);
-    this._storage.setItemsOrder('sumar', {plato:this.plato(),cantidad:1})
+  AddToOrder(): void {
+    this._storage.setItemsOrder('sumar', {
+      plato: this.plato(),
+      cantidad: 1
+    });
   }
   ModificarCantidad(ope: string) {
+    let _plato = this.plato();
+    let cantidadActual = this.cantidadPlatos();
+
     switch (ope) {
       case 'sumar':
-        this.cantidadPlatos.set(this.cantidadPlatos() + 1);
+        this._storage.setItemsOrder('sumar', {
+          plato: _plato,
+          cantidad: 1
+        });
         break;
+
       case 'restar':
-        this.cantidadPlatos.set(this.cantidadPlatos() - 1)
+        if (cantidadActual === 1) {
+          this._storage.setItemsOrder('eliminar', {
+            plato: _plato,
+            cantidad: 0
+          });
+        } else if (cantidadActual > 1) {
+          this._storage.setItemsOrder('restar', {
+            plato: _plato,
+            cantidad: cantidadActual - 1
+          });
+        }
         break;
     }
-    this._storage.setItemsOrder(this.cantidadPlatos() == 0 ? 'eliminar' : 'restar', { plato: this.plato(), cantidad: this.cantidadPlatos() })
-
   }
 
-  ElPlatito(){
+  ElPlatito() {
     this._router.navigate(['Restaurante/Plato', this.plato()._id])
   }
 

@@ -8,7 +8,7 @@
             <!-- Nombre y valoración -->
             <div class="row mb-4">
               <div class="col-md d-flex justify-content-between align-items-center">
-                <h3><strong>{{ plato()?.nombre }}</strong></h3>
+                <h3><strong>{{ plato().nombre }}</strong></h3>
                 <div class="d-flex align-items-center">
                   @for (i of estrellas(); track $index) {
                   <i class="fas fa-star fa-lg" [style.color]="i <= valoracionRedondeada() ? '#ffc107' : '#ccc'"></i>
@@ -20,7 +20,7 @@
             <!-- Imágenes del plato -->
             <div class="row mb-4">
               <div class="col-md d-flex flex-wrap gap-3 justify-content-start">
-                <img [src]="plato()?.imagen" class="rounded shadow-sm"
+                <img [src]="plato().imagen" class="rounded shadow-sm"
                   style="width: 280px; height: 280px; object-fit: cover; border: 1px solid #e0e0e0;">
               </div>
             </div>
@@ -29,7 +29,7 @@
             <div class="row mb-4">
               <div class="col-md">
                 <h5><strong>Descripción</strong></h5>
-                <p>{{ plato()?.descripcion }}</p>
+                <p>{{ plato().descripcion }}</p>
                 <hr>
               </div>
             </div>
@@ -64,7 +64,7 @@
                       {{ valoracionRedondeada()}}/5
                     </span>
                     <small class="ms-2 text-muted">
-                      (basado en {{ plato()?.valoraciones?.length || 0}} opiniones)
+                      (basado en {{ plato().valoraciones.length || 0}} opiniones)
                     </small>
                   </div>
                 </div>
@@ -133,8 +133,7 @@
                 <!-- Botón favorito -->
                 <button class="btn btn-outline-danger rounded-circle p-0"
                   style="width: 42px; height: 42px; display: flex; align-items: center; justify-content: center;"
-                  (click)="toggleFavorito()"
-                  [disabled]="!datosUsuario()">
+                  (click)="toggleFavorito()">
                   <i [class]="esFavorito() ? 'bi bi-heart-fill' : 'bi bi-heart'"
                     [style.color]="esFavorito() ? '#c82333' : ''"></i>
                 </button>
@@ -142,7 +141,7 @@
             </div>
             <div class="row mt-3">
               <div class="col-md text-center">
-                <h4 class="fw-bold">Precio: {{ plato()?.precio }} €</h4>
+                <h4 class="fw-bold">Precio: {{ plato().precio }} €</h4>
               </div>
             </div>
           </div>

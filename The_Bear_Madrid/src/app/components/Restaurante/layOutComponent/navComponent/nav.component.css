@@ -1,4 +1,3 @@
-
 .custom-navbar {
   background-color: #0b1fd7 !important;
   height: 90px;
@@ -144,49 +143,7 @@
   }
 }
 
-@media (max-width: 768px) {
-  .custom-navbar {
-    height: 75px;
-    padding: 0 0.75rem;
-  }
-
-  .logo {
-    height: 55px;
-  }
-
-  .navbar-toggler {
-    font-size: 1.6rem;
-    padding: 0.5rem 0.8rem;
-  }
-  .dropdown .btn {
-    max-width: 45px;
-    padding: 0.5rem;
-    overflow: visible;
-  }
-
-  .dropdown .btn i {
-    margin: 0;
-  }
-
-  .dropdown .btn-light {
-    font-size: 0;
-  }
-
-  .dropdown .btn-light i {
-    font-size: 1.2rem;
-  }
-
-  .btn-light:not(.rounded-circle) {
-    font-size: 0.85rem;
-    padding: 0.5rem 0.75rem;
-  }
-
-  .d-flex {
-    gap: 0.35rem;
-  }
-}
-
-@media (max-width: 576px) {
+@media (max-width: 690px) {
   .custom-navbar {
     height: 70px;
     padding: 0 0.5rem;
@@ -226,33 +183,50 @@
   }
 }
 
-@media (max-width: 400px) {
-  .custom-navbar {
-    height: 65px;
-    padding: 0 0.4rem;
+@media (max-width: 425px) {
+ 
+    .dropdown .btn {
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border-radius: 50% !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3);
   }
 
-  .logo {
-    height: 45px;
+  .dropdown .btn i {
+    margin: 0;
+    font-size: 1.3rem !important;
+    color: #0b1fd7 !important;
   }
 
-  .navbar-toggler {
-    font-size: 1.4rem;
-    padding: 0.35rem 0.6rem;
+  .dropdown .btn-light {
+    font-size: 0;
   }
 
-  .btn-light:not(.rounded-circle) {
-    font-size: 0.75rem;
-    padding: 0.35rem 0.5rem;
+  .btn-light:not(.rounded-circle):not(.dropdown .btn) {
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border-radius: 50% !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0;
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid rgba(255, 255, 255, 0.9);
   }
 
-  .btn.rounded-circle {
-    width: 36px;
-    height: 36px;
+  .btn-light:not(.rounded-circle):not(.dropdown .btn) i {
+    font-size: 1.3rem !important;
+    color: #0b1fd7 !important;
   }
 
-  .dropdown .btn {
-    max-width: 40px;
-    padding: 0.35rem;
+  .d-flex {
+    gap: 0.5rem;
   }
 }

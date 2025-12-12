@@ -62,7 +62,7 @@ export class OrderComponent {
     //llamar al método del storage con la operación correcta
     this._storageGlobal.setItemsOrder($event.operacion, item);
 
-    // Actualizar el signal para refrescar la vista
+    // actualizar el signal para refrescar la vista
     this.order.set({ ...this._storageGlobal.getOrder() });
     this.itemModificado.emit($event);
   }
@@ -70,7 +70,8 @@ export class OrderComponent {
   CambiarMetodo(metodo: string) {
     this.metodoPago.set(metodo);
 
-    // crear primero el payment al seleccionar el metodo de pago, NO AL DARLE FINALIZAR PAGO CAGADON
+    // crear primero el payment al seleccionar el metodo de pago,
+    //  NO AL DARLE FINALIZAR PAGO CAGADON
     if (metodo === 'tarjeta' || metodo === 'revolut') {
       this.prepararPagoStripe(metodo);
     }

@@ -10,6 +10,11 @@
 
 La aplicación sigue una arquitectura **SPA (Single Page Application)**, cargando una única página dinámica que actualiza el contenido sin recargar la página completa.
 
+El frontend está desarrollado con Angular, para gestionar la navegación mediante un enrutador sin necesidad de recargar la página completa. Cada apartado de la aplicación (Home, Perfil, Mapa, etc.) se representa como un componente independiente renderizado dinámicamente.
+
+El backend está desarrollado con Node.js y Express, estructurado en dos controladores, modelos y servicios.
+
+
 ### Tecnologías empleadas
 
 #### Frontend
@@ -85,7 +90,7 @@ La aplicación sigue una arquitectura **SPA (Single Page Application)**, cargand
 
 ## Organización de la lógica de negocio
 
-El backend está separado en dos apartados principales: **Usuario** y **Restaurante**, donde se maneja el flujo de datos de cada parte.
+El backend está separado en dos controladores principales: **Usuario** y **Restaurante**, donde se maneja el flujo de datos de cada parte.
 
 * Servicio de **PayPal** encargado de realizar pagos redirigiendo a la pasarela de PayPal.
 * Servicio de **Stripe** para pagos con tarjeta bancaria y la opción de **Revolut Pay**, gestionado a través de Stripe.
@@ -121,9 +126,9 @@ Otro reto destacable ha sido la agrupación de los platos por tipos incluyendo e
 
 ### Aprendizaje y mejoras futuras
 
-He profundizado en el desarrollo de aplicaciones web utilizando Angular, especialmente en el uso de la reactividad para la gestión de datos y la interacción con la interfaz de usuario.
+He profundizado en el desarrollo full stack utilizando Angular, especialmente en el uso de la reactividad para la gestión de datos y la interacción con la interfaz de usuario.
 
-Como mejoras futuras, se incluiría una mayor personalización del perfil, permitiendo modificar datos, borrar o editar opiniones y la posibilidad de eliminar la cuenta.
+Como mejoras futuras, se incluiría una mayor personalización del perfil, permitiendo modificar datos, borrar o editar opiniones y la posibilidad de eliminar la cuenta. También un sistema de descuentos para que sean instroducidos por los clientes y comprobar del aguna forma si ya han sido utilizados.
 
 ---
 

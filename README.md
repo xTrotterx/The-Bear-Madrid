@@ -10,7 +10,7 @@
 
 La aplicación sigue una arquitectura **SPA (Single Page Application)**, cargando una única página dinámica que actualiza el contenido sin recargar la página completa.
 
-El frontend está desarrollado con Angular, para gestionar la navegación mediante un enrutador sin necesidad de recargar la página completa. Cada apartado de la aplicación (Home, Perfil, Mapa, etc.) se representa como un componente independiente renderizado dinámicamente.
+El frontend está desarrollado con Angular. Cada apartado de la aplicación (Home, Perfil, Mapa, etc.) se representa como un componente independiente renderizado dinámicamente.
 
 El backend está desarrollado con Node.js y Express, estructurado en dos controladores, modelos y servicios.
 

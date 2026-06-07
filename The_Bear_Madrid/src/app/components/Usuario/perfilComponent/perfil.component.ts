@@ -21,24 +21,26 @@ export class PerfilComponent {
   //#region-------------propiedades--------
   public datosUsuario = computed<IUsuario | undefined>(() => this._storageGlobal.getDatosUsuario());
 
-  private _listasResource: Resource<IRestMessage> = resource({
-    request: () => this.datosUsuario()?._id, // Función que devuelve el id
-    loader: async ({ request, abortSignal }) => {
-      if (!request) {
-        return { codigo: 400, mensaje: 'No hay usuario logueado', datos: null };
-      }
+  private _listasResource: Resource<IRestMessage> = resource((injector) => {
+    return {
+      request: () => this.datosUsuario()?._id,
+      loader: async ({ request }: any) => {
+        if (!request) {
+          return { codigo: 400, mensaje: 'No hay usuario logueado', datos: null };
+        }
 
-      console.log('id del usuario de las listas a cargar...', request);
-      
-      let _resp = await fetch(
-        `http://localhost:3003/api/Restaurante/Listas?idUser=${request}`,
-        { method: 'GET', signal: abortSignal }
-      );
-      let _body = await _resp.json();
-      console.log('listas', _body);
-      return _body ?? { codigo: 400, mensaje: 'error al recuperar las listas' };
-    },
-    injector: this._injector
+        console.log('id del usuario de las listas a cargar...', request);
+        
+        let _resp = await fetch(
+          `http://localhost:3003/api/Restaurante/Listas?idUser=${request}`,
+          { method: 'GET' }
+        );
+        let _body = await _resp.json();
+        console.log('listas', _body);
+        return _body ?? { codigo: 400, mensaje: 'error al recuperar las listas' };
+      },
+      injector: this._injector
+    };
   });
 
   public listaFav = computed(() => {

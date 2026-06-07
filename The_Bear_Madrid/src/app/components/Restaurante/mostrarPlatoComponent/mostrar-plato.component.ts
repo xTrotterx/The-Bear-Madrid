@@ -48,22 +48,22 @@ export class MostrarPlatoComponent {
   });
 
   //#region------------metodos--------------------
-  private _platoResource: Resource<IRestMessage> = resource(
-    {
+  private _platoResource: Resource<IRestMessage> = resource((injector) => {
+    return {
       request: () => this._idPlato(),
-      loader: async ({ request, abortSignal, previous }) => {
-        console.log('valor de la señal del id: ', this._idPlato())
+      loader: async ({ request }: any) => {
+        console.log('valor de la señal del id: ', request)
         let _resp = await fetch(
           `http://localhost:3003/api/Restaurante/Plato?idPlato=${request}`,
-          { method: 'GET', signal: abortSignal }
+          { method: 'GET' }
         );
         let _body = await _resp.json();
         console.log('plato con opiniones', _body);
         return _body ?? { codigo: 400, mensaje: 'error al recuperar el plato' }
       },
       injector: this._injector
-    }
-  );
+    };
+  });
 
   public plato = computed<IPlato>(() => {
     let _resp = this._platoResource.value();
@@ -199,7 +199,6 @@ export class MostrarPlatoComponent {
 
   public recargarPlato() {
     console.log('Recargando opiniones del plato...');
-    this._platoResource.reload();
   }
   //#endregion
 }

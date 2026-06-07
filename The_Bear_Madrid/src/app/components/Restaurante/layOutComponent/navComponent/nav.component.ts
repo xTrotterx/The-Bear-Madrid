@@ -30,22 +30,22 @@ export class NavComponent {
   public btnCerrar = viewChild<ElementRef>('btnCerrar');
 
   //funcion resource para recuperar los tipos de platos
-  public _tipoResource: ResourceRef<IRestMessage> = resource(
-    {
-      request: this.tipo,
-      loader: async ({ request, abortSignal, previous }) => {
-        console.log('valor del resource donde van los tipos, ', request, abortSignal, previous);
-        let _pathTipo = this.tipo()?.pathTipo || 'raiz';
+  public _tipoResource: ResourceRef<IRestMessage> = resource((injector) => {
+    return {
+      request: () => this.tipo(),
+      loader: async ({ request }: any) => {
+        console.log('valor del resource donde van los tipos, tipo:', request);
+        let _pathTipo = request?.pathTipo || 'raiz';
         let _resp = await fetch(
           `http://localhost:3003/api/Restaurante/Tipos?pathTipo=${_pathTipo}`,
-          { method: 'GET', signal: abortSignal }
+          { method: 'GET' }
         );
         let _body = await _resp.json();
         return _body ?? { codigo: 400, mensaje: 'recuperando tiops de platos' }
       },
       injector: this._injector
-    }
-  );
+    };
+  });
   public tipos = computed<ITipos[]>(() => this._tipoResource.value() ? (this._tipoResource.value().codigo == 0 ? this._tipoResource.value().datos : []) : []);
 
   //#endregion
